@@ -1,2 +1,4 @@
 #ignore IDE settings
 .idea/
+#ignore downloaded xml data
+hansard_xml/
