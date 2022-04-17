@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 label-studio = "*"
 lxml = "*"
+scorch = "*"
 
 [dev-packages]
 
