@@ -19,11 +19,12 @@ class MPData:
         # dictionary where key is office, value is datetime
         self.current_offices = {}
         # dictionary where key is office, value is tuple of start and end datetime
-        self.historical_offices = {}
+        self.past_offices = {}
 
         self.constituency = constituency
         self.party = party
         self.set_current_offices(mp_soup)
+        self.set_historical_offices(mp_soup)
 
 
 
@@ -55,6 +56,35 @@ class MPData:
             self.current_offices[office_name] = datetime_for_start
 
 
+    def set_historical_offices(self, mp_soup):
+        offices_heading = mp_soup.find(string="Other offices held in the past")
+
+        if offices_heading is None:
+            print("skipping")
+            self.offices = None
+            return
+
+        offices_heading_parent = offices_heading.parent
+
+        offices_ul = offices_heading_parent.find_next_sibling("ul")
+
+        # finds all tags containing the duration of the item
+        lis = offices_ul.find_all("small")
+        # name of the office is the text that is the previous sibling to the duration tag
+        for li in lis:
+            office_name = li.previous_sibling.rstrip()
+            right = li.text.split("(")[1]
+            mid = right.split(")")[0]
+
+            start_end = mid.split(" to ")
+
+
+            datetime_for_start = datetime.datetime.strptime(start_end[0], "%d %b %Y")
+            datetime_for_end = datetime.datetime.strptime(start_end[1], "%d %b %Y")
+
+            self.past_offices[office_name] = (datetime_for_start, datetime_for_end)
+
+
     def fetch_html_for_mp(self, url, retry_duration_seconds=3, request_timeout_seconds=5):
         correct_endpoint_prefix = "https://www.theyworkforyou.com/mp/"
         print("url: ", url)
@@ -83,6 +113,7 @@ def insert_into_db(mp):
     print(mp.party)
     print(mp.constituency)
     print(mp.current_offices)
+    print(mp.past_offices)
     # todo: insert MP data into DB
     #conn = sqlite3.connect(db_location)
 
