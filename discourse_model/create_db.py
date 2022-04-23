@@ -6,6 +6,8 @@ from urllib.error import URLError, HTTPError
 import time
 from bs4 import BeautifulSoup
 
+import datetime
+
 class MPData:
     def __init__(self, mp_url=None, constituency=None, party=None, dummy_mp=False):
         #self.name = mp_name
@@ -14,14 +16,19 @@ class MPData:
         mp_html = self.fetch_html_for_mp(mp_url)
         mp_soup = BeautifulSoup(mp_html, "html.parser")
 
+        # dictionary where key is office, value is datetime
+        self.current_offices = {}
+        # dictionary where key is office, value is tuple of start and end datetime
+        self.historical_offices = {}
+
         self.constituency = constituency
         self.party = party
-        self.set_offices(mp_soup)
+        self.set_current_offices(mp_soup)
 
 
 
 
-    def set_offices(self, mp_soup):
+    def set_current_offices(self, mp_soup):
         offices_heading = mp_soup.find(string="Currently held offices")
         #print(offices_heading)
         #print("sib 1")
@@ -38,7 +45,14 @@ class MPData:
         lis = offices_ul.find_all("small")
         # name of the office is the text that is the previous sibling to the duration tag
         for li in lis:
-            self.offices.append(li.previous_sibling.rstrip())
+            office_name = li.previous_sibling.rstrip()
+            right = li.text.split("(since ")[1]
+            date_text = right.split(")")[0]
+            print(f"\'{date_text}\'")
+            datetime_for_start = datetime.datetime.strptime(date_text, "%d %b %Y")
+            print(datetime_for_start)
+
+            self.current_offices[office_name] = datetime_for_start
 
 
     def fetch_html_for_mp(self, url, retry_duration_seconds=3, request_timeout_seconds=5):
@@ -65,9 +79,10 @@ class MPData:
 
 
 def insert_into_db(mp):
+    # todo: constituency will be primary key, as at the time of a general election, candidates may share names
     print(mp.party)
     print(mp.constituency)
-    print(mp.offices)
+    print(mp.current_offices)
     # todo: insert MP data into DB
     #conn = sqlite3.connect(db_location)
 
@@ -85,8 +100,6 @@ def create_db_from_list(list_file, db_location):
         party = row[3]
         constituency = row[4]
         url = row[5]
-
-        print("url1", url)
 
         mp = MPData(mp_url=url, constituency=constituency, party=party)
 
