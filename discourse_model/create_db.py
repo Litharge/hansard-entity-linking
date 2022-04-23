@@ -8,8 +8,10 @@ from bs4 import BeautifulSoup
 
 import datetime
 
+import os
+
 class MPData:
-    def __init__(self, mp_url=None, constituency=None, party=None, dummy_mp=False):
+    def __init__(self, mp_url=None, constituency=None, party=None, first_name=None, last_name=None, dummy_mp=False):
         #self.name = mp_name
         self.offices = []
 
@@ -23,6 +25,9 @@ class MPData:
 
         self.constituency = constituency
         self.party = party
+        self.first_name = first_name
+        self.last_name = last_name
+
         self.set_current_offices(mp_soup)
         self.set_historical_offices(mp_soup)
 
@@ -108,18 +113,85 @@ class MPData:
         return mp_html
 
 
-def insert_into_db(mp):
+
+def create_db(directory, date):
+    db_file = directory + date + ".db"
+
+    # delete the existing db
+    os.remove(db_file)
+
+    conn = sqlite3.connect(db_file,
+                           detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+
+    cursor = conn.cursor()
+
+    cursor.execute("CREATE TABLE IF NOT EXISTS mps "
+                   "(constituency TEXT PRIMARY KEY,"
+                   "party TEXT,"
+                   "mp_name TEXT)")
+
+    cursor.execute("CREATE TABLE IF NOT EXISTS mp_offices "
+                   "("
+                   "office_id INTEGER PRIMARY KEY,"
+                   "title TEXT,"
+                   "mp_con TEXT,"
+                   "start_date timestamp,"
+                   "end_date timestamp,"
+                   "is_current INTEGER,"
+                   "FOREIGN KEY(mp_con) REFERENCES mps(constituency)"
+                   ")"
+                   )
+
+    """
+    cursor.execute("CREATE TABLE IF NOT EXISTS mp_office"
+                   "("
+                   "mp_con TEXT,"
+                   "office_title TEXT,"
+                   "start_time timestamp,"
+                   "end_time timestamp,"
+                   "is_current INTEGER,"
+                   "FOREIGN KEY(mp_con) REFERENCES mps(constituency),"
+                   "FOREIGN KEY(office_title) REFERENCES offices(title)"
+                   ")")
+    """
+
+    conn.commit()
+
+    return conn, cursor
+
+
+def insert_into_db(mp, conn, cursor):
     # todo: constituency will be primary key, as at the time of a general election, candidates may share names
     print(mp.party)
     print(mp.constituency)
     print(mp.current_offices)
     print(mp.past_offices)
+    print(mp.first_name)
+    print(mp.last_name)
     # todo: insert MP data into DB
-    #conn = sqlite3.connect(db_location)
+
+    mps_command_with_slots = "INSERT INTO 'mps' ('constituency', 'party', 'mp_name') VALUES (?, ?, ?);"
+    data = (mp.constituency, mp.party, mp.party)
+    cursor.execute(mps_command_with_slots, data)
+
+    offices_command_with_slots = "INSERT INTO mp_offices ('title', 'mp_con', 'start_date', 'end_date', 'is_current') VALUES (?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
+
+    for key in mp.current_offices:
+        print("key:" , key)
+        data = (key, mp.constituency, mp.current_offices[key], None, 1)
+        cursor.execute(offices_command_with_slots, data)
+
+    for key in mp.past_offices:
+        print("key:" , key)
+        data = (key, mp.constituency, mp.past_offices[key][0], mp.past_offices[key][1], 0)
+        cursor.execute(offices_command_with_slots, data)
+
+    conn.commit()
 
 
+def create_db_from_list(list_file, directory, date):
+    conn, cursor = create_db(directory, date)
 
-def create_db_from_list(list_file, db_location):
     with open(list_file, "r") as f:
         decoded = f.read()
 
@@ -128,10 +200,12 @@ def create_db_from_list(list_file, db_location):
 
     # skip first row
     for row in mp_list[1:]:
+        first_name = row[1]
+        last_name = row[2]
         party = row[3]
         constituency = row[4]
         url = row[5]
 
-        mp = MPData(mp_url=url, constituency=constituency, party=party)
+        mp = MPData(mp_url=url, constituency=constituency, party=party, first_name=first_name, last_name=last_name)
 
-        insert_into_db(mp)
+        insert_into_db(mp, conn, cursor)
