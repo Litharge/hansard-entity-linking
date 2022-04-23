@@ -6,9 +6,10 @@ from time import sleep
 
 # stores the csv list of mps in a file allowing the user to visualise which mps are known to the system
 def save_csv(to_download, save_directory):
+
     while True:
         try:
-            r = requests.get("https://www.theyworkforyou.com/mps/?f=csv&date=2017-06-09")
+            r = requests.get("https://www.theyworkforyou.com/mps/?f=csv&date=" + to_download)
             r.raise_for_status()
             break
         except requests.exceptions.HTTPError as e:
