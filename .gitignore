@@ -2,3 +2,5 @@
 .idea/
 #ignore downloaded xml data
 hansard_xml/
+#ignore saved discourse model data
+discourse_model_data/
