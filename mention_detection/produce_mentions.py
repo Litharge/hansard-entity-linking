@@ -58,11 +58,10 @@ def get_sentence_bounds(nlp: stanza.Pipeline, utt_span: str):
 def get_first_person_pronouns(utt_span):
     # bounds of the sections we are interested in, for "I've" this is the first char only
     first_person_pronoun_spans = {
-        " I ": (1, 2), " I'": (1, 2), " me ": (1, 3), " myself ": (1, 7), " mine ": (1, 5), " my ": (1, 3),
-        " I,": (1, 2), " me,": (1, 3), " myself,": (1, 7), " mine,": (1, 5), " my,": (1, 3),
-        " I\.": (1, 2), " me\.": (1, 3), " myself\.": (1, 7), " mine\.": (1, 5), " my\.": (1, 3),
-        "^I ": (0, 1), "^I'": (0, 1), "^me ": (0, 2), "^myself ": (0, 6), "^mine ": (0, 4), "^my ": (0, 2),
-        "^I\.": (0, 1), "^me\.": (0, 2), "^myself\.": (0, 6), "^mine\.": (0, 4), "^my\.": (1, 3),
+        " I ": (1, 2), " me ": (1, 3), " myself ": (1, 7), " mine ": (1, 5), " my ": (1, 3),
+        " I\W": (1, 2), " me\W": (1, 3), " myself\W": (1, 7), " mine\W": (1, 5), " my\W": (1, 3),
+        "^I ": (0, 1), "^me ": (0, 2), "^myself ": (0, 6), "^mine ": (0, 4), "^my ": (0, 2),
+        "^I\W": (0, 1), "^me\W": (0, 2), "^myself\W": (0, 6), "^mine\W": (0, 4), "^my\W": (1, 3),
         " I$": (1, 2), " me$": (1, 3), " myself$": (1, 7), " mine$": (1, 5), " my$": (0, 2),
         "^I$": (0, 1), "^me$": (0, 2), "^myself$": (0, 6), "^mine$": (0, 4), "^my$": (0, 2)
     }
