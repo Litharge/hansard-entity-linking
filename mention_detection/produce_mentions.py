@@ -43,13 +43,13 @@ def get_utterance_spans(location, start, end):
 
 def get_sentence_bounds(nlp: stanza.Pipeline, utt_span: str):
     # dictionary containing sentence number as key and tuple of start and end char inclusive
-    sentence_dict = {}
+    sentence_list = []
     doc = nlp(utt_span)
 
-    for sentence_no, sentence in enumerate(doc.sentences):
-        sentence_dict[sentence_no] = (sentence.tokens[0].start_char, sentence.tokens[-1].end_char)
+    for sentence in doc.sentences:
+        sentence_list.append((sentence.tokens[0].start_char, sentence.tokens[-1].end_char))
 
-    return sentence_dict
+    return sentence_list
 
 
 def get_first_person_pronouns(utt_span):
