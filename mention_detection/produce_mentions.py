@@ -1,8 +1,11 @@
 # module to produce pronoun mentions
 
+import re
+import bisect
+
 import stanza
 from lxml import etree
-import re
+
 
 # iterate through [desired range] of [a given xml file]
 # first determine sentence bounds
@@ -83,18 +86,56 @@ def get_mentions_indexed_by_character(utt_span):
     get_first_person_pronouns(utt_span)
 
 
+# instances represent mentions in sentences
+# can take on additional data e.g. linking to a cluster
+class AnnotatedMention():
+    def __init__(self, sentence_starts, sentence_bounds, mention):
+        # find which sentence the mention begins in based on the start character index
+        # todo: this can be sped up by a modified linear search, although may be less readable
+        self.sentence_number = bisect.bisect_right(sentence_starts, mention[0]) - 1
+
+        self.start_char_in_sentence = mention[0] - sentence_starts[self.sentence_number]
+        self.end_char_in_sentence = mention[1] - sentence_starts[self.sentence_number]
+
+
+# contains AnnotatedMention's
+# has an id associated
+class Mentions():
+    def __init__(self, mentions, sentence_bounds):
+        self.annotated_mentions = []
+
+        self.sentence_bounds = sentence_bounds
+
+        # generate sentence starts for binary search once, so that each AnnotatedMention doesnt have to generate it
+        sentence_starts = [item[0] for item in sentence_bounds]
+
+        for m in mentions:
+            am = AnnotatedMention(sentence_starts, sentence_bounds, m)
+            self.annotated_mentions.append(am)
+
+    def __repr__(self):
+        repr_str = ""
+        repr_str += str(self.sentence_bounds) + "\n\n"
+
+        for am in self.annotated_mentions:
+            repr_str += f"{am.sentence_number}, {am.start_char_in_sentence}, {am.end_char_in_sentence}\n"
+
+        return repr_str
+
+
 def get_mentions(location, start, end):
     # to put in get_sentences
     nlp = stanza.Pipeline(lang='en', processors='tokenize')
 
+    # goes through each entire utterance span,
     for utt_span in get_utterance_spans(location, start, end):
         utt_span = transform_hon(utt_span)
-        get_sentence_bounds(nlp, utt_span)
+        sentence_bounds = get_sentence_bounds(nlp, utt_span)
 
         # todo: function to get list of spans of quotations
 
-        get_mentions_indexed_by_character(utt_span)
+        mentions = get_mentions_indexed_by_character(utt_span)
 
-
+        sentence_mentions = Mentions(mentions, sentence_bounds)
 
 
