@@ -55,8 +55,24 @@ def get_sentence_bounds(nlp: stanza.Pipeline, utt_span: str):
     return sentence_list
 
 
+def get_regex_mention_spans(utt_span, regex):
+    spans_found = []
+
+    for key in regex:
+        print(key)
+        for m in re.finditer(key, utt_span, re.IGNORECASE):
+            print("here")
+            spans_found.append(
+                (m.start(0) + regex[key][0],
+                m.start(0) + regex[key][1])
+            )
+
+    return spans_found
+
+
+# get mentions indexed by character [start, end)
 def get_first_person_pronouns(utt_span):
-    # bounds of the sections we are interested in, for "I've" this is the first char only
+    # bounds of the sections we are interested in, e.g. for "I've" this is the first char only
     first_person_pronoun_spans = {
         " I ": (1, 2), " me ": (1, 3), " myself ": (1, 7), " mine ": (1, 5), " my ": (1, 3),
         " I\W": (1, 2), " me\W": (1, 3), " myself\W": (1, 7), " mine\W": (1, 5), " my\W": (1, 3),
@@ -66,23 +82,9 @@ def get_first_person_pronouns(utt_span):
         "^I$": (0, 1), "^me$": (0, 2), "^myself$": (0, 6), "^mine$": (0, 4), "^my$": (0, 2)
     }
 
-    spans_found = []
+    first_person_pronoun_spans = get_regex_mention_spans(utt_span, first_person_pronoun_spans)
 
-    for key in first_person_pronoun_spans:
-        print(key)
-        for m in re.finditer(key, utt_span, re.IGNORECASE):
-            print("here")
-            spans_found.append(
-                (m.start(0) + first_person_pronoun_spans[key][0],
-                m.start(0) + first_person_pronoun_spans[key][1])
-            )
-
-    return spans_found
-
-
-# get mentions indexed by character [start, end)
-def get_mentions_indexed_by_character(utt_span):
-    get_first_person_pronouns(utt_span)
+    return first_person_pronoun_spans
 
 
 # instances represent mentions in sentences
@@ -133,7 +135,7 @@ def get_mentions(location, start, end):
 
         # todo: function to get list of spans of quotations
 
-        mentions = get_mentions_indexed_by_character(utt_span)
+        mentions = get_first_person_pronouns(utt_span)
 
         sentence_mentions = Mentions(mentions, sentence_bounds)
 
