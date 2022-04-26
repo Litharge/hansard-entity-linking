@@ -151,9 +151,12 @@ class Mentions():
 
                 if word.feats is not None:
                     # if the word is a pronoun, look at the feats string to determine if the pronoun is singular
-                    if word.upos == "PRON" and word.feats[word.feats.find("Number=")+len_of_number : word.feats.find("Number=")+len_of_number+4]:
+                    if word.upos == "PRON":# and word.feats[word.feats.find("Number=")+len_of_number : word.feats.find("Number=")+len_of_number+4] == "Sing":
                         # filter out neuter and epicene pronouns, feats does not contain information to discriminate this
                         if word.text.lower() in ["it", "itself", "its", "they", "them", "themselves", "theirs", "their"]:
+                            continue
+                        # filter out first person plural, geats does not contain info to discriminate this
+                        if word.text.lower() in ["we", "us", "ourselves", "ours", "our"]:
                             continue
                         print(word.text, word.parent.text, word.upos, word.feats)
                         person = word.feats[word.feats.find("Person=")+len_of_person]
