@@ -59,25 +59,120 @@ def get_sentence_bounds(doc):
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
-    def __init__(self, start_char=None, end_char=None, person=None, sentence=None):
+    def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
+                                      end_char_in_sentence=None, person=None, gender=None):
+        self.start_char = start_char
+        self.end_char = end_char
+
         self.sentence_number = sentence
+        self.start_char_in_sentence = start_char_in_sentence
+        self.end_char_in_sentence = end_char_in_sentence
         self.person = person
-        self.start_char_in_sentence = start_char
-        self.end_char_in_sentence = end_char
+        # todo: these actually assign overall character
+
+
+        self.gender = gender
 
 
 # contains AnnotatedMention's
 # has an id associated
 class Mentions():
-    def __init__(self, doc, sentence_bounds):
+    def __init__(self, doc, utt_span, sentence_bounds):
         self.annotated_mentions = []
 
         # store sentence bounds for conversions
         self.sentence_bounds = sentence_bounds
 
+        self.add_pronouns(doc)
+
+        # todo: this should be instance variable instead of arg
+        sentence_starts = [item[0] for item in sentence_bounds]
+        self.add_hon_epicene_mentions(utt_span, sentence_starts)
+        self.add_hon_masculine_mentions(utt_span, sentence_starts)
+        self.add_hon_feminine_mentions(utt_span, sentence_starts)
+
+
+    def get_regex_span(self, spans, utt_span):
+        spans_found = []
+
+        for span in spans:
+            for m in re.finditer(span, utt_span, re.IGNORECASE):
+                print("here")
+                spans_found.append(
+                    (m.start(0),
+                     m.start(0) + len(span))
+                )
+
+        return spans_found
+
+    # using a list of found span tuples, add AnnotatedMentions to self.annotated_mentions
+    def add_am(self, gender, found_spans, sentence_starts):
+        for mention in found_spans:
+            sentence_number = bisect.bisect_right(sentence_starts, mention[0]) - 1
+
+            start_char_in_sentence = mention[0] - sentence_starts[sentence_number]
+            end_char_in_sentence = mention[1] - sentence_starts[sentence_number]
+
+            new_am = AnnotatedMention(start_char=mention[0],
+                                      end_char=mention[1],
+                                      sentence=sentence_number,
+                                      start_char_in_sentence=start_char_in_sentence,
+                                      end_char_in_sentence=end_char_in_sentence,
+                                      person=None,
+                                      gender=gender)
+
+            self.annotated_mentions.append(new_am)
+
+
+
+    def add_hon_epicene_mentions(self, utt_span, sentence_starts):
+        # bounds of the sections we are interested in, for "I've" this is the first char only
+        hon_spans = [
+            "my hon  friend",
+            "my hon  and learned friend",
+            "my right hon  friend",
+            "my right hon  and learned friend",
+            "the hon  member",
+            "the hon  and learned member",
+            "the right hon  member",
+            "the right hon  and learned member",
+        ]
+
+        found_spans = self.get_regex_span(hon_spans, utt_span)
+
+        self.add_am("epicene", found_spans, sentence_starts)
+
+
+    def add_hon_masculine_mentions(self, utt_span, sentence_starts):
+        hon_spans = [
+        "the hon  gentleman",
+        "the hon  and learned gentleman",
+        "the right hon  gentleman",
+        "the right hon  and learned gentleman"
+        ]
+
+        found_spans = self.get_regex_span(hon_spans, utt_span)
+
+        self.add_am("masculine", found_spans, sentence_starts)
+
+    def add_hon_feminine_mentions(self, utt_span, sentence_starts):
+        hon_spans = [
+        "the hon  lady",
+        "the hon  and learned lady",
+        "the right hon  lady",
+        "the right hon  and learned lady"]
+
+        found_spans = self.get_regex_span(hon_spans, utt_span)
+
+        self.add_am("feminine", found_spans, sentence_starts)
+
+
+    def add_pronouns(self, doc):
         len_of_number = len("Number=")
         len_of_person = len("Person=")
+        len_of_gender = len("Gender=")
 
+        # add pronouns to annotated_mentions
         for sent_no, sentence in enumerate(doc.sentences):
             for word in sentence.words:
 
@@ -90,12 +185,23 @@ class Mentions():
                         print(word.text, word.parent.text, word.upos, word.feats)
                         person = word.feats[word.feats.find("Person=")+len_of_person]
 
+                        gender=None
+                        print("word:", word.text, "gender:", word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4])
+                        if word.feats.find("Gender=") != -1:
+                            if word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4] == "Masc":
+                                gender = "Masc"
+                            elif word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+3] == "Fem":
+                                gender = "Fem"
+                            else:
+                                gender = "Epi"
+
                         # store only the features we are interested in
                         # todo: start and end chars are using tokens, which is correct in most cases
                         new_am = AnnotatedMention(start_char=word.parent.start_char,
                                                   end_char=word.parent.end_char,
                                                   person=person,
-                                                  sentence=sent_no)
+                                                  sentence=sent_no,
+                                                  gender=gender)
                         self.annotated_mentions.append(new_am)
 
 
@@ -105,7 +211,7 @@ class Mentions():
         repr_str += str(self.sentence_bounds) + "\n\n"
 
         for am in self.annotated_mentions:
-            repr_str += f"{am.sentence_number}, {am.start_char_in_sentence}, {am.end_char_in_sentence}\n"
+            repr_str += f"{am.start_char}, {am.end_char}, {am.sentence_number}, {am.start_char_in_sentence}, {am.end_char_in_sentence}, {am.gender}\n"
 
         return repr_str
 
