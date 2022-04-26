@@ -80,13 +80,15 @@ class Mentions():
     def __init__(self, doc, utt_span, sentence_bounds):
         self.annotated_mentions = []
 
+        # todo: this should be instance variable instead of arg
+        sentence_starts = [item[0] for item in sentence_bounds]
+
         # store sentence bounds for conversions
         self.sentence_bounds = sentence_bounds
 
-        self.add_pronouns(doc)
+        self.add_pronouns(doc, sentence_starts)
 
-        # todo: this should be instance variable instead of arg
-        sentence_starts = [item[0] for item in sentence_bounds]
+
         self.add_hon_epicene_mentions(utt_span, sentence_starts)
         self.add_hon_masculine_mentions(utt_span, sentence_starts)
         self.add_hon_feminine_mentions(utt_span, sentence_starts)
@@ -105,13 +107,18 @@ class Mentions():
 
         return spans_found
 
+    def get_sentence_position(self, sentence_starts, start_char, end_char):
+        sentence_number = bisect.bisect_right(sentence_starts, start_char) - 1
+
+        start_char_in_sentence = start_char - sentence_starts[sentence_number]
+        end_char_in_sentence = end_char - sentence_starts[sentence_number]
+
+        return sentence_number, start_char_in_sentence, end_char_in_sentence
+
     # using a list of found span tuples, add AnnotatedMentions to self.annotated_mentions
     def add_am(self, gender, found_spans, sentence_starts):
         for mention in found_spans:
-            sentence_number = bisect.bisect_right(sentence_starts, mention[0]) - 1
-
-            start_char_in_sentence = mention[0] - sentence_starts[sentence_number]
-            end_char_in_sentence = mention[1] - sentence_starts[sentence_number]
+            sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(sentence_starts, mention[0], mention[1])
 
             new_am = AnnotatedMention(start_char=mention[0],
                                       end_char=mention[1],
@@ -167,7 +174,7 @@ class Mentions():
         self.add_am("feminine", found_spans, sentence_starts)
 
 
-    def add_pronouns(self, doc):
+    def add_pronouns(self, doc, sentence_starts):
         len_of_number = len("Number=")
         len_of_person = len("Person=")
         len_of_gender = len("Gender=")
@@ -195,12 +202,19 @@ class Mentions():
                             else:
                                 gender = "Epi"
 
+                        sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(
+                            sentence_starts, word.parent.start_char, word.parent.end_char)
+
                         # store only the features we are interested in
                         # todo: start and end chars are using tokens, which is correct in most cases
-                        new_am = AnnotatedMention(start_char=word.parent.start_char,
+                        new_am = AnnotatedMention(
+
+                                                  start_char=word.parent.start_char,
                                                   end_char=word.parent.end_char,
                                                   person=person,
-                                                  sentence=sent_no,
+                            sentence=sent_no,
+                            start_char_in_sentence=start_char_in_sentence,
+                            end_char_in_sentence=end_char_in_sentence,
                                                   gender=gender)
                         self.annotated_mentions.append(new_am)
 
