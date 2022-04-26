@@ -61,7 +61,7 @@ def get_sentence_bounds(doc):
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, person=None, sentence=None):
         self.sentence_number = sentence
-
+        self.person = person
         self.start_char_in_sentence = start_char
         self.end_char_in_sentence = end_char
 
@@ -94,7 +94,7 @@ class Mentions():
                         # todo: start and end chars are using tokens, which is correct in most cases
                         new_am = AnnotatedMention(start_char=word.parent.start_char,
                                                   end_char=word.parent.end_char,
-                                                  person=word,
+                                                  person=person,
                                                   sentence=sent_no)
                         self.annotated_mentions.append(new_am)
 
