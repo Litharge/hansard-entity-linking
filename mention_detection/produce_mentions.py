@@ -207,14 +207,11 @@ class Mentions():
 
                         # store only the features we are interested in
                         # todo: start and end chars are using tokens, which is correct in most cases
-                        new_am = AnnotatedMention(
-
-                                                  start_char=word.parent.start_char,
+                        new_am = AnnotatedMention(start_char=word.parent.start_char,
                                                   end_char=word.parent.end_char,
-                                                  person=person,
-                            sentence=sent_no,
-                            start_char_in_sentence=start_char_in_sentence,
-                            end_char_in_sentence=end_char_in_sentence,
+                                                  person=person,sentence=sent_no,
+                                                  start_char_in_sentence=start_char_in_sentence,
+                                                  end_char_in_sentence=end_char_in_sentence,
                                                   gender=gender)
                         self.annotated_mentions.append(new_am)
 
