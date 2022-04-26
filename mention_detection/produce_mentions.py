@@ -44,10 +44,10 @@ def get_utterance_spans(location, start, end):
             break
 
 
-def get_sentence_bounds(nlp: stanza.Pipeline, utt_span: str):
+def get_sentence_bounds(doc):
     # dictionary containing sentence number as key and tuple of start and end char inclusive
     sentence_list = []
-    doc = nlp(utt_span)
+
 
     for sentence in doc.sentences:
         sentence_list.append((sentence.tokens[0].start_char, sentence.tokens[-1].end_char))
@@ -55,63 +55,50 @@ def get_sentence_bounds(nlp: stanza.Pipeline, utt_span: str):
     return sentence_list
 
 
-def get_regex_mention_spans(utt_span, regex):
-    spans_found = []
-
-    for key in regex:
-        print(key)
-        for m in re.finditer(key, utt_span, re.IGNORECASE):
-            print("here")
-            spans_found.append(
-                (m.start(0) + regex[key][0],
-                m.start(0) + regex[key][1])
-            )
-
-    return spans_found
-
-
-# get mentions indexed by character [start, end)
-def get_first_person_pronouns(utt_span):
-    # bounds of the sections we are interested in, e.g. for "I've" this is the first char only
-    first_person_pronoun_spans = {
-        " I\W": (1, 2), " me\W": (1, 3), " myself\W": (1, 7), " mine\W": (1, 5), " my\W": (1, 3),
-        "^I\W": (0, 1), "^me\W": (0, 2), "^myself\W": (0, 6), "^mine\W": (0, 4), "^my\W": (1, 3),
-        " I$": (1, 2), " me$": (1, 3), " myself$": (1, 7), " mine$": (1, 5), " my$": (0, 2),
-        "^I$": (0, 1), "^me$": (0, 2), "^myself$": (0, 6), "^mine$": (0, 4), "^my$": (0, 2)
-    }
-
-    first_person_pronoun_spans = get_regex_mention_spans(utt_span, first_person_pronoun_spans)
-
-    return first_person_pronoun_spans
-
-
 
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
-    def __init__(self, sentence_starts, sentence_bounds, mention):
-        # find which sentence the mention begins in based on the start character index
-        # todo: this can be sped up by a modified linear search, although may be less readable
-        self.sentence_number = bisect.bisect_right(sentence_starts, mention[0]) - 1
+    def __init__(self, start_char=None, end_char=None, person=None, sentence=None):
+        self.sentence_number = sentence
 
-        self.start_char_in_sentence = mention[0] - sentence_starts[self.sentence_number]
-        self.end_char_in_sentence = mention[1] - sentence_starts[self.sentence_number]
+        self.start_char_in_sentence = start_char
+        self.end_char_in_sentence = end_char
 
 
 # contains AnnotatedMention's
 # has an id associated
 class Mentions():
-    def __init__(self, mentions, sentence_bounds):
+    def __init__(self, doc, sentence_bounds):
         self.annotated_mentions = []
 
+        # store sentence bounds for conversions
         self.sentence_bounds = sentence_bounds
 
-        # generate sentence starts for binary search once, so that each AnnotatedMention doesnt have to generate it
-        sentence_starts = [item[0] for item in sentence_bounds]
+        len_of_number = len("Number=")
+        len_of_person = len("Person=")
 
-        for m in mentions:
-            am = AnnotatedMention(sentence_starts, sentence_bounds, m)
-            self.annotated_mentions.append(am)
+        for sent_no, sentence in enumerate(doc.sentences):
+            for word in sentence.words:
+
+                if word.feats is not None:
+                    # if the word is a pronoun, look at the feats string to determine if the pronoun is singular
+                    if word.upos == "PRON" and word.feats[word.feats.find("Number=")+len_of_number : word.feats.find("Number=")+len_of_number+4]:
+                        # filter out neuter and epicene pronouns, feats does not contain information to discriminate this
+                        if word.text.lower() in ["it", "itself", "its", "they", "them", "themselves", "theirs", "their"]:
+                            continue
+                        print(word.text, word.parent.text, word.upos, word.feats)
+                        person = word.feats[word.feats.find("Person=")+len_of_person]
+
+                        # store only the features we are interested in
+                        # todo: start and end chars are using tokens, which is correct in most cases
+                        new_am = AnnotatedMention(start_char=word.parent.start_char,
+                                                  end_char=word.parent.end_char,
+                                                  person=word,
+                                                  sentence=sent_no)
+                        self.annotated_mentions.append(new_am)
+
+
 
     def __repr__(self):
         repr_str = ""
