@@ -14,12 +14,14 @@ class TestProduceMentions(unittest.TestCase):
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         doc = nlp(test_utterance)
 
-        result = Mentions(doc, test_utterance, test_sentence_spans)
+        m = Mentions(test_sentence_spans)
+
+        m.detect_mentions(doc, test_utterance)
 
         print(test_utterance)
-        print(result)
+        print(m)
 
-        result_sentences = [a.sentence_number for a in result.annotated_mentions]
+        result_sentences = [a.sentence_number for a in m.annotated_mentions]
 
         self.assertListEqual(result_sentences, [0, 0, 1, 1, 1, 2, 3, 3])
 
@@ -31,12 +33,14 @@ class TestProduceMentions(unittest.TestCase):
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         doc = nlp(test_utterance)
 
-        result = Mentions(doc, test_utterance, test_sentence_spans)
+        m = Mentions(test_sentence_spans)
+
+        m.detect_mentions(doc, test_utterance)
 
         print(test_utterance)
-        print(result)
+        print(m)
 
-        result_sentences = [a.sentence_number for a in result.annotated_mentions if a.person == None]
+        result_sentences = [a.sentence_number for a in m.annotated_mentions if a.person == None]
 
         self.assertListEqual(result_sentences, [0, 1, 1])
 
@@ -48,12 +52,14 @@ class TestProduceMentions(unittest.TestCase):
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         doc = nlp(test_utterance)
 
-        result = Mentions(doc, test_utterance, test_sentence_spans)
+        m = Mentions(test_sentence_spans)
+
+        m.detect_mentions(doc, test_utterance)
 
         print(test_utterance)
-        print(result)
+        print(m)
 
-        result_sentences = [a.gender for a in result.annotated_mentions if a.person == None]
+        result_sentences = [a.gender for a in m.annotated_mentions if a.person == None]
 
         #self.assertListEqual(result_sentences, ["masculine", "feminine"])
 

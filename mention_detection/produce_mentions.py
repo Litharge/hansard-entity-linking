@@ -15,7 +15,6 @@ from lxml import etree
 def transform_hon(to_transform):
     return to_transform.replace(" hon. ", " hon  ")
 
-
 def get_utterance_spans(location, start, end):
     tree = etree.parse(location)
 
@@ -44,17 +43,6 @@ def get_utterance_spans(location, start, end):
             break
 
 
-def get_sentence_bounds(doc):
-    # dictionary containing sentence number as key and tuple of start and end char inclusive
-    sentence_list = []
-
-
-    for sentence in doc.sentences:
-        sentence_list.append((sentence.tokens[0].start_char, sentence.tokens[-1].end_char))
-
-    return sentence_list
-
-
 
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
@@ -77,21 +65,37 @@ class AnnotatedMention():
 # contains AnnotatedMention's
 # has an id associated
 class Mentions():
-    def __init__(self, doc, utt_span, sentence_bounds):
+    def __init__(self, sentence_bounds):
         self.annotated_mentions = []
 
         # todo: this should be instance variable instead of arg
-        sentence_starts = [item[0] for item in sentence_bounds]
+        self.sentence_starts = [item[0] for item in sentence_bounds]
 
         # store sentence bounds for conversions
         self.sentence_bounds = sentence_bounds
 
-        self.add_pronouns(doc, sentence_starts)
 
+
+    def detect_mentions(self, doc, utt_span):
+        sentence_starts = self.sentence_starts
+
+        self.add_pronouns(doc, sentence_starts)
 
         self.add_hon_epicene_mentions(utt_span, sentence_starts)
         self.add_hon_masculine_mentions(utt_span, sentence_starts)
         self.add_hon_feminine_mentions(utt_span, sentence_starts)
+
+
+
+
+    def get_sentence_bounds(self, doc):
+        # dictionary containing sentence number as key and tuple of start and end char inclusive
+        sentence_list = []
+
+        for sentence in doc.sentences:
+            sentence_list.append((sentence.tokens[0].start_char, sentence.tokens[-1].end_char))
+
+        return sentence_list
 
 
     def get_regex_span(self, spans, utt_span):

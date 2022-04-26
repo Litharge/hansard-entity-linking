@@ -1,4 +1,4 @@
-from mention_detection.produce_mentions import get_sentence_bounds, transform_hon
+from mention_detection.produce_mentions import Mentions, transform_hon
 import unittest
 import stanza
 
@@ -21,7 +21,11 @@ class TestMentions(unittest.TestCase):
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize')
 
-        results = get_sentence_bounds(nlp, test_utterance_span)
+        doc = nlp(test_utterance_span)
+
+        test_obj = Mentions([])
+
+        results = test_obj.get_sentence_bounds(doc)
 
         self.assertEqual(results[0], (0, 46))
         self.assertEqual(results[1], (47, 128))
