@@ -1,4 +1,4 @@
-from mention_detection.produce_mentions import Mentions
+from mention_detection.utterance_level import Mentions
 
 import unittest
 
