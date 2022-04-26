@@ -141,7 +141,6 @@ class Mentions():
 
 
     def add_pronouns(self, doc, sentence_starts):
-        len_of_number = len("Number=")
         len_of_person = len("Person=")
         len_of_gender = len("Gender=")
 
@@ -151,18 +150,22 @@ class Mentions():
 
                 if word.feats is not None:
                     # if the word is a pronoun, look at the feats string to determine if the pronoun is singular
-                    if word.upos == "PRON":# and word.feats[word.feats.find("Number=")+len_of_number : word.feats.find("Number=")+len_of_number+4] == "Sing":
-                        # filter out neuter and epicene pronouns, feats does not contain information to discriminate this
+                    if word.upos == "PRON":
+                        # filter out neuter and epicene pronouns, feats does not contain information to discriminate
                         if word.text.lower() in ["it", "itself", "its", "they", "them", "themselves", "theirs", "their"]:
                             continue
+
                         # filter out first person plural, geats does not contain info to discriminate this
                         if word.text.lower() in ["we", "us", "ourselves", "ours", "our"]:
                             continue
                         print(word.text, word.parent.text, word.upos, word.feats)
+
                         person = word.feats[word.feats.find("Person=")+len_of_person]
 
                         gender=None
+
                         print("word:", word.text, "gender:", word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4])
+
                         if word.feats.find("Gender=") != -1:
                             if word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4] == "Masc":
                                 gender = "Masc"
@@ -172,7 +175,10 @@ class Mentions():
                                 gender = "Epi"
 
                         sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(
-                            sentence_starts, word.parent.start_char, word.parent.end_char)
+                            sentence_starts,
+                            word.parent.start_char,
+                            word.parent.end_char
+                        )
 
                         # store only the features we are interested in
                         # todo: start and end chars are using tokens, which is correct in most cases
@@ -182,6 +188,7 @@ class Mentions():
                                                   start_char_in_sentence=start_char_in_sentence,
                                                   end_char_in_sentence=end_char_in_sentence,
                                                   gender=gender)
+
                         self.annotated_mentions.append(new_am)
 
 
