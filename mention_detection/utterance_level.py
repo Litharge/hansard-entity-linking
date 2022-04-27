@@ -6,6 +6,8 @@ import bisect
 import stanza
 from lxml import etree
 
+from mention_detection.span_detection import get_hon_epicene_mentions, get_hon_masculine_mentions, get_hon_feminine_mentions
+
 
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
@@ -43,9 +45,14 @@ class Mentions():
 
         self.add_pronouns(doc, sentence_starts)
 
-        self.add_hon_epicene_mentions(utt_span, sentence_starts)
-        self.add_hon_masculine_mentions(utt_span, sentence_starts)
-        self.add_hon_feminine_mentions(utt_span, sentence_starts)
+        epicene_ranges = get_hon_epicene_mentions(utt_span, sentence_starts)
+        self.add_am("epicene", epicene_ranges, sentence_starts)
+
+        masculine_ranges = get_hon_masculine_mentions(utt_span, sentence_starts)
+        self.add_am("masculine", masculine_ranges, sentence_starts)
+
+        feminine_ranges = get_hon_feminine_mentions(utt_span, sentence_starts)
+        self.add_am("feminine", feminine_ranges, sentence_starts)
 
 
 
@@ -60,18 +67,7 @@ class Mentions():
         return sentence_list
 
 
-    def get_regex_span(self, spans, utt_span):
-        spans_found = []
 
-        for span in spans:
-            for m in re.finditer(span, utt_span, re.IGNORECASE):
-                print("here")
-                spans_found.append(
-                    (m.start(0),
-                     m.start(0) + len(span))
-                )
-
-        return spans_found
 
     def get_sentence_position(self, sentence_starts, start_char, end_char):
         sentence_number = bisect.bisect_right(sentence_starts, start_char) - 1
@@ -98,46 +94,7 @@ class Mentions():
 
 
 
-    def add_hon_epicene_mentions(self, utt_span, sentence_starts):
-        # bounds of the sections we are interested in, for "I've" this is the first char only
-        hon_spans = [
-            "my hon  friend",
-            "my hon  and learned friend",
-            "my right hon  friend",
-            "my right hon  and learned friend",
-            "the hon  member",
-            "the hon  and learned member",
-            "the right hon  member",
-            "the right hon  and learned member",
-        ]
 
-        found_spans = self.get_regex_span(hon_spans, utt_span)
-
-        self.add_am("epicene", found_spans, sentence_starts)
-
-
-    def add_hon_masculine_mentions(self, utt_span, sentence_starts):
-        hon_spans = [
-        "the hon  gentleman",
-        "the hon  and learned gentleman",
-        "the right hon  gentleman",
-        "the right hon  and learned gentleman"
-        ]
-
-        found_spans = self.get_regex_span(hon_spans, utt_span)
-
-        self.add_am("masculine", found_spans, sentence_starts)
-
-    def add_hon_feminine_mentions(self, utt_span, sentence_starts):
-        hon_spans = [
-        "the hon  lady",
-        "the hon  and learned lady",
-        "the right hon  lady",
-        "the right hon  and learned lady"]
-
-        found_spans = self.get_regex_span(hon_spans, utt_span)
-
-        self.add_am("feminine", found_spans, sentence_starts)
 
 
     def add_pronouns(self, doc, sentence_starts):
