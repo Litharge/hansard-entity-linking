@@ -130,7 +130,9 @@ def create_db(directory, date):
     cursor.execute("CREATE TABLE IF NOT EXISTS mps "
                    "(constituency TEXT PRIMARY KEY,"
                    "party TEXT,"
-                   "mp_name TEXT)")
+                   "first_name TEXT,"
+                   "last_name TEXT)"
+                   )
 
     cursor.execute("CREATE TABLE IF NOT EXISTS mp_offices "
                    "("
@@ -172,8 +174,8 @@ def insert_into_db(mp, conn, cursor):
     print(mp.last_name)
     # todo: insert MP data into DB
 
-    mps_command_with_slots = "INSERT INTO 'mps' ('constituency', 'party', 'mp_name') VALUES (?, ?, ?);"
-    data = (mp.constituency, mp.party, mp.party)
+    mps_command_with_slots = "INSERT INTO 'mps' ('constituency', 'party', 'first_name', 'last_name') VALUES (?, ?, ?, ?);"
+    data = (mp.constituency, mp.party, mp.first_name, mp.last_name)
     cursor.execute(mps_command_with_slots, data)
 
     offices_command_with_slots = "INSERT INTO mp_offices ('title', 'mp_con', 'start_date', 'end_date', 'is_current') VALUES (?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
