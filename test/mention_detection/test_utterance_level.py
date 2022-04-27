@@ -80,7 +80,43 @@ class TestProduceMentions(unittest.TestCase):
         self.assertEqual(results[1], (47, 128))
 
 
+    def test_speaker_sentences_are_correct(self):
+        test_utterance = "Mr Speaker, the hon  gentleman is correct. Excuse me, Madam Speaker."
 
+        test_sentence_spans = [(0, 42), (43, 68)]
+
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+        doc = nlp(test_utterance)
+
+        m = Mentions(test_sentence_spans)
+
+        m.detect_mentions(doc, test_utterance)
+
+        print(test_utterance)
+        print(m)
+
+        result_sentences = [a.sentence_number for a in m.annotated_mentions if a.role == "speaker_mention"]
+
+        self.assertListEqual(result_sentences, [0, 1])
+
+    def test_deputy_speaker_genders_are_correct(self):
+        test_utterance = "Mr Deputy Speaker, the hon  gentleman is correct. Excuse me, Madam Deputy Speaker."
+
+        test_sentence_spans = [(0, 49), (50, 82)]
+
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+        doc = nlp(test_utterance)
+
+        m = Mentions(test_sentence_spans)
+
+        m.detect_mentions(doc, test_utterance)
+
+        print(test_utterance)
+        print(m)
+
+        result_sentences = [a.gender for a in m.annotated_mentions if a.role == "deputy_speaker_mention"]
+
+        self.assertListEqual(result_sentences, ["masculine", "feminine"])
 
 if __name__ == "__main__":
     unittest.main()
