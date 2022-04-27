@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import datetime
 
 import os
+import os.path
 
 class MPData:
     def __init__(self, mp_url=None, constituency=None, party=None, first_name=None, last_name=None, dummy_mp=False):
@@ -118,7 +119,8 @@ def create_db(directory, date):
     db_file = directory + date + ".db"
 
     # delete the existing db
-    os.remove(db_file)
+    if os.path.isfile(db_file):
+        os.remove(db_file)
 
     conn = sqlite3.connect(db_file,
                            detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
