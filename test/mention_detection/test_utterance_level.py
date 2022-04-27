@@ -45,9 +45,9 @@ class TestProduceMentions(unittest.TestCase):
         self.assertListEqual(result_sentences, [0, 1, 1])
 
     def test_hon_genders_are_correct(self):
-        test_utterance = "My right hon  friend is waiting for you. They are pleased."
+        test_utterance = "My right hon  friend is waiting for you. The right hon  lady and the hon  gentleman are here."
 
-        test_sentence_spans = [(0,40), (41,58)]
+        test_sentence_spans = [(0, 40), (41, 93)]
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         doc = nlp(test_utterance)
@@ -61,7 +61,7 @@ class TestProduceMentions(unittest.TestCase):
 
         result_sentences = [a.gender for a in m.annotated_mentions if a.person == None]
 
-        #self.assertListEqual(result_sentences, ["masculine", "feminine"])
+        self.assertListEqual(result_sentences, ["epicene", "masculine", "feminine"])
 
 
     def test_correct_sentence_bounds(self):
@@ -78,6 +78,7 @@ class TestProduceMentions(unittest.TestCase):
 
         self.assertEqual(results[0], (0, 46))
         self.assertEqual(results[1], (47, 128))
+
 
 
 
