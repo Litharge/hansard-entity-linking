@@ -6,14 +6,19 @@ import bisect
 import stanza
 from lxml import etree
 
-from mention_detection.span_detection import get_hon_epicene_mentions, get_hon_masculine_mentions, get_hon_feminine_mentions
+from mention_detection.span_detection import get_hon_epicene_mentions, \
+    get_hon_masculine_mentions, \
+    get_hon_feminine_mentions, \
+    get_speaker_mentions, \
+    get_deputy_speaker_masculine_mentions, \
+    get_deputy_speaker_feminine_mentions
 
 
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
-                                      end_char_in_sentence=None, person=None, gender=None):
+                                      end_char_in_sentence=None, person=None, gender=None, role=None):
         self.start_char = start_char
         self.end_char = end_char
 
@@ -22,8 +27,9 @@ class AnnotatedMention():
         self.end_char_in_sentence = end_char_in_sentence
         self.person = person
 
-
         self.gender = gender
+
+        self.role = role
 
 
 # contains AnnotatedMention's
@@ -54,6 +60,16 @@ class Mentions():
         feminine_ranges = get_hon_feminine_mentions(utt_span, sentence_starts)
         self.add_am("feminine", feminine_ranges, sentence_starts)
 
+        speaker_ranges = get_speaker_mentions(utt_span)
+        self.add_am(None, speaker_ranges, sentence_starts, role="speaker_mention")
+
+        masculine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
+        self.add_am("masculine", masculine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
+
+        feminine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
+        self.add_am("feminine", feminine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
+
+
 
 
 
@@ -78,7 +94,7 @@ class Mentions():
         return sentence_number, start_char_in_sentence, end_char_in_sentence
 
     # using a list of found span tuples, add AnnotatedMentions to self.annotated_mentions
-    def add_am(self, gender, found_spans, sentence_starts):
+    def add_am(self, gender, found_spans, sentence_starts, role=None):
         for mention in found_spans:
             sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(sentence_starts, mention[0], mention[1])
 
@@ -88,7 +104,8 @@ class Mentions():
                                       start_char_in_sentence=start_char_in_sentence,
                                       end_char_in_sentence=end_char_in_sentence,
                                       person=None,
-                                      gender=gender)
+                                      gender=gender,
+                                      role=role)
 
             self.annotated_mentions.append(new_am)
 

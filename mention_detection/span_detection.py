@@ -56,7 +56,39 @@ def get_hon_feminine_mentions(utt_span, sentence_starts):
         "the hon  lady",
         "the hon  and learned lady",
         "the right hon  lady",
-        "the right hon  and learned lady"]
+        "the right hon  and learned lady"
+    ]
+
+    found_spans = get_regex_span(hon_spans, utt_span)
+
+    return found_spans
+
+
+# no need to distinguish gender of speaker, there is only one at a time
+def get_speaker_mentions(utt_span):
+    hon_spans = [
+        "Mr Speaker",
+        "Madam Speaker"
+    ]
+
+    found_spans = get_regex_span(hon_spans, utt_span)
+
+    return found_spans
+
+
+def get_deputy_speaker_masculine_mentions(utt_span):
+    hon_spans = [
+        "Mr Deputy Speaker"
+    ]
+
+    found_spans = get_regex_span(hon_spans, utt_span)
+
+    return found_spans
+
+def get_deputy_speaker_feminine_mentions(utt_span):
+    hon_spans = [
+        "Madam Deputy Speaker"
+    ]
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
