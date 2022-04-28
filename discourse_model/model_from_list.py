@@ -14,7 +14,7 @@ import os.path
 
 class MPData:
     def __str__(self):
-        representation = f"{self.first_name} {self.last_name} \n {self.current_offices} \n {self.past_offices}"
+        representation = f"{self.first_name} {self.last_name} \n {self.constituency} {self.party} \n {self.current_offices} \n {self.past_offices}"
 
         return representation
 
