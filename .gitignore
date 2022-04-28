@@ -6,5 +6,5 @@ hansard_xml/
 discourse_model_data/
 #ignore bytecode
 __pycache__/
-#ignore test db in discourse_model testing
-test/discourse_model/test.db
+#ignore test pickle in discourse_model testing
+test/discourse_model/test.p
