@@ -2,6 +2,7 @@
 
 import re
 import bisect
+import pickle
 
 import stanza
 from lxml import etree
@@ -13,6 +14,8 @@ from mention_detection.span_detection import get_hon_epicene_mentions, \
     get_deputy_speaker_masculine_mentions, \
     get_deputy_speaker_feminine_mentions
 
+from mention_detection.member_for_span_detection import get_member_for_spans
+
 # todo: place call to get_matching_antecedent() in here, this will be a function in a coreference subpackage that
 #  takes in params for what type of mention to look for then return the matching chain id
 #  MAYBE place AnnotatedMention in the coreference package, then Mentions is seen as detecting the mentions, ready
@@ -21,7 +24,7 @@ from mention_detection.span_detection import get_hon_epicene_mentions, \
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
-                                      end_char_in_sentence=None, person=None, gender=None, role=None):
+                                      end_char_in_sentence=None, person=None, gender=None, role=None, entity=None):
         self.start_char = start_char
         self.end_char = end_char
 
@@ -50,7 +53,9 @@ class Mentions():
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
-    def detect_mentions(self, doc, utt_span):
+    def detect_mentions(self, doc, utt_span, model_location):
+        model = pickle.load(open(model_location, "rb"))
+
         sentence_starts = self.sentence_starts
 
         self.add_pronouns(doc, sentence_starts)
@@ -72,6 +77,9 @@ class Mentions():
 
         feminine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
         self.add_am("feminine", feminine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
+
+        member_for_ranges_and_entities = get_member_for_spans(model, utt_span)
+        self.add_am(None, member_for_ranges_and_entities, sentence_starts, role="member_for_mention")
 
     # returns a tuple [start char index, end char index) for a sentence
     def get_sentence_bounds(self, doc):
@@ -110,7 +118,21 @@ class Mentions():
             self.annotated_mentions.append(new_am)
 
 
+    def known_add_am(self, gender, found_ranges_with_entities, sentence_starts, role=None):
+        for mention, entity in found_ranges_with_entities:
+            sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(sentence_starts, mention[0], mention[1])
 
+            new_am = AnnotatedMention(start_char=mention[0],
+                                      end_char=mention[1],
+                                      sentence=sentence_number,
+                                      start_char_in_sentence=start_char_in_sentence,
+                                      end_char_in_sentence=end_char_in_sentence,
+                                      person=None,
+                                      gender=gender,
+                                      role=role,
+                                      entity=entity)
+
+            self.annotated_mentions.append(new_am)
 
 
 
