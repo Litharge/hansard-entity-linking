@@ -13,7 +13,10 @@ from mention_detection.span_detection import get_hon_epicene_mentions, \
     get_deputy_speaker_masculine_mentions, \
     get_deputy_speaker_feminine_mentions
 
-
+# todo: place call to get_matching_antecedent() in here, this will be a function in a coreference subpackage that
+#  takes in params for what type of mention to look for then return the matching chain id
+#  MAYBE place AnnotatedMention in the coreference package, then Mentions is seen as detecting the mentions, ready
+#  for them to perform coref resolution
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
@@ -45,7 +48,8 @@ class Mentions():
         self.sentence_bounds = sentence_bounds
 
 
-
+    # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
+    # all relevant kinds to self.annotated_mentions
     def detect_mentions(self, doc, utt_span):
         sentence_starts = self.sentence_starts
 
@@ -69,10 +73,7 @@ class Mentions():
         feminine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
         self.add_am("feminine", feminine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
 
-
-
-
-
+    # returns a tuple [start char index, end char index) for a sentence
     def get_sentence_bounds(self, doc):
         # dictionary containing sentence number as key and tuple of start and end char inclusive
         sentence_list = []
@@ -82,9 +83,8 @@ class Mentions():
 
         return sentence_list
 
-
-
-
+    # returns a tuple (sentence number, index of start character within sentence, index of end character within
+    # sentence)
     def get_sentence_position(self, sentence_starts, start_char, end_char):
         sentence_number = bisect.bisect_right(sentence_starts, start_char) - 1
 
