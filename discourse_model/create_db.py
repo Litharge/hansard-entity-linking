@@ -1,5 +1,6 @@
 import csv
 import sqlite3
+import pickle
 
 from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
@@ -12,6 +13,12 @@ import os
 import os.path
 
 class MPData:
+    def __str__(self):
+        representation = f"{self.first_name} {self.last_name} \n {self.current_offices} \n {self.past_offices}"
+
+        return representation
+
+
     def __init__(self, mp_url=None, constituency=None, party=None, first_name=None, last_name=None, dummy_mp=False):
         #self.name = mp_name
         self.offices = []
@@ -115,101 +122,29 @@ class MPData:
 
 
 
-def create_db(directory, date):
-    db_file = directory + date + ".db"
+class MPList():
+    def __init__(self, list_file=None, directory=None, date=None, create_pickle=True):
+        if create_pickle:
+            self.mp_list = []
+            self.create_pickle_from_list(list_file, directory, date)
 
-    # delete the existing db
-    if os.path.isfile(db_file):
-        os.remove(db_file)
+    def create_pickle_from_list(self, list_file, directory, date):
+        with open(list_file, "r") as f:
+            decoded = f.read()
 
-    conn = sqlite3.connect(db_file,
-                           detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        cr = csv.reader(decoded.splitlines(), delimiter=",")
+        mp_list = list(cr)
 
-    cursor = conn.cursor()
+        # skip first row
+        for row in mp_list[1:]:
+            first_name = row[1]
+            last_name = row[2]
+            party = row[3]
+            constituency = row[4]
+            url = row[5]
 
-    cursor.execute("CREATE TABLE IF NOT EXISTS mps "
-                   "(constituency TEXT PRIMARY KEY,"
-                   "party TEXT,"
-                   "first_name TEXT,"
-                   "last_name TEXT)"
-                   )
+            mp = MPData(mp_url=url, constituency=constituency, party=party, first_name=first_name, last_name=last_name)
 
-    cursor.execute("CREATE TABLE IF NOT EXISTS mp_offices "
-                   "("
-                   "office_id INTEGER PRIMARY KEY,"
-                   "title TEXT,"
-                   "mp_con TEXT,"
-                   "start_date timestamp,"
-                   "end_date timestamp,"
-                   "is_current INTEGER,"
-                   "FOREIGN KEY(mp_con) REFERENCES mps(constituency)"
-                   ")"
-                   )
+            self.mp_list.append(mp)
 
-    """
-    cursor.execute("CREATE TABLE IF NOT EXISTS mp_office"
-                   "("
-                   "mp_con TEXT,"
-                   "office_title TEXT,"
-                   "start_time timestamp,"
-                   "end_time timestamp,"
-                   "is_current INTEGER,"
-                   "FOREIGN KEY(mp_con) REFERENCES mps(constituency),"
-                   "FOREIGN KEY(office_title) REFERENCES offices(title)"
-                   ")")
-    """
-
-    conn.commit()
-
-    return conn, cursor
-
-
-def insert_into_db(mp, conn, cursor):
-    # todo: constituency will be primary key, as at the time of a general election, candidates may share names
-    print(mp.party)
-    print(mp.constituency)
-    print(mp.current_offices)
-    print(mp.past_offices)
-    print(mp.first_name)
-    print(mp.last_name)
-    # todo: insert MP data into DB
-
-    mps_command_with_slots = "INSERT INTO 'mps' ('constituency', 'party', 'first_name', 'last_name') VALUES (?, ?, ?, ?);"
-    data = (mp.constituency, mp.party, mp.first_name, mp.last_name)
-    cursor.execute(mps_command_with_slots, data)
-
-    offices_command_with_slots = "INSERT INTO mp_offices ('title', 'mp_con', 'start_date', 'end_date', 'is_current') VALUES (?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;"
-
-    for key in mp.current_offices:
-        print("key:" , key)
-        data = (key, mp.constituency, mp.current_offices[key], None, 1)
-        cursor.execute(offices_command_with_slots, data)
-
-    for key in mp.past_offices:
-        print("key:" , key)
-        data = (key, mp.constituency, mp.past_offices[key][0], mp.past_offices[key][1], 0)
-        cursor.execute(offices_command_with_slots, data)
-
-    conn.commit()
-
-
-def create_db_from_list(list_file, directory, date):
-    conn, cursor = create_db(directory, date)
-
-    with open(list_file, "r") as f:
-        decoded = f.read()
-
-    cr = csv.reader(decoded.splitlines(), delimiter=",")
-    mp_list = list(cr)
-
-    # skip first row
-    for row in mp_list[1:]:
-        first_name = row[1]
-        last_name = row[2]
-        party = row[3]
-        constituency = row[4]
-        url = row[5]
-
-        mp = MPData(mp_url=url, constituency=constituency, party=party, first_name=first_name, last_name=last_name)
-
-        insert_into_db(mp, conn, cursor)
+        pickle.dump(self, open(directory + date + ".p", "wb"))
