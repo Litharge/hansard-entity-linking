@@ -1,7 +1,7 @@
 import unittest
 import datetime
 
-from discourse_model.create_db import MPList
+from discourse_model.model_from_list import MPList
 
 class TestObjectCreation(unittest.TestCase):
     def setUp(self):

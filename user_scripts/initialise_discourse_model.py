@@ -5,7 +5,7 @@ import sys
 # todo: use sys.argv to get cmd line args
 
 from discourse_model.get_list import save_csv
-from discourse_model.create_db import MPList
+from discourse_model.model_from_list import MPList
 
 test_date = "2020-06-15"
 save_csv(test_date, "../discourse_model_data/test")
