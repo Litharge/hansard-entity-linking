@@ -16,7 +16,7 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
 
         print(test_utterance)
         print(m)
@@ -35,7 +35,7 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
 
         print(test_utterance)
         print(m)
@@ -54,7 +54,7 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
 
         print(test_utterance)
         print(m)
@@ -90,7 +90,7 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
 
         print(test_utterance)
         print(m)
@@ -109,7 +109,7 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
 
         print(test_utterance)
         print(m)
