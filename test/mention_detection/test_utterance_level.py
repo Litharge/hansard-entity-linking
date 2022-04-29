@@ -1,3 +1,5 @@
+import datetime
+
 from mention_detection.utterance_level import Mentions
 
 import unittest
@@ -16,7 +18,8 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p", datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -35,7 +38,9 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -54,7 +59,9 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -90,7 +97,9 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -109,7 +118,9 @@ class TestProduceMentions(unittest.TestCase):
 
         m = Mentions(test_sentence_spans)
 
-        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p")
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
