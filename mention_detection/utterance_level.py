@@ -79,7 +79,7 @@ class Mentions():
         self.add_am("feminine", feminine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
 
         member_for_ranges_and_entities = get_member_for_spans(model, utt_span)
-        self.add_am(None, member_for_ranges_and_entities, sentence_starts, role="member_for_mention")
+        self.known_add_am(None, member_for_ranges_and_entities, sentence_starts, role="member_for_mention")
 
     # returns a tuple [start char index, end char index) for a sentence
     def get_sentence_bounds(self, doc):
