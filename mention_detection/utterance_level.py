@@ -20,6 +20,8 @@ from mention_detection.exact_office_span_detection import get_exact_office_spans
 
 from mention_detection.annotated_mention import AnnotatedMention
 
+from mention_detection.ministerial_class_span_detection import get_ministerial_class_mentions
+
 
 # contains AnnotatedMention's
 # has an id associated
@@ -67,6 +69,9 @@ class Mentions():
         exact_offices_ranges_and_entities = get_exact_office_spans(model, utt_span, datetime_of_utterance)
         self.known_add_am(None, exact_offices_ranges_and_entities, sentence_starts, role="exact_office_match")
 
+        ministerial_class_mentions = get_ministerial_class_mentions(utt_span)
+        self.add_am_list(ministerial_class_mentions, sentence_starts)
+
     # returns a tuple [start char index, end char index) for a sentence
     def get_sentence_bounds(self, doc):
         # dictionary containing sentence number as key and tuple of start and end char inclusive
@@ -86,6 +91,13 @@ class Mentions():
         end_char_in_sentence = end_char - sentence_starts[sentence_number]
 
         return sentence_number, start_char_in_sentence, end_char_in_sentence
+
+    def add_am_list(self, mentions, sentence_starts):
+        for mention in mentions:
+            mention.sentence_number, mention.start_char_in_sentence, mention.end_char_in_sentence = self.get_sentence_position(sentence_starts,
+                                                                                                       mention.start_char,
+                                                                                                       mention.end_char)
+            self.annotated_mentions.append(mention)
 
     # using a list of found span tuples, add AnnotatedMentions to self.annotated_mentions
     def add_am(self, gender, found_spans, sentence_starts, role=None):
