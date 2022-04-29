@@ -16,6 +16,8 @@ from mention_detection.span_detection import get_hon_epicene_mentions, \
 
 from mention_detection.member_for_span_detection import get_member_for_spans
 
+from mention_detection.exact_office_span_detection import get_exact_office_spans
+
 # todo: place call to get_matching_antecedent() in here, this will be a function in a coreference subpackage that
 #  takes in params for what type of mention to look for then return the matching chain id
 #  MAYBE place AnnotatedMention in the coreference package, then Mentions is seen as detecting the mentions, ready
@@ -53,7 +55,7 @@ class Mentions():
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
-    def detect_mentions(self, doc, utt_span, model_location):
+    def detect_mentions(self, doc, utt_span, model_location, datetime_of_utterance):
         model = pickle.load(open(model_location, "rb"))
 
         sentence_starts = self.sentence_starts
@@ -80,6 +82,9 @@ class Mentions():
 
         member_for_ranges_and_entities = get_member_for_spans(model, utt_span)
         self.known_add_am(None, member_for_ranges_and_entities, sentence_starts, role="member_for_mention")
+
+        exact_offices_ranges_and_entities = get_exact_office_spans(model, utt_span, datetime_of_utterance)
+        self.known_add_am(None, exact_offices_ranges_and_entities, sentence_starts, role="exact_office_match")
 
     # returns a tuple [start char index, end char index) for a sentence
     def get_sentence_bounds(self, doc):
