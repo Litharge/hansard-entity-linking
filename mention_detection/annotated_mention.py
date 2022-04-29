@@ -6,15 +6,26 @@
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
-                                      end_char_in_sentence=None, person=None, gender=None, role=None, entity=None):
+                                      end_char_in_sentence=None, person=None, gender=None, rank=None, shadow=None, role=None, entity=None):
+        # syntactic info
         self.start_char = start_char
         self.end_char = end_char
 
         self.sentence_number = sentence
         self.start_char_in_sentence = start_char_in_sentence
         self.end_char_in_sentence = end_char_in_sentence
-        self.person = person
 
+        self.person = person
         self.gender = gender
 
+        self.rank = rank
+        self.shadow = shadow
+
         self.role = role
+
+    def __str__(self):
+        return f"{self.start_char}, {self.end_char}\n" \
+               f"{self.sentence_number}, {self.start_char_in_sentence}, {self.end_char_in_sentence}\n" \
+               f"{self.person}, {self.gender}\n" \
+               f"{self.rank}, shadow? {self.shadow}\n" \
+               f"{self.role}"
