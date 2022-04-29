@@ -6,7 +6,7 @@ import unittest
 
 import stanza
 
-
+# todo: this should only test sentence data
 class TestProduceMentions(unittest.TestCase):
     def test_sentences_are_correct(self):
         test_utterance = "I am sure that I've not seen it. Myself, I would prefer to hear it from a friend of mine. Come with me. You can go in, he is friendly."
@@ -128,6 +128,27 @@ class TestProduceMentions(unittest.TestCase):
         result_sentences = [a.gender for a in m.annotated_mentions if a.role == "deputy_speaker_mention"]
 
         self.assertListEqual(result_sentences, ["masculine", "feminine"])
+
+    def test_minister_class_sentences_are_correct(self):
+        test_utterance = "The secretary of state, the shadow minister, the minister. The under-secretary, the shadow secretary of state."
+
+        test_sentence_spans = [(0, 58), (59, 110)]
+
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+        doc = nlp(test_utterance)
+
+        m = Mentions(test_sentence_spans)
+
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
+
+        char_in_sentence_only = [(item.start_char_in_sentence, item.end_char_in_sentence) for item in m.annotated_mentions]
+
+        print("char in sent only")
+        print(char_in_sentence_only)
+
+        self.assertSetEqual(set(char_in_sentence_only), {(0, 22), (45, 57), (24, 43), (0, 19), (21, 50)})
 
 if __name__ == "__main__":
     unittest.main()
