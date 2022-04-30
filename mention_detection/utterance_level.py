@@ -212,23 +212,4 @@ class Mentions():
 
         return repr_str
 
-"""
-def get_mentions(location, start, end):
-    # to put in get_sentences
-    nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-
-    doc = nlp(utt_span)
-
-    # goes through each entire utterance span,
-    for utt_span in get_utterance_spans(location, start, end):
-        utt_span = transform_hon(utt_span)
-
-        sentence_bounds = get_sentence_bounds(doc)
-
-        # todo: function to get list of spans of quotations
-
-        #mentions = get_first_person_pronouns(utt_span)
-
-        sentence_mentions = Mentions(doc, sentence_bounds)
-"""
 
