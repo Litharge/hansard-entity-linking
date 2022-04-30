@@ -23,9 +23,17 @@ class AnnotatedMention():
 
         self.role = role
 
+        self.entity = entity
+
     def __str__(self):
+        if self.entity is not None:
+            con = self.entity.constituency
+        else:
+            con = None
+
         return f"{self.start_char}, {self.end_char}\n" \
                f"{self.sentence_number}, {self.start_char_in_sentence}, {self.end_char_in_sentence}\n" \
                f"{self.person}, {self.gender}\n" \
                f"{self.rank}, shadow? {self.shadow}\n" \
-               f"{self.role}"
+               f"{self.role}\n" \
+               f"constituency of associated MP: {con}"
