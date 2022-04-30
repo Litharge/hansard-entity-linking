@@ -22,6 +22,8 @@ from mention_detection.annotated_mention import AnnotatedMention
 
 from mention_detection.ministerial_class_span_detection import get_ministerial_class_mentions
 
+from mention_detection.regular_secretary import get_regular_secretary_mentions
+
 
 # contains AnnotatedMention's
 # has an id associated
@@ -71,6 +73,10 @@ class Mentions():
 
         ministerial_class_mentions = get_ministerial_class_mentions(utt_span)
         self.add_am_list(ministerial_class_mentions, sentence_starts)
+
+        regular_secretary_mentions = get_regular_secretary_mentions(utt_span)
+        self.add_am_list(regular_secretary_mentions, sentence_starts)
+
 
     # returns a tuple [start char index, end char index) for a sentence
     def get_sentence_bounds(self, doc):
