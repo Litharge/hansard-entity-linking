@@ -60,7 +60,7 @@ class Mentions():
         masculine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
         self.add_am("masculine", masculine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
 
-        feminine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
+        feminine_deputy_speaker_ranges = get_deputy_speaker_feminine_mentions(utt_span)
         self.add_am("feminine", feminine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
 
         member_for_ranges_and_entities = get_member_for_spans(model, utt_span)
