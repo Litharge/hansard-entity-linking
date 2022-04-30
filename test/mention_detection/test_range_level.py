@@ -1,6 +1,5 @@
-from mention_detection.range_level import transform_hon
+from coreference.range_level import transform_hon
 import unittest
-import stanza
 
 
 class TestMentions(unittest.TestCase):
