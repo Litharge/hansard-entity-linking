@@ -152,9 +152,9 @@ class TestProduceMentions(unittest.TestCase):
 
     # test whether multiple mention types can be detected correctly simultaneously
     def test_multiple(self):
-        test_utterance = "I see my hon  friend the shadow Health Secretary agrees. The Parliamentary Under-Secretary of State for the Home Department. Mr Speaker and Madam Deputy Speaker, the member for Redditch. Diane Abbott."
+        test_utterance = "I see my hon  friend the shadow Health Secretary agrees. The Parliamentary Under-Secretary of State for the Home Department. Mr Speaker and Madam Deputy Speaker, the member for Redditch. Diane Abbott. The Prime Minister."
 
-        test_sentence_spans = [(0, 56), (57, 124), (125, 186), (187, 200)]
+        test_sentence_spans = [(0, 56), (57, 124), (125, 186), (187, 200), (201, 220)]
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         doc = nlp(test_utterance)
@@ -181,6 +181,7 @@ class TestProduceMentions(unittest.TestCase):
         self.assertTrue((2, 15, 35, None, "deputy_speaker_mention", None) in sentence_pos_with_features)
         self.assertTrue((2, 37, 60, None, 'member_for_mention', 'Redditch') in sentence_pos_with_features)
         self.assertTrue((3, 0, 12, None, 'exact_nominal_mention', 'Hackney North and Stoke Newington') in sentence_pos_with_features)
+        self.assertTrue((4, 0, 18, None, 'irregular_office_mention', None) in sentence_pos_with_features)
 
 
 if __name__ == "__main__":
