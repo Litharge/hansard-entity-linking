@@ -150,5 +150,36 @@ class TestProduceMentions(unittest.TestCase):
 
         self.assertSetEqual(set(char_in_sentence_only), {(0, 22), (45, 57), (24, 43), (0, 19), (21, 50)})
 
+    # test whether multiple mention types can be detected correctly simultaneously
+    def test_multiple(self):
+        test_utterance = "I see my hon  friend the shadow Health Secretary agrees. The Parliamentary Under-Secretary of State for the Home Department. Mr Speaker and Madam Deputy Speaker."
+
+        test_sentence_spans = [(0, 56), (57, 124), (125, 161)]
+
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+        doc = nlp(test_utterance)
+
+        m = Mentions(test_sentence_spans)
+
+        dummy_datetime = datetime.datetime(2020, 1, 1)
+        m.detect_mentions(doc, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
+
+        for item in m.annotated_mentions:
+            print(item)
+
+        sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence, item.shadow, item.role) for item in m.annotated_mentions]
+
+        print(sentence_pos_with_features)
+
+        self.assertTrue((0, 0, 1, None, None) in sentence_pos_with_features)
+        self.assertTrue((0, 6, 8, None, None) in sentence_pos_with_features)
+        self.assertTrue((0, 6, 20, None, None) in sentence_pos_with_features)
+        self.assertTrue((0, 21, 48, True, 'secretary_regular_mention') in sentence_pos_with_features)
+        self.assertTrue((1, 0, 66, None, "exact_office_match") in sentence_pos_with_features)
+        self.assertTrue((2, 0, 10, None, "speaker_mention") in sentence_pos_with_features)
+        self.assertTrue((2, 15, 35, None, "deputy_speaker_mention") in sentence_pos_with_features)
+
+
 if __name__ == "__main__":
     unittest.main()
