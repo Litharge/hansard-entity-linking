@@ -32,19 +32,26 @@ from mention_detection.irregular_office_mention import get_irregular_office_ment
 # contains AnnotatedMention's
 # has an id associated
 class Mentions():
-    def __init__(self, sentence_bounds):
+    def __init__(self):
         self.annotated_mentions = []
 
-        # todo: this should be instance variable instead of arg
-        self.sentence_starts = [item[0] for item in sentence_bounds]
+        self.sentence_bounds = None
+        self.sentence_starts = None
 
-        # store sentence bounds for conversions
-        self.sentence_bounds = sentence_bounds
+        # todo: this should be instance variable instead of arg
+
 
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
-    def detect_mentions(self, doc, utt_span, model_location, datetime_of_utterance):
+    def detect_mentions(self, utt_span, model_location, datetime_of_utterance):
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+        doc = nlp(utt_span)
+
+        self.set_sentence_bounds(doc)
+
+        self.sentence_starts = [item[0] for item in self.sentence_bounds]
+
         model = pickle.load(open(model_location, "rb"))
 
         sentence_starts = self.sentence_starts
@@ -89,14 +96,14 @@ class Mentions():
 
 
     # returns a tuple [start char index, end char index) for a sentence
-    def get_sentence_bounds(self, doc):
+    def set_sentence_bounds(self, doc):
         # dictionary containing sentence number as key and tuple of start and end char inclusive
         sentence_list = []
 
         for sentence in doc.sentences:
             sentence_list.append((sentence.tokens[0].start_char, sentence.tokens[-1].end_char))
 
-        return sentence_list
+        self.sentence_bounds = sentence_list
 
     # returns a tuple (sentence number, index of start character within sentence, index of end character within
     # sentence)
