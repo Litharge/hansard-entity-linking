@@ -19,8 +19,5 @@ class TestMemberForSpanDetection(unittest.TestCase):
 
         result = get_exact_office_spans(test_model, test_utterance, test_datetime)
 
-        # transform to include constituency for span only, as each MP can uniquely be identified by constituency
-        results_with_constituency_only = [(item[0], item[1].constituency) for item in result]
-
-        self.assertTrue(((0, 66), "Torbay") in results_with_constituency_only)
-        self.assertTrue(((141, 166), "Hackney North and Stoke Newington") in results_with_constituency_only)
+        self.assertTrue((0, 66) in result)
+        self.assertTrue((141, 166) in result)

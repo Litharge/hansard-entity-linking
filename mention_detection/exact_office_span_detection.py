@@ -32,7 +32,7 @@ def get_exact_office_spans(discourse_model: MPList, utt_span, datetime):
 
         search_terms = prepend_definite_article(search_terms)
 
-        spans_with_associated_entity = [(span, mp) for span in get_regex_span(search_terms, utt_span)]
+        spans_with_associated_entity = [span for span in get_regex_span(search_terms, utt_span)]
 
         found_spans.extend(spans_with_associated_entity)
 

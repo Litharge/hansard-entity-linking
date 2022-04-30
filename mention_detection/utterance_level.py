@@ -69,7 +69,7 @@ class Mentions():
         self.known_add_am(None, member_for_ranges_and_entities, sentence_starts, role="member_for_mention")
 
         exact_offices_ranges_and_entities = get_exact_office_spans(model, utt_span, datetime_of_utterance)
-        self.known_add_am(None, exact_offices_ranges_and_entities, sentence_starts, role="exact_office_match")
+        self.add_am(None, exact_offices_ranges_and_entities, sentence_starts, role="exact_office_match")
 
         ministerial_class_mentions = get_ministerial_class_mentions(utt_span)
         self.add_am_list(ministerial_class_mentions, sentence_starts)
