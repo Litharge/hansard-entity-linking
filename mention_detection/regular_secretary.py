@@ -25,6 +25,12 @@ def get_regular_secretary_mentions(utt_span):
 
     print(spans)
 
-    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], role="secretary_regular_mention") for span in spans]
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], shadow=False, role="secretary_regular_mention") for span in spans]
+
+    regular_shadow_secretary_pattern = r"[Tt]he [Ss]hadow ([A-Z][a-z]*)(( and |, | )([A-Z][a-z]*)*)*? Secretary"
+
+    spans = regex_get_start_end(regular_shadow_secretary_pattern, utt_span)
+
+    mentions.extend([AnnotatedMention(start_char=span[0], end_char=span[1], shadow=True, role="secretary_regular_mention") for span in spans])
 
     return mentions
