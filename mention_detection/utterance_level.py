@@ -26,6 +26,8 @@ from mention_detection.regular_secretary import get_regular_secretary_mentions
 
 from mention_detection.exact_nominal_mentions import get_exact_nominal_mentions
 
+from mention_detection.irregular_office_mention import get_irregular_office_mentions
+
 
 # contains AnnotatedMention's
 # has an id associated
@@ -81,6 +83,9 @@ class Mentions():
 
         exact_nominal_mentions = get_exact_nominal_mentions(model, utt_span)
         self.add_am_list(exact_nominal_mentions, sentence_starts)
+
+        irregular_office_mentions = get_irregular_office_mentions(utt_span)
+        self.add_am_list(irregular_office_mentions, sentence_starts)
 
 
     # returns a tuple [start char index, end char index) for a sentence
