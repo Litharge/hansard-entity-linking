@@ -12,6 +12,8 @@ import datetime
 import os
 import os.path
 
+# TODO: add id's, precompute shadow status, secretarial status, ministerial status, speaker status, deputy speaker status
+
 class MPData:
     def __str__(self):
         representation = f"{self.first_name} {self.last_name} \n {self.constituency} {self.party} \n {self.current_offices} \n {self.past_offices}"
