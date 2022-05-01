@@ -85,14 +85,14 @@ class Mentions():
         ministerial_class_mentions = get_ministerial_class_mentions(utt_span)
         self.add_am_list(ministerial_class_mentions, sentence_starts)
 
-        regular_secretary_mentions = get_regular_secretary_mentions(utt_span)
-        self.add_am_list(regular_secretary_mentions, sentence_starts)
-
         exact_nominal_mentions = get_exact_nominal_mentions(model, utt_span)
         self.add_am_list(exact_nominal_mentions, sentence_starts)
 
+        regular_secretary_mentions = get_regular_secretary_mentions(utt_span)
+        self.add_am_list(regular_secretary_mentions, sentence_starts, allow_overlap=False)
+
         irregular_office_mentions = get_irregular_office_mentions(utt_span)
-        self.add_am_list(irregular_office_mentions, sentence_starts)
+        self.add_am_list(irregular_office_mentions, sentence_starts, allow_overlap=False)
 
 
     # returns a tuple [start char index, end char index) for a sentence
@@ -115,12 +115,22 @@ class Mentions():
 
         return sentence_number, start_char_in_sentence, end_char_in_sentence
 
-    def add_am_list(self, mentions, sentence_starts):
+    def is_overlapping_with_existing(self, to_check):
+        for item in self.annotated_mentions:
+            if item.start_char <= to_check.start_char <= item.end_char or item.start_char <= to_check.end_char <= item.end_char:
+                return True
+
+        return False
+
+    # todo this should only add irregular type and regular secretary type mentions if they do not overlap with existing mentions
+    #  do this with a parameter, as we want first person pronouns to allow overlap for example in "my hon. friend"
+    def add_am_list(self, mentions, sentence_starts, allow_overlap=True):
         for mention in mentions:
-            mention.sentence_number, mention.start_char_in_sentence, mention.end_char_in_sentence = self.get_sentence_position(sentence_starts,
-                                                                                                       mention.start_char,
-                                                                                                       mention.end_char)
-            self.annotated_mentions.append(mention)
+            if allow_overlap or not self.is_overlapping_with_existing(mention):
+                mention.sentence_number, mention.start_char_in_sentence, mention.end_char_in_sentence = self.get_sentence_position(sentence_starts,
+                                                                                                           mention.start_char,
+                                                                                                           mention.end_char)
+                self.annotated_mentions.append(mention)
 
     # using a list of found span tuples, add AnnotatedMentions to self.annotated_mentions
     def add_am(self, gender, found_spans, sentence_starts, role=None):
@@ -156,7 +166,7 @@ class Mentions():
             self.annotated_mentions.append(new_am)
 
 
-
+    # todo: incorrectly adds interrogative "what", needs more processing, maybe look at person
     def add_pronouns(self, doc, sentence_starts):
         len_of_person = len("Person=")
         len_of_gender = len("Gender=")
