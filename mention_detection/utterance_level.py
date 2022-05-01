@@ -44,8 +44,8 @@ class Mentions():
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
-    def detect_mentions(self, utt_span, model_location, datetime_of_utterance):
-        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+    def detect_mentions(self, nlp, utt_span, model_location, datetime_of_utterance):
+
         doc = nlp(utt_span)
 
         self.set_sentence_bounds(doc)

@@ -11,10 +11,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_sentences_are_correct(self):
         test_utterance = "I am sure that I've not seen it. Myself, I would prefer to hear it from a friend of mine. Come with me. You can go in, he is friendly."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p", datetime_of_utterance=dummy_datetime)
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p", datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -26,10 +27,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_hon_sentences_are_correct(self):
         test_utterance = "My right hon  friend is waiting for you. The right hon  lady and the hon  gentleman are here."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -42,10 +44,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_hon_genders_are_correct(self):
         test_utterance = "My right hon  friend is waiting for you. The right hon  lady and the hon  gentleman are here."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -60,10 +63,11 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = "The  hon Gentleman is at least partly correct. There will be additional costs to " \
                               "maintaining the Vanguard class through to 2028."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         self.assertEqual(m.sentence_bounds[0], (0, 46))
@@ -73,10 +77,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_speaker_sentences_are_correct(self):
         test_utterance = "Mr Speaker, the hon  gentleman is correct. Excuse me, Madam Speaker."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -89,10 +94,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_deputy_speaker_genders_are_correct(self):
         test_utterance = "Mr Deputy Speaker, the hon  gentleman is correct. Excuse me, Madam Deputy Speaker."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -105,10 +111,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_minister_class_sentences_are_correct(self):
         test_utterance = "The secretary of state, the shadow minister, the minister. The under-secretary, the shadow secretary of state."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         char_in_sentence_only = [(item.start_char_in_sentence, item.end_char_in_sentence) for item in m.annotated_mentions]
@@ -122,10 +129,11 @@ class TestProduceMentions(unittest.TestCase):
     def test_multiple(self):
         test_utterance = "I see my hon  friend the shadow Health Secretary agrees. The Parliamentary Under-Secretary of State for the Home Department. Mr Speaker and Madam Deputy Speaker, the member for Redditch. Diane Abbott. The Prime Minister."
 
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(test_utterance, model_location="verified_test_discourse_model.p",
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
                           datetime_of_utterance=dummy_datetime)
 
         for item in m.annotated_mentions:
