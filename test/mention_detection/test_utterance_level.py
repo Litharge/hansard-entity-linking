@@ -154,6 +154,27 @@ class TestProduceMentions(unittest.TestCase):
         self.assertTrue((3, 0, 12, None, 'exact_nominal_mention', 'Hackney North and Stoke Newington') in sentence_pos_with_features)
         self.assertTrue((4, 0, 18, None, 'irregular_office_mention', None) in sentence_pos_with_features)
 
+    # test whether multiple mention types can be detected correctly simultaneously
+    def test_overlap_removal(self):
+        # "The Shadow Home Secretary" will be detected both by the exact office match and by the regular secretary match
+        test_utterance = "The Shadow Home Secretary. She"
+
+        nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
+        m = Mentions()
+
+        # at this date Diane Abbott was shadow home secretary
+        dummy_datetime = datetime.datetime(2018, 1, 1)
+        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+                          datetime_of_utterance=dummy_datetime)
+
+        for item in m.annotated_mentions:
+            print(item)
+
+        sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence,
+                                       item.shadow, item.role, item.get_associated_constituency()) for item in
+                                      m.annotated_mentions]
+
+        print(sentence_pos_with_features)
 
 if __name__ == "__main__":
     unittest.main()
