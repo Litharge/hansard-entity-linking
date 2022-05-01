@@ -1,5 +1,6 @@
-from coreference.range_level import transform_hon
+from coreference.range_level import transform_hon, WholeXMLAnnotation
 import unittest
+import datetime
 
 
 class TestMentions(unittest.TestCase):
@@ -14,8 +15,14 @@ class TestMentions(unittest.TestCase):
 
         self.assertEqual(test_utterance_span, test_utterance_span_expected)
 
+    def test_output(self):
+        test_obj = WholeXMLAnnotation("test_debate.xml",
+                                      "uk.org.publicwhip/debate/2020-06-15a.503.6",
+                                      "uk.org.publicwhip/debate/2020-06-15a.506.5",
+                                      "2021-12-01.p",
+                                      datetime.datetime(2021, 12, 1))
 
-
+        print(test_obj)
 
 if __name__ == "__main__":
     unittest.main()
