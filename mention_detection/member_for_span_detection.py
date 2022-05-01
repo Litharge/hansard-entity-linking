@@ -11,7 +11,7 @@ def get_member_for_spans(discourse_model, utt_span):
     for mp in discourse_model.mp_list:
         search_terms = [prefix + mp.constituency for prefix in prefixes]
 
-        print(search_terms)
+        #print(search_terms)
 
         spans_with_associated_entity = [(span, mp) for span in get_regex_span(search_terms, utt_span)]
 

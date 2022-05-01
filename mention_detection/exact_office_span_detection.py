@@ -21,8 +21,8 @@ def get_exact_office_spans(discourse_model: MPList, utt_span, datetime):
     found_spans = []
 
     for mp in discourse_model.mp_list:
-        for key in mp.current_offices:
-            print(key)
+        #for key in mp.current_offices:
+        #    print(key)
         # look at current offices
         search_terms = [key for key in mp.current_offices if datetime > mp.current_offices[key]]
 

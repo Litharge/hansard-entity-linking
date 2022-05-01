@@ -7,7 +7,7 @@ from mention_detection.annotated_mention import AnnotatedMention
 def regex_get_start_end(span, utt_span):
     spans_found = []
     for m in re.finditer(span, utt_span, re.IGNORECASE):
-        print("here")
+        #print("here")
         spans_found.append(
             (m.start(0),
              m.start(0) + len(span))

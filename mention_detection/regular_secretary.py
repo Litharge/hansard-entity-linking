@@ -23,7 +23,7 @@ def get_regular_secretary_mentions(utt_span):
 
     spans = regex_get_start_end(regular_secretary_pattern, utt_span)
 
-    print(spans)
+    #print(spans)
 
     mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], shadow=False, role="secretary_regular_mention") for span in spans]
 
