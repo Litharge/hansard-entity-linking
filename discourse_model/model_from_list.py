@@ -16,7 +16,7 @@ import os.path
 
 class MPData:
     def __str__(self):
-        representation = f"{self.first_name} {self.last_name} \n {self.constituency} {self.party} \n {self.current_offices} \n {self.past_offices}"
+        representation = f"{self.url} \n {self.first_name} {self.last_name} \n {self.constituency} {self.party} \n {self.current_offices} \n {self.past_offices}"
 
         return representation
 
@@ -27,6 +27,8 @@ class MPData:
 
         mp_html = self.fetch_html_for_mp(mp_url)
         mp_soup = BeautifulSoup(mp_html, "html.parser")
+
+        self.url = mp_url
 
         # dictionary where key is office, value is datetime
         self.current_offices = {}
