@@ -7,8 +7,5 @@ import sys
 from discourse_model.get_list import save_csv
 from discourse_model.model_from_list import MPList
 
-test_date = "2020-06-15"
-save_csv(test_date, "../discourse_model_data/test")
-
-to_save = MPList("../discourse_model_data/test", "../discourse_model_data/", test_date, create_pickle=True)
+to_save = MPList("./test", "./", "verified_test_discourse_model", create_pickle=True)
 
