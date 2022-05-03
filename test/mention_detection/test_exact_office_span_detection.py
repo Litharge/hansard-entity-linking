@@ -19,5 +19,9 @@ class TestMemberForSpanDetection(unittest.TestCase):
 
         result = get_exact_office_spans(test_model, test_utterance, test_datetime)
 
-        self.assertTrue((0, 66) in result)
-        self.assertTrue((141, 166) in result)
+        spans_only = [(item.start_char, item.end_char) for item in result]
+
+        print(spans_only)
+
+        self.assertTrue((0, 66) in spans_only)
+        self.assertTrue((141, 166) in spans_only)
