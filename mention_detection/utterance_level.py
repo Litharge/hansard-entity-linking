@@ -58,29 +58,29 @@ class Mentions():
 
         self.add_pronouns(doc, sentence_starts)
 
-        epicene_ranges = get_hon_epicene_mentions(utt_span, sentence_starts)
-        self.add_am("epicene", epicene_ranges, sentence_starts)
+        hon_epicene_mentions = get_hon_epicene_mentions(utt_span, sentence_starts)
+        self.add_am_list(hon_epicene_mentions, sentence_starts)
 
-        masculine_ranges = get_hon_masculine_mentions(utt_span, sentence_starts)
-        self.add_am("masculine", masculine_ranges, sentence_starts)
+        hon_masculine_mentions = get_hon_masculine_mentions(utt_span, sentence_starts)
+        self.add_am_list(hon_masculine_mentions, sentence_starts)
 
-        feminine_ranges = get_hon_feminine_mentions(utt_span, sentence_starts)
-        self.add_am("feminine", feminine_ranges, sentence_starts)
+        hon_feminine_mentions = get_hon_feminine_mentions(utt_span, sentence_starts)
+        self.add_am_list(hon_feminine_mentions, sentence_starts)
 
-        speaker_ranges = get_speaker_mentions(utt_span)
-        self.add_am(None, speaker_ranges, sentence_starts, role="speaker_mention")
+        speaker_mentions = get_speaker_mentions(utt_span)
+        self.add_am_list(speaker_mentions, sentence_starts)
 
-        masculine_deputy_speaker_ranges = get_deputy_speaker_masculine_mentions(utt_span)
-        self.add_am("masculine", masculine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
+        deputy_speaker_masculine_mentions = get_deputy_speaker_masculine_mentions(utt_span)
+        self.add_am_list(deputy_speaker_masculine_mentions, sentence_starts)
 
-        feminine_deputy_speaker_ranges = get_deputy_speaker_feminine_mentions(utt_span)
-        self.add_am("feminine", feminine_deputy_speaker_ranges, sentence_starts, role="deputy_speaker_mention")
+        deputy_speaker_feminine_ranges = get_deputy_speaker_feminine_mentions(utt_span)
+        self.add_am_list(deputy_speaker_feminine_ranges, sentence_starts)
 
-        member_for_ranges_and_entities = get_member_for_spans(model, utt_span)
-        self.known_add_am(None, member_for_ranges_and_entities, sentence_starts, role="member_for_mention")
+        member_for_mentions = get_member_for_spans(model, utt_span)
+        self.add_am_list(member_for_mentions, sentence_starts)
 
-        exact_offices_ranges_and_entities = get_exact_office_spans(model, utt_span, datetime_of_utterance)
-        self.add_am(None, exact_offices_ranges_and_entities, sentence_starts, role="exact_office_match")
+        exact_offices_mentions = get_exact_office_spans(model, utt_span, datetime_of_utterance)
+        self.add_am_list(exact_offices_mentions, sentence_starts)
 
         ministerial_class_mentions = get_ministerial_class_mentions(utt_span)
         self.add_am_list(ministerial_class_mentions, sentence_starts)
@@ -187,7 +187,11 @@ class Mentions():
                             continue
                         print(word.text, word.parent.text, word.upos, word.feats)
 
-                        person = word.feats[word.feats.find("Person=")+len_of_person]
+                        if word.feats.find("Person=") != -1:
+                            person = word.feats[word.feats.find("Person=")+len_of_person]
+                            person = int(person)
+                        else:
+                            person = None
 
                         gender=None
 
@@ -195,11 +199,11 @@ class Mentions():
 
                         if word.feats.find("Gender=") != -1:
                             if word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4] == "Masc":
-                                gender = "Masc"
+                                gender = "masculine"
                             elif word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+3] == "Fem":
-                                gender = "Fem"
+                                gender = "feminine"
                             else:
-                                gender = "Epi"
+                                gender = "epicene"
 
                         sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(
                             sentence_starts,
@@ -214,7 +218,8 @@ class Mentions():
                                                   person=person,sentence=sent_no,
                                                   start_char_in_sentence=start_char_in_sentence,
                                                   end_char_in_sentence=end_char_in_sentence,
-                                                  gender=gender)
+                                                  gender=gender,
+                                                  role="pronominal_mention")
 
                         self.annotated_mentions.append(new_am)
 

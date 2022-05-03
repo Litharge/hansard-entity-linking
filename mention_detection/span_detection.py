@@ -3,6 +3,8 @@
 
 import re
 
+from mention_detection.annotated_mention import AnnotatedMention
+
 
 def get_regex_span(spans, utt_span):
     spans_found = []
@@ -19,20 +21,23 @@ def get_regex_span(spans, utt_span):
 
 def get_hon_epicene_mentions(utt_span, sentence_starts):
     # bounds of the sections we are interested in, for "I've" this is the first char only
+    # todo: "the hon  member" can form part of larger mention incorrectly
     hon_spans = [
         "my hon  friend",
         "my hon  and learned friend",
         "my right hon  friend",
         "my right hon  and learned friend",
-        "the hon  member",
-        "the hon  and learned member",
+        #"the hon  member",
+        #"the hon  and learned member",
         "the right hon  member",
         "the right hon  and learned member",
     ]
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    return found_spans
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], gender="epicene", role="hon_mention") for span in found_spans]
+
+    return mentions
 
 
 
@@ -47,7 +52,10 @@ def get_hon_masculine_mentions(utt_span, sentence_starts):
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    return found_spans
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], gender="masculine", role="hon_mention") for span in
+                found_spans]
+
+    return mentions
 
 
 def get_hon_feminine_mentions(utt_span, sentence_starts):
@@ -60,7 +68,11 @@ def get_hon_feminine_mentions(utt_span, sentence_starts):
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    return found_spans
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], gender="feminine", role="hon_mention") for span
+                in
+                found_spans]
+
+    return mentions
 
 
 # no need to distinguish gender of speaker, there is only one at a time
@@ -72,7 +84,11 @@ def get_speaker_mentions(utt_span):
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    return found_spans
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], gender=None, role="speaker_mention") for span
+                in
+                found_spans]
+
+    return mentions
 
 
 def get_deputy_speaker_masculine_mentions(utt_span):
@@ -82,7 +98,11 @@ def get_deputy_speaker_masculine_mentions(utt_span):
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    return found_spans
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], gender="masculine", role="deputy_speaker_mention") for span
+                in
+                found_spans]
+
+    return mentions
 
 def get_deputy_speaker_feminine_mentions(utt_span):
     hon_spans = [
@@ -91,5 +111,11 @@ def get_deputy_speaker_feminine_mentions(utt_span):
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    return found_spans
+    mentions = [
+        AnnotatedMention(start_char=span[0], end_char=span[1], gender="feminine", role="deputy_speaker_mention") for
+        span
+        in
+        found_spans]
+
+    return mentions
 
