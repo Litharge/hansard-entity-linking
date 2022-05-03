@@ -33,7 +33,7 @@ def get_exact_office_spans(discourse_model: MPList, utt_span, datetime):
         found_spans.extend(spans)
 
     mentions = [
-        AnnotatedMention(start_char=span[0], end_char=span[0], role="exact_office_mention") for
+        AnnotatedMention(start_char=span[0], end_char=span[1], role="exact_office_mention") for
         span
         in
         found_spans]
