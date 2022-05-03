@@ -13,11 +13,10 @@ class TestMemberForSpanDetection(unittest.TestCase):
 
         result = get_member_for_spans(test_model, test_utterance)
 
-        # transform to include constituency for span only, as each MP can uniquely be identified by constituency
-        results_with_constituency_only = [(item[0], item[1].constituency) for item in result]
+        spans_with_constituency = [(item.start_char, item.end_char, item.get_associated_constituency()) for item in result]
 
-        self.assertTrue(((17, 65), "Hackney North and Stoke Newington") in results_with_constituency_only)
-        self.assertTrue(((78, 106), "Redditch") in results_with_constituency_only)
-        self.assertTrue(((108, 129), "Torbay") in results_with_constituency_only)
+        self.assertTrue((17, 65, "Hackney North and Stoke Newington") in spans_with_constituency)
+        self.assertTrue((78, 106, "Redditch") in spans_with_constituency)
+        self.assertTrue((108, 129, "Torbay") in spans_with_constituency)
 
 
