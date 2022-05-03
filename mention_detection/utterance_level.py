@@ -40,7 +40,17 @@ class Mentions():
 
         # todo: this should be instance variable instead of arg
 
-
+    # find all mentions that are adjacent, replace them with a single mention spanning their entirety in
+    # self.annotated mentions, add all original mentions to the new mention's appos list
+    def join_appositives(self, utt_span):
+        # sort the AnnotatedMentions by start_char
+        self.annotated_mentions.sort(key=lambda x: x.start_char)
+        # go through each non-pronominal mention and look at the characters between it and the next mention
+        # if the characters are of an allowed form, then add the mention to the appos chain and check the next between characters in the same way
+        # else start a new appos candidate on the next mention
+        for i in range(len(self.annotated_mentions) - 1):
+            separating_span = utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[i+1].start_char]
+            print("separating span", separating_span)
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
@@ -131,40 +141,6 @@ class Mentions():
                                                                                                            mention.start_char,
                                                                                                            mention.end_char)
                 self.annotated_mentions.append(mention)
-
-    # using a list of found span tuples, add AnnotatedMentions to self.annotated_mentions
-    def add_am(self, gender, found_spans, sentence_starts, role=None):
-        for mention in found_spans:
-            sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(sentence_starts, mention[0], mention[1])
-
-            new_am = AnnotatedMention(start_char=mention[0],
-                                      end_char=mention[1],
-                                      sentence=sentence_number,
-                                      start_char_in_sentence=start_char_in_sentence,
-                                      end_char_in_sentence=end_char_in_sentence,
-                                      person=None,
-                                      gender=gender,
-                                      role=role)
-
-            self.annotated_mentions.append(new_am)
-
-
-    def known_add_am(self, gender, found_ranges_with_entities, sentence_starts, role=None):
-        for mention, entity in found_ranges_with_entities:
-            sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(sentence_starts, mention[0], mention[1])
-
-            new_am = AnnotatedMention(start_char=mention[0],
-                                      end_char=mention[1],
-                                      sentence=sentence_number,
-                                      start_char_in_sentence=start_char_in_sentence,
-                                      end_char_in_sentence=end_char_in_sentence,
-                                      person=None,
-                                      gender=gender,
-                                      role=role,
-                                      entity=entity)
-
-            self.annotated_mentions.append(new_am)
-
 
     # todo: incorrectly adds interrogative "what", needs more processing, maybe look at person
     def add_pronouns(self, doc, sentence_starts):
