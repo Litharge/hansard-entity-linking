@@ -57,8 +57,9 @@ class Mentions():
         for i in range(len(self.annotated_mentions) - 1):
             target = i+1
             # skip overlapping
-            while self.annotated_mentions[target].start_char <= self.annotated_mentions[i].end_char:
+            while target < len(self.annotated_mentions)-1 and self.annotated_mentions[target].start_char <= self.annotated_mentions[i].end_char:
                 target += 1
+
             separating_span = utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[target].start_char]
 
             if separating_span in {" ", ", "}:
