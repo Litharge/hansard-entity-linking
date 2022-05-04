@@ -27,6 +27,9 @@ class AnnotatedMention():
 
         self.assoc_constituency = None
 
+        self.appos_chain = []
+        self.is_appositive = False
+
     def get_associated_constituency(self):
         if self.entity is not None:
             assoc_constituency = self.entity.constituency
