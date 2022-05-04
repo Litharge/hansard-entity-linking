@@ -3,6 +3,7 @@
 import re
 import bisect
 import pickle
+import copy
 
 import stanza
 from lxml import etree
@@ -28,6 +29,8 @@ from mention_detection.exact_nominal_mentions import get_exact_nominal_mentions
 
 from mention_detection.irregular_office_mention import get_irregular_office_mentions
 
+from mention_detection.mention_type import is_more_precise
+
 
 # contains AnnotatedMention's
 # has an id associated
@@ -38,6 +41,8 @@ class Mentions():
         self.sentence_bounds = None
         self.sentence_starts = None
 
+        self.appositives_processed = False
+
         # todo: this should be instance variable instead of arg
 
     # find all mentions that are adjacent, replace them with a single mention spanning their entirety in
@@ -45,12 +50,101 @@ class Mentions():
     def join_appositives(self, utt_span):
         # sort the AnnotatedMentions by start_char
         self.annotated_mentions.sort(key=lambda x: x.start_char)
-        # go through each non-pronominal mention and look at the characters between it and the next mention
-        # if the characters are of an allowed form, then add the mention to the appos chain and check the next between characters in the same way
-        # else start a new appos candidate on the next mention
+        # sort the annotated mentions by start character
+        # go through each non-pronominal mention and look at the characters between it and the next non-overlapping mention
+        # if the separating characters are of an allowed form, an item of form <mention index>: <next non-overlapping mention index>
+        joins = {}
         for i in range(len(self.annotated_mentions) - 1):
-            separating_span = utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[i+1].start_char]
+            target = i+1
+            # skip overlapping
+            while self.annotated_mentions[target].start_char <= self.annotated_mentions[i].end_char:
+                target += 1
+            separating_span = utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[target].start_char]
+
+            if separating_span in {" ", ", "}:
+                print("found")
+                joins[i] = target
             print("separating span", separating_span)
+
+        print("joins", joins)
+
+        # now transform the joins dictionary into a dictionary containing the groupings of appositives
+        new_mentions = []
+        already_added = set()
+        # dictionary of lists
+        appos_chains = {}
+        for i in range(len(self.annotated_mentions)):
+            if i in already_added:
+                continue
+            j = i
+            already_added.add(j)
+            appos_chains[i] = [i]
+            while j in joins:
+                j = joins[j]
+                appos_chains[i].append(j)
+                already_added.add(j)
+
+        print("appos chains", appos_chains)
+
+        # now take the groupings of appositives and generate a new list of mentions
+        new_start_end = {}
+        for i in appos_chains:
+            first_item_index = appos_chains[i][0]
+            new_start = (self.annotated_mentions[first_item_index].start_char, self.annotated_mentions[first_item_index].start_char_in_sentence, self.annotated_mentions[first_item_index].sentence_number)
+            new_end = (self.annotated_mentions[first_item_index].end_char, self.annotated_mentions[first_item_index].end_char_in_sentence, self.annotated_mentions[first_item_index].sentence_number)
+            for am_index in appos_chains[i]:
+                if self.annotated_mentions[am_index].start_char < new_start[0]:
+                    new_start = (self.annotated_mentions[am_index].start_char, self.annotated_mentions[am_index].start_char_in_sentence, self.annotated_mentions[am_index].sentence_number)
+                if self.annotated_mentions[am_index].end_char > new_end[0]:
+                    new_end = (self.annotated_mentions[am_index].end_char, self.annotated_mentions[am_index].end_char_in_sentence, self.annotated_mentions[am_index].sentence_number)
+            print("i:", i, "new start, end:", new_start, new_end)
+            new_start_end[i] = (new_start, new_end)
+
+        print("new_start_end:", new_start_end)
+
+        print(appos_chains)
+
+        # transformed version of self.annotated_mentions, where appositives are joined
+        for key in appos_chains:
+            # go through appos chain to find the most precise mention
+            most_precise_index = appos_chains[key][0]
+            most_precise = self.annotated_mentions[appos_chains[key][0]]
+            for chain_item_index in appos_chains[key]:
+                chain_item = self.annotated_mentions[chain_item_index]
+                if is_more_precise(chain_item.role, most_precise.role):
+                    most_precise = chain_item
+                    most_precise_index = chain_item_index
+
+            print("most precise index:", most_precise_index)
+            print("most precise:", most_precise)
+
+            # now take the properties of the most precise mention in the apposition
+            encompassing_mention = copy.deepcopy(most_precise)
+
+            # but set the start and end characters to the start and end of the entire appositive
+            # todo: set start and end char in sent
+            encompassing_mention.start_char = new_start_end[key][0][0]
+            encompassing_mention.end_char = new_start_end[key][1][0]
+            encompassing_mention.start_char_in_sentence = new_start_end[key][0][1]
+            encompassing_mention.end_char_in_sentence = new_start_end[key][1][1]
+            encompassing_mention.sentence = new_start_end[key][0][2]
+
+            print("new set:", new_start_end[key][0][0])
+            print("new set:", new_start_end[key][1][0])
+            encompassing_mention.appos_chain = []
+
+            if len(appos_chains[key]) > 1:
+                encompassing_mention.is_appositive = True
+
+
+            new_mentions.append(encompassing_mention)
+
+        self.annotated_mentions = new_mentions
+
+        self.appositives_processed = True
+
+
+
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
