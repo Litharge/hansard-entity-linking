@@ -22,7 +22,7 @@ def get_exact_nominal_mentions(discourse_model: MPList, utt_span):
     found_spans = []
 
     for mp in discourse_model.mp_list:
-        exact_nominal = f"{mp.first_name} {mp.last_name}"
+        exact_nominal = f"\(?{mp.first_name} {mp.last_name}\)?"
 
         spans_with_associated_entity = regex_get_start_end(exact_nominal, utt_span)
 
