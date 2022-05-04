@@ -125,6 +125,18 @@ class WholeXMLAnnotation():
 
             self.utterers[utterance_id] = self.get_MP_from_person_id(person_id, self.augmented_model)
 
+    def set_references(self):
+        for key in self.utterance_mentions:
+            for mention in self.utterance_mentions[key].annotated_mentions:
+                # pass contextual information to the mention so it can resolve itself
+                mention.resolve(self.utterers, key)
+
+    # sets a dictionary of lists of indexes corresponding to items in self.annotated_mentions in each Mentions
+    # each value in the dict shall be a list like
+    # a b c. d e f. g h. -> indexes of c b a f e d h g
+    def order_mentions(self):
+        for key in self.utterance_mentions:
+            self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
 
     def __init__(self, xml_location, start, end, model_location, datetime_of_utterance):
         self.augmented_model_location = None
@@ -134,6 +146,16 @@ class WholeXMLAnnotation():
         self.utterers = {}
 
         self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
+
+        print("---")
+        print("utterance_mentions:", self.utterance_mentions['uk.org.publicwhip/debate/2020-06-15a.503.6'])
+        print("---")
+        for key in self.utterance_mentions:
+            self.utterance_mentions[key].join_appositives()
+
+        self.ordered_mentions = {}
+        #self.order_mentions()
+
 
 
 

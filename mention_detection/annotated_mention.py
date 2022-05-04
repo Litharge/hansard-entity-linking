@@ -30,6 +30,7 @@ class AnnotatedMention():
         self.appos_chain = []
         self.is_appositive = False
 
+
     def get_associated_constituency(self):
         if self.entity is not None:
             assoc_constituency = self.entity.constituency
@@ -37,6 +38,51 @@ class AnnotatedMention():
             assoc_constituency = None
 
         return assoc_constituency
+
+    def member_for_mention(self, utterers, utterance_id):
+        print("in member_for_mention")
+    def irregular_office_mention(self, utterers, utterance_id):
+        pass
+    def speaker_mention(self, utterers, utterance_id):
+        pass
+    def exact_nominal_mention(self, utterers, utterance_id):
+        pass
+    def exact_office_mention(self, utterers, utterance_id):
+        pass
+    def secretary_regular_mention(self, utterers, utterance_id):
+        pass
+    def minister_class_mention(self, utterers, utterance_id):
+        pass
+    def deputy_speaker_mention(self, utterers, utterance_id):
+        pass
+    def hon_mention(self, utterers, utterance_id):
+        pass
+
+    # first person pronouns
+    def pronominal_mention_1(self, utterers, utterance_id):
+        self.entity = utterers[utterance_id]
+    def pronominal_mention_2(self, utterers, utterance_id):
+        pass
+    def pronominal_mention_3(self, utterers, utterance_id):
+        pass
+    def pronominal_mention_other(self, utterers, utterance_id):
+        pass
+
+    def pronominal_mention(self, utterers, utterance_id):
+        # now call a specific method based on the person of the pronoun
+        getattr(self, f"{self.role}_{self.person}")(utterers, utterance_id)
+
+
+    # assign an associated entity
+    def resolve(self, utterers, utterance_id):
+        print("utterers, key", utterers, utterance_id)
+        # if the entity was already set due to 1 to 1 mapping, there is no work to be done
+        if self.entity is not None:
+            return
+
+        # call correct method based on role of mention
+        # using getattr() is safer than using exec()
+        getattr(self, self.role)(utterers, utterance_id)
 
     def __str__(self):
         return f"{self.start_char}, {self.end_char}\n" \

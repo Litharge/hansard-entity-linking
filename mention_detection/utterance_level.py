@@ -36,6 +36,8 @@ from mention_detection.mention_type import is_more_precise
 # has an id associated
 class Mentions():
     def __init__(self):
+        self.utt_span = None
+
         self.annotated_mentions = []
 
         self.sentence_bounds = None
@@ -43,11 +45,15 @@ class Mentions():
 
         self.appositives_processed = False
 
+        self.parent_range = None
+
         # todo: this should be instance variable instead of arg
 
     # find all mentions that are adjacent, replace them with a single mention spanning their entirety in
     # self.annotated mentions, add all original mentions to the new mention's appos list
-    def join_appositives(self, utt_span):
+    def join_appositives(self, utt_span=None):
+        # todo: replace utt_span with self.utt_span
+        utt_span = self.utt_span
         # sort the AnnotatedMentions by start_char
         self.annotated_mentions.sort(key=lambda x: x.start_char)
         # sort the annotated mentions by start character
@@ -150,6 +156,7 @@ class Mentions():
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
     def detect_mentions(self, nlp, utt_span, model_location, datetime_of_utterance):
+        self.utt_span = utt_span
 
         doc = nlp(utt_span)
 
@@ -262,7 +269,9 @@ class Mentions():
                             person = word.feats[word.feats.find("Person=")+len_of_person]
                             person = int(person)
                         else:
-                            person = None
+                            # stanza outputs no person for some third person pronouns
+                            # todo: need better handling of other types
+                            person = "other"
 
                         gender=None
 
@@ -292,7 +301,18 @@ class Mentions():
                                                   gender=gender,
                                                   role="pronominal_mention")
 
+
                         self.annotated_mentions.append(new_am)
+
+        # returns list of indexes
+        # a b c. d e f. g h. -> indexes for: c b a f e d h g
+        def order_mentions():
+            sentence_groups = {}
+            for i, item in enumerate(self.annotated_mentions):
+                sentence_groups.setdefault(item.sentence, []).append(i)
+                #sentence_groups[item.sentence].append(i)
+
+            print(sentence_groups)
 
 
 
