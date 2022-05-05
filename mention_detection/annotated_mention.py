@@ -63,16 +63,23 @@ class AnnotatedMention():
 
         # simply gets previous utterer
         # todo: improve this by using own attributes and matching against them
-        utterer_to_check_index = utterance_position - 1
+        utterer_to_check_index = utterance_position
         while True:
+            utterer_to_check_index -= 1
+            print("utterer_to_check_index:", utterer_to_check_index)
             if utterer_to_check_index < 0:
                 print("no entity found")
                 self.entity = None
+                break
             self.entity = utterers[utterers_keys[utterer_to_check_index]]
             attribs_to_check = ["is_addressed"]
+            # if entity not in model, keep going
+            if self.entity is None:
+                continue
+            # if entity is a match then stop decrementing index
             if self.entity.is_addressed == self.is_addressed:
                 break
-            utterer_to_check_index -= 1
+
 
     def hon_mention(self, context):
         utterers = context["utterers"]
