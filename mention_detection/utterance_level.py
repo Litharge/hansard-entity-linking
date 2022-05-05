@@ -304,15 +304,20 @@ class Mentions():
 
                         self.annotated_mentions.append(new_am)
 
-        # returns list of indexes
-        # a b c. d e f. g h. -> indexes for: c b a f e d h g
-        def order_mentions():
-            sentence_groups = {}
-            for i, item in enumerate(self.annotated_mentions):
-                sentence_groups.setdefault(item.sentence, []).append(i)
-                #sentence_groups[item.sentence].append(i)
+    # returns list of indexes
+    # a b c. d e f. g h. -> indexes for: c b a f e d h g
+    def order_mentions(self):
+        mentions_ordered = []
+        sentence_groups = {}
+        for i, item in enumerate(self.annotated_mentions):
+            sentence_groups.setdefault(item.sentence, []).append(i)
 
-            print(sentence_groups)
+        for key in sentence_groups:
+            sentence_groups[key].sort(reverse=True)
+            mentions_ordered.extend(sentence_groups[key])
+
+        print("mentions ordered:", mentions_ordered)
+        return mentions_ordered
 
 
 

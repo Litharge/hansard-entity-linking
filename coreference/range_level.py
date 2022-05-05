@@ -126,15 +126,26 @@ class WholeXMLAnnotation():
             self.utterers[utterance_id] = self.get_MP_from_person_id(person_id, self.augmented_model)
 
     def set_references(self):
-        for key in self.utterance_mentions:
-            for mention in self.utterance_mentions[key].annotated_mentions:
+        for utterance_key in self.utterance_mentions:
+            for mention_index, mention in enumerate(self.utterance_mentions[utterance_key].annotated_mentions):
                 # pass contextual information to the mention so it can resolve itself
-                mention.resolve(self.utterers, key)
+                # the relevant information is:
+                # * who the utterers are
+                # * which utterance the mention is in
+                # * the mentions within that utterance only
+                # * the index that this mention is within those utterances
+                mention.resolve(utterers=self.utterers,
+                                utterance_id=utterance_key,
+                                annotated_mentions=self.utterance_mentions[utterance_key].annotated_mentions,
+                                mention_index=mention_index,
+                                ordered_mentions=self.ordered_mentions[utterance_key],
+                                model=self.augmented_model)
 
     # sets a dictionary of lists of indexes corresponding to items in self.annotated_mentions in each Mentions
     # each value in the dict shall be a list like
     # a b c. d e f. g h. -> indexes of c b a f e d h g
     def order_mentions(self):
+        print("in order_mentions")
         for key in self.utterance_mentions:
             self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
 
@@ -154,7 +165,7 @@ class WholeXMLAnnotation():
             self.utterance_mentions[key].join_appositives()
 
         self.ordered_mentions = {}
-        #self.order_mentions()
+        self.order_mentions()
 
 
 

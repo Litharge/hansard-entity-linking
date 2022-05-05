@@ -39,50 +39,65 @@ class AnnotatedMention():
 
         return assoc_constituency
 
-    def member_for_mention(self, utterers, utterance_id):
+    def member_for_mention(self, context):
         print("in member_for_mention")
-    def irregular_office_mention(self, utterers, utterance_id):
+    def irregular_office_mention(self, context):
         pass
-    def speaker_mention(self, utterers, utterance_id):
+    def speaker_mention(self, context):
         pass
-    def exact_nominal_mention(self, utterers, utterance_id):
+    def exact_nominal_mention(self, context):
         pass
-    def exact_office_mention(self, utterers, utterance_id):
+    def exact_office_mention(self, context):
         pass
-    def secretary_regular_mention(self, utterers, utterance_id):
+    def secretary_regular_mention(self, context):
         pass
-    def minister_class_mention(self, utterers, utterance_id):
+    def minister_class_mention(self, context):
         pass
-    def deputy_speaker_mention(self, utterers, utterance_id):
+    def deputy_speaker_mention(self, context):
         pass
-    def hon_mention(self, utterers, utterance_id):
-        pass
+    def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, model):
+        # since python 3.7 dictionaries maintain insertion order
+        utterers_keys = list(utterers.keys())
+        utterance_position = utterers_keys.index(utterance_id)
+        print("utterance pos:", utterance_position)
+
+        # simply gets previous utterer
+        # todo: improve this by using own attributes and matching against them
+        self.entity = utterers[utterers_keys[utterance_position-1]]
+
+    def hon_mention(self, context):
+        utterers = context["utterers"]
+        utterance_id = context["utterance_id"]
+        model = context["model"]
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model)
 
     # first person pronouns
-    def pronominal_mention_1(self, utterers, utterance_id):
+    def pronominal_mention_1(self, context):
+        utterers = context["utterers"]
+        utterance_id = context["utterance_id"]
         self.entity = utterers[utterance_id]
-    def pronominal_mention_2(self, utterers, utterance_id):
+    def pronominal_mention_2(self, context):
         pass
-    def pronominal_mention_3(self, utterers, utterance_id):
+    def pronominal_mention_3(self, context):
         pass
-    def pronominal_mention_other(self, utterers, utterance_id):
+    def pronominal_mention_other(self, context):
         pass
 
-    def pronominal_mention(self, utterers, utterance_id):
+    def pronominal_mention(self, context):
         # now call a specific method based on the person of the pronoun
-        getattr(self, f"{self.role}_{self.person}")(utterers, utterance_id)
+        getattr(self, f"{self.role}_{self.person}")(context)
 
 
     # assign an associated entity
-    def resolve(self, utterers, utterance_id):
-        print("utterers, key", utterers, utterance_id)
+    def resolve(self, **context):
+        print("utterers, key", context["utterers"], context["utterance_id"], context["annotated_mentions"], context["mention_index"], context["ordered_mentions"])
         # if the entity was already set due to 1 to 1 mapping, there is no work to be done
         if self.entity is not None:
             return
 
         # call correct method based on role of mention
         # using getattr() is safer than using exec()
-        getattr(self, self.role)(utterers, utterance_id)
+        getattr(self, self.role)(context)
 
     def __str__(self):
         return f"{self.start_char}, {self.end_char}\n" \
