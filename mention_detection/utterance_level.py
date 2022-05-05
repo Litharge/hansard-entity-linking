@@ -260,8 +260,12 @@ class Mentions():
                         if word.text.lower() in ["it", "itself", "its", "they", "them", "themselves", "theirs", "their"]:
                             continue
 
-                        # filter out first person plural, geats does not contain info to discriminate this
+                        # filter out first person plural, feats does not contain info to discriminate this
                         if word.text.lower() in ["we", "us", "ourselves", "ours", "our"]:
+                            continue
+
+                        # filter out interrogative non-personal plural, feats does not contain info to discriminate this
+                        if word.text.lower() in ["what"]:
                             continue
                         print(word.text, word.parent.text, word.upos, word.feats)
 
