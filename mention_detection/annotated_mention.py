@@ -93,10 +93,45 @@ class AnnotatedMention():
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
         self.entity = utterers[utterance_id]
+
     def pronominal_mention_2(self, context):
         pass
+
+    # todo: could use own attributes e.g. gender
+    def mention_attributes_match(self, candidate_antecedent, disallowed_roles=[]):
+        print("candidate antecedent:", candidate_antecedent)
+        if candidate_antecedent.role not in disallowed_roles:
+            return True
+
+        return False
+
+
+    # resolve third person pronouns
     def pronominal_mention_3(self, context):
-        pass
+        annotated_mentions = context["annotated_mentions"]
+        mention_index = context["mention_index"]
+        ordered_mentions = context["ordered_mentions"]
+        utterance_id = context["utterance_id"]
+
+        print("annotated mentions", annotated_mentions)
+        print("mention index", mention_index)
+        print("ordered_mentions in annot", ordered_mentions)
+        print("for ", self)
+
+        break_i = False
+        # iterate over sentences in reverse
+        for i in range(self.sentence_number, -1, -1):
+            # iterate mentions left to right as in Raghunathan et al. (2010)
+            for j in range(len(ordered_mentions[i])):
+                # if the candidate antecedent matches then the entity can be set to match that of the antecedent and the loop can break
+                if self.mention_attributes_match(annotated_mentions[ordered_mentions[i][j]], disallowed_roles=["pronominal_mention"]):
+                    self.entity = annotated_mentions[ordered_mentions[i][j]].entity
+                    break_i = True
+                    break
+            if break_i:
+                break
+
+
     def pronominal_mention_other(self, context):
         pass
 
@@ -107,7 +142,7 @@ class AnnotatedMention():
 
     # assign an associated entity
     def resolve(self, **context):
-        print("utterers, key", context["utterers"], context["utterance_id"], context["annotated_mentions"], context["mention_index"], context["ordered_mentions"])
+        #print("utterers, key", context["utterers"], context["utterance_id"], context["annotated_mentions"], context["mention_index"], context["ordered_mentions"])
         # if the entity was already set due to 1 to 1 mapping, there is no work to be done
         if self.entity is not None:
             return

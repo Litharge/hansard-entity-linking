@@ -308,16 +308,24 @@ class Mentions():
     # a b c. d e f. g h. -> indexes for: c b a f e d h g
     def order_mentions(self):
         mentions_ordered = []
-        sentence_groups = {}
+        sentence_groups = []
+        max_sentence = 0
+        for item in self.annotated_mentions:
+            if item.sentence_number > max_sentence:
+                max_sentence = item.sentence_number
+        print("max sentence: ", max_sentence)
+        # add 1 as if the maximum sentence has index 0, we need one sublist to hold its values
+        sentence_groups = [[] for item in range(max_sentence+1)]
+        print("init sentence groups:", sentence_groups)
         for i, item in enumerate(self.annotated_mentions):
-            sentence_groups.setdefault(item.sentence, []).append(i)
+            sentence_groups[item.sentence_number].append(i)
 
-        for key in sentence_groups:
-            sentence_groups[key].sort(reverse=True)
-            mentions_ordered.extend(sentence_groups[key])
+        #for key in sentence_groups:
+        #    sentence_groups[key].sort(reverse=True)
+        #    mentions_ordered.extend(sentence_groups[key])
 
         print("mentions ordered:", mentions_ordered)
-        return mentions_ordered
+        return sentence_groups
 
 
 
