@@ -30,7 +30,10 @@ def get_utterance_spans(location, start, end):
 
             utterance_text = transform_hon(utterance_text)
 
-            yield (utterance_text, ch.get("id"), ch.get("person_id"))
+            if ch.get("person_id") is not None:
+                yield (utterance_text, ch.get("id"), ch.get("person_id"))
+            else:
+                yield (utterance_text, ch.get("id"), ch.get("speakerid"))
 
         # end the loop when the end pid is found
         if ch.get("id") == end:
@@ -104,6 +107,7 @@ class WholeXMLAnnotation():
         # todo: ultimately this should just return model, but need to refactor mention detection stuff first
         return model, new_location
 
+    # looks in the model for a matching mp based on their id
     def get_MP_from_person_id(self, id, model):
         id_number = id.split("/")[-1]
         for mp in model.mp_list:
@@ -124,6 +128,7 @@ class WholeXMLAnnotation():
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
 
         for utt_span, utterance_id, person_id in get_utterance_spans(xml_location, start, end):
+            print("utt_span", utt_span)
             print("\n\nutterance id: ", utterance_id)
             to_add = Mentions()
 
@@ -169,7 +174,7 @@ class WholeXMLAnnotation():
         self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
 
         print("---")
-        print("utterance_mentions:", self.utterance_mentions['uk.org.publicwhip/debate/2020-06-15a.503.6'])
+        #print("utterance_mentions:", self.utterance_mentions['uk.org.publicwhip/debate/2020-06-15a.503.6'])
         print("---")
         for key in self.utterance_mentions:
             self.utterance_mentions[key].join_appositives()
