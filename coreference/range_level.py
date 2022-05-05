@@ -63,6 +63,14 @@ class WholeXMLAnnotation():
 
         return False
 
+    # returns true if the mp is a speaker or deputy speaker, as these are the MPs who are addressed in Parliament
+    def check_if_addressed(self, offices_to_check):
+        for office in offices_to_check:
+            if ("Speaker" in office or "speaker" in office) and "Speaker's" not in office and "speaker's" not in office:
+                return True
+
+        return False
+
     # method looks through the model and sets for each mp attributes describing shadow status, ministerial rankings
     # pickles the resulting extended model
     # returns string describing location of pickle of extended model
@@ -81,6 +89,7 @@ class WholeXMLAnnotation():
             model.mp_list[i].is_secretary = self.check_if_any_are_secretary(offices_to_check)
             model.mp_list[i].is_minister_of_state = self.check_if_any_are_minister_of_the_crown(offices_to_check)
             model.mp_list[i].is_shadow = self.check_if_shadow(offices_to_check)
+            model.mp_list[i].is_addressed = self.check_if_addressed(offices_to_check)
 
         new_location = f"{model_location[:-2]}_{at_datetime.strftime('%Y_%m_%d')}.p"
         pickle.dump(model, open(new_location, "wb"))
@@ -90,6 +99,7 @@ class WholeXMLAnnotation():
             print("is_secretary:", mp.is_secretary)
             print("is_minister_of_state:", mp.is_minister_of_state)
             print("is_shadow:", mp.is_shadow)
+            print("is_addressed", mp.is_addressed)
 
         # todo: ultimately this should just return model, but need to refactor mention detection stuff first
         return model, new_location

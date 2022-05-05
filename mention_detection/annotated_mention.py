@@ -63,12 +63,22 @@ class AnnotatedMention():
 
         # simply gets previous utterer
         # todo: improve this by using own attributes and matching against them
-        self.entity = utterers[utterers_keys[utterance_position-1]]
+        utterer_to_check_index = utterance_position - 1
+        while True:
+            if utterer_to_check_index < 0:
+                print("no entity found")
+                self.entity = None
+            self.entity = utterers[utterers_keys[utterer_to_check_index]]
+            attribs_to_check = ["is_addressed"]
+            if self.entity.is_addressed == self.is_addressed:
+                break
+            utterer_to_check_index -= 1
 
     def hon_mention(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
         model = context["model"]
+        self.is_addressed = False
         self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model)
 
     # first person pronouns
