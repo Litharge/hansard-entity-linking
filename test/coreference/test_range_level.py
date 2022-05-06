@@ -1,4 +1,4 @@
-from coreference.range_level import transform_hon, WholeXMLAnnotation
+from structure.range_level import transform_hon, WholeXMLAnnotation
 import unittest
 import datetime
 
