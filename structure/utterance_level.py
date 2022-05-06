@@ -11,11 +11,11 @@ from mention_detection.span_detection import get_hon_epicene_mentions, \
     get_deputy_speaker_masculine_mentions, \
     get_deputy_speaker_feminine_mentions
 
+from mention_detection.pronominal_mentions import get_pronominal_mentions
+
 from mention_detection.member_for_span_detection import get_member_for_spans
 
 from mention_detection.exact_office_span_detection import get_exact_office_spans
-
-from structure.annotated_mention import AnnotatedMention
 
 from mention_detection.ministerial_class_span_detection import get_ministerial_class_mentions
 
@@ -158,7 +158,8 @@ class Mentions():
 
         sentence_starts = self.sentence_starts
 
-        self.add_pronouns(doc, sentence_starts)
+        pronominal_mentions = get_pronominal_mentions(doc, sentence_starts)
+        self.add_am_list(pronominal_mentions, sentence_starts)
 
         hon_epicene_mentions = get_hon_epicene_mentions(utt_span, sentence_starts)
         self.add_am_list(hon_epicene_mentions, sentence_starts)
@@ -234,69 +235,7 @@ class Mentions():
                                                                                                            mention.end_char)
                 self.annotated_mentions.append(mention)
 
-    # todo: incorrectly adds interrogative "what", needs more processing, maybe look at person
-    def add_pronouns(self, doc, sentence_starts):
-        len_of_person = len("Person=")
-        len_of_gender = len("Gender=")
 
-        # add pronouns to annotated_mentions
-        for sent_no, sentence in enumerate(doc.sentences):
-            for word in sentence.words:
-
-                if word.feats is not None:
-                    # if the word is a pronoun, look at the feats string to determine if the pronoun is singular
-                    if word.upos == "PRON":
-                        # filter out neuter and epicene pronouns, feats does not contain information to discriminate
-                        if word.text.lower() in ["it", "itself", "its", "they", "them", "themselves", "theirs", "their"]:
-                            continue
-
-                        # filter out first person plural, feats does not contain info to discriminate this
-                        if word.text.lower() in ["we", "us", "ourselves", "ours", "our"]:
-                            continue
-
-                        # filter out interrogative non-personal plural, feats does not contain info to discriminate this
-                        if word.text.lower() in ["what"]:
-                            continue
-                        #print(word.text, word.parent.text, word.upos, word.feats)
-
-                        if word.feats.find("Person=") != -1:
-                            person = word.feats[word.feats.find("Person=")+len_of_person]
-                            person = int(person)
-                        else:
-                            # stanza outputs no person for some third person pronouns
-                            # todo: need better handling of other types
-                            person = "other"
-
-                        gender=None
-
-                        #print("word:", word.text, "gender:", word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4])
-
-                        if word.feats.find("Gender=") != -1:
-                            if word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4] == "Masc":
-                                gender = "masculine"
-                            elif word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+3] == "Fem":
-                                gender = "feminine"
-                            else:
-                                gender = "epicene"
-
-                        sentence_number, start_char_in_sentence, end_char_in_sentence = self.get_sentence_position(
-                            sentence_starts,
-                            word.parent.start_char,
-                            word.parent.end_char
-                        )
-
-                        # store only the features we are interested in
-                        # todo: start and end chars are using tokens, which is correct in most cases
-                        new_am = AnnotatedMention(start_char=word.parent.start_char,
-                                                  end_char=word.parent.end_char,
-                                                  person=person,sentence=sent_no,
-                                                  start_char_in_sentence=start_char_in_sentence,
-                                                  end_char_in_sentence=end_char_in_sentence,
-                                                  gender=gender,
-                                                  role="pronominal_mention")
-
-
-                        self.annotated_mentions.append(new_am)
 
     # returns list of indexes
     # a b c. d e f. g h. -> indexes for: c b a f e d h g
