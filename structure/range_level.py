@@ -94,9 +94,6 @@ class WholeXMLAnnotation():
             model.mp_list[i].is_shadow = self.check_if_shadow(offices_to_check)
             model.mp_list[i].is_addressed = self.check_if_addressed(offices_to_check)
 
-        new_location = f"{model_location[:-2]}_{at_datetime.strftime('%Y_%m_%d')}.p"
-        pickle.dump(model, open(new_location, "wb"))
-
         #for mp in model.mp_list:
             #print(mp)
             #print("is_secretary:", mp.is_secretary)
@@ -105,7 +102,7 @@ class WholeXMLAnnotation():
             #print("is_addressed", mp.is_addressed)
 
         # todo: ultimately this should just return model, but need to refactor mention detection stuff first
-        return model, new_location
+        return model
 
     # looks in the model for a matching mp based on their id
     def get_MP_from_person_id(self, id, model):
