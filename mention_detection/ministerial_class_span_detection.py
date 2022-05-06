@@ -31,7 +31,7 @@ def get_ministerial_class_mentions(utt_span):
     for item in to_search_and_attributes:
         spans = regex_get_start_end(item[0], utt_span)
         # todo: actually return a span object, which is then used by method in utterance level
-        spans_with_attributes = [AnnotatedMention(start_char=span[0], end_char=span[1], rank=item[1], shadow=item[2], role="minister_class_mention") for span in spans]
+        spans_with_attributes = [AnnotatedMention(start_char=span[0], end_char=span[1], rank=item[1], is_shadow=item[2], role="minister_class_mention") for span in spans]
 
         spans_and_attributes.extend(spans_with_attributes)
 

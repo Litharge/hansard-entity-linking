@@ -6,7 +6,7 @@
 # can take on additional data e.g. linking to a cluster
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
-                                      end_char_in_sentence=None, person=None, gender=None, rank=None, shadow=None, role=None, entity=None):
+                                      end_char_in_sentence=None, person=None, gender=None, rank=None, is_shadow=None, role=None, entity=None):
         # syntactic info
         self.start_char = start_char
         self.end_char = end_char
@@ -19,7 +19,17 @@ class AnnotatedMention():
         self.gender = gender
 
         self.rank = rank
-        self.shadow = shadow
+        if self.rank == "secretary_of_state":
+            self.is_secretary = True
+        else:
+            self.is_secretary = False
+
+        if self.rank == "minister":
+            self.is_minister_of_state = True
+        else:
+            self.is_minister_of_state = False
+
+        self.is_shadow = is_shadow
 
         self.role = role
 
@@ -52,10 +62,16 @@ class AnnotatedMention():
     def secretary_regular_mention(self, context):
         pass
     def minister_class_mention(self, context):
-        pass
+        utterers = context["utterers"]
+        utterance_id = context["utterance_id"]
+        model = context["model"]
+
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model, ["is_secretary", "is_minister_of_state", "is_shadow"])
+
+
     def deputy_speaker_mention(self, context):
         pass
-    def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, model):
+    def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, model, attribs_to_check=None):
         # since python 3.7 dictionaries maintain insertion order
         utterers_keys = list(utterers.keys())
         utterance_position = utterers_keys.index(utterance_id)
@@ -72,12 +88,19 @@ class AnnotatedMention():
                 self.entity = None
                 break
             self.entity = utterers[utterers_keys[utterer_to_check_index]]
-            attribs_to_check = ["is_addressed"]
+
             # if entity not in model, keep going
             if self.entity is None:
                 continue
             # if entity is a match then stop decrementing index
-            if self.entity.is_addressed == self.is_addressed:
+            #if self.entity.is_addressed == self.is_addressed:
+            #    break
+            match_on_all_attribs = True
+            for attrib in attribs_to_check:
+                if getattr(self.entity, attrib) != getattr(self, attrib):
+                    match_on_all_attribs = False
+                    break
+            if match_on_all_attribs:
                 break
 
 
@@ -85,8 +108,9 @@ class AnnotatedMention():
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
         model = context["model"]
+        # this mention refers to someone other than the addressee
         self.is_addressed = False
-        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model)
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model, attribs_to_check=["is_addressed"])
 
     # first person pronouns
     def pronominal_mention_1(self, context):
@@ -141,6 +165,8 @@ class AnnotatedMention():
 
 
     # assign an associated entity
+    # todo: replace **context with named args, pack it into a dict and pass this into method based on string,
+    #   if some context is missing, put out a warning but continue with the rest of the resolution
     def resolve(self, **context):
         #print("utterers, key", context["utterers"], context["utterance_id"], context["annotated_mentions"], context["mention_index"], context["ordered_mentions"])
         # if the entity was already set due to 1 to 1 mapping, there is no work to be done
@@ -155,6 +181,6 @@ class AnnotatedMention():
         return f"{self.start_char}, {self.end_char}\n" \
                f"{self.sentence_number}, {self.start_char_in_sentence}, {self.end_char_in_sentence}\n" \
                f"{self.person}, {self.gender}\n" \
-               f"{self.rank}, shadow? {self.shadow}\n" \
+               f"{self.rank}, shadow? {self.is_shadow}\n" \
                f"{self.role}\n" \
                f"constituency of associated MP: {self.get_associated_constituency()}"
