@@ -1,4 +1,5 @@
 import datetime
+import pickle
 
 from structure.utterance_level import Mentions
 
@@ -15,7 +16,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p", datetime_of_utterance=dummy_datetime)
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model, datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -31,7 +35,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -48,7 +55,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -67,7 +77,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         self.assertEqual(m.sentence_bounds[0], (0, 46))
@@ -81,7 +94,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -98,7 +114,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -115,7 +134,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         char_in_sentence_only = [(item.start_char_in_sentence, item.end_char_in_sentence) for item in m.annotated_mentions]
@@ -133,7 +155,10 @@ class TestProduceMentions(unittest.TestCase):
         m = Mentions()
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         for item in m.annotated_mentions:
@@ -165,7 +190,10 @@ class TestProduceMentions(unittest.TestCase):
 
         # at this date Diane Abbott was shadow home secretary
         dummy_datetime = datetime.datetime(2018, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         for item in m.annotated_mentions:
@@ -188,7 +216,10 @@ class TestProduceMentions(unittest.TestCase):
 
         # at this date Diane Abbott was shadow home secretary
         dummy_datetime = datetime.datetime(2018, 1, 1)
-        m.detect_mentions(nlp, test_utterance, model_location="verified_test_discourse_model.p",
+        model_location = "verified_test_discourse_model.p"
+        model = pickle.load(open(model_location, "rb"))
+
+        m.detect_mentions(nlp, test_utterance, model=model,
                           datetime_of_utterance=dummy_datetime)
         print("unsorted")
         for item in m.annotated_mentions:

@@ -147,7 +147,7 @@ class Mentions():
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
-    def detect_mentions(self, nlp, utt_span, model_location, datetime_of_utterance):
+    def detect_mentions(self, nlp, utt_span, model, datetime_of_utterance):
         self.utt_span = utt_span
 
         doc = nlp(utt_span)
@@ -155,8 +155,6 @@ class Mentions():
         self.set_sentence_bounds(doc)
 
         self.sentence_starts = [item[0] for item in self.sentence_bounds]
-
-        model = pickle.load(open(model_location, "rb"))
 
         sentence_starts = self.sentence_starts
 

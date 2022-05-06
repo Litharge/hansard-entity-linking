@@ -121,7 +121,7 @@ class WholeXMLAnnotation():
 
     # sets all mentions and adds reference to utterer
     def set_all_mentions(self, xml_location, start, end, model_location, datetime_of_utterance):
-        self.augmented_model, self.augmented_model_location = self.set_MP_statuses_at_time(model_location, datetime_of_utterance)
+        self.augmented_model = self.set_MP_statuses_at_time(model_location, datetime_of_utterance)
 
         self.utterance_mentions = {}
 
@@ -134,7 +134,7 @@ class WholeXMLAnnotation():
 
             utt_span = transform_hon(utt_span)
 
-            to_add.detect_mentions(nlp, utt_span, self.augmented_model_location, datetime_of_utterance=datetime_of_utterance)
+            to_add.detect_mentions(nlp, utt_span, self.augmented_model, datetime_of_utterance=datetime_of_utterance)
 
             self.utterance_mentions[utterance_id] = to_add
 
@@ -166,8 +166,6 @@ class WholeXMLAnnotation():
             self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
 
     def __init__(self, xml_location, start, end, model_location, datetime_of_utterance):
-        self.augmented_model_location = None
-
         self.utterance_mentions = None
 
         self.utterers = {}
