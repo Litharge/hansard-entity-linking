@@ -4,7 +4,7 @@ from lxml import etree
 
 import stanza
 
-from mention_detection.utterance_level import Mentions
+from structure.utterance_level import Mentions
 
 def transform_hon(to_transform):
     return to_transform.replace(" hon. ", " hon  ")
