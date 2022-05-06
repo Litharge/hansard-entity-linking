@@ -1,7 +1,5 @@
-import re
-
 from mention_detection.span_detection import get_regex_span
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 from discourse_model.model_from_list import MPList
 

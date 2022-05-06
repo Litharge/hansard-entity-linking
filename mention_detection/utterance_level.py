@@ -1,12 +1,8 @@
 # module to produce pronoun mentions
 
-import re
 import bisect
 import pickle
 import copy
-
-import stanza
-from lxml import etree
 
 from mention_detection.span_detection import get_hon_epicene_mentions, \
     get_hon_masculine_mentions, \
@@ -19,7 +15,7 @@ from mention_detection.member_for_span_detection import get_member_for_spans
 
 from mention_detection.exact_office_span_detection import get_exact_office_spans
 
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 from mention_detection.ministerial_class_span_detection import get_ministerial_class_mentions
 

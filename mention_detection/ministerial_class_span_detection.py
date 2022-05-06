@@ -2,7 +2,7 @@
 
 import re
 
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 def regex_get_start_end(span, utt_span):
     spans_found = []

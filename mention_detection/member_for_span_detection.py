@@ -1,7 +1,5 @@
-import re
-
 from mention_detection.span_detection import get_regex_span
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 
 def get_member_for_spans(discourse_model, utt_span):

@@ -1,6 +1,6 @@
 from mention_detection.span_detection import get_regex_span
 
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 def get_irregular_office_mentions(utt_span):
     # bounds of the sections we are interested in, for "I've" this is the first char only

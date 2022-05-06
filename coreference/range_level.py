@@ -149,7 +149,8 @@ class WholeXMLAnnotation():
                 # * which utterance the mention is in
                 # * the mentions within that utterance only
                 # * the index that this mention is within those utterances
-                mention.resolve(utterers=self.utterers,
+                mention.resolve(#utterance_span=self.utterance_mentions[utterance_key].utt_span,
+                                utterers=self.utterers,
                                 utterance_id=utterance_key,
                                 annotated_mentions=self.utterance_mentions[utterance_key].annotated_mentions,
                                 mention_index=mention_index,

@@ -1,10 +1,8 @@
 import re
 
-from mention_detection.span_detection import get_regex_span
-
 from discourse_model.model_from_list import MPList
 
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 
 def regex_get_start_end(span, utt_span):

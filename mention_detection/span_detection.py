@@ -3,7 +3,7 @@
 
 import re
 
-from mention_detection.annotated_mention import AnnotatedMention
+from structure.annotated_mention import AnnotatedMention
 
 
 def get_regex_span(spans, utt_span):
