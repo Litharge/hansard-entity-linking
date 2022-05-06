@@ -1,6 +1,6 @@
 import datetime
 
-from mention_detection.utterance_level import Mentions
+from structure.utterance_level import Mentions
 
 import unittest
 
@@ -172,7 +172,7 @@ class TestProduceMentions(unittest.TestCase):
             print(item)
 
         sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence,
-                                       item.shadow, item.role, item.get_associated_constituency()) for item in
+                                       item.is_shadow, item.role, item.get_associated_constituency()) for item in
                                       m.annotated_mentions]
 
         print(sentence_pos_with_features)
@@ -201,7 +201,7 @@ class TestProduceMentions(unittest.TestCase):
             print(item)
 
         sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence,
-                                       item.shadow, item.role, item.get_associated_constituency(), item.is_appositive) for item in
+                                       item.is_shadow, item.role, item.get_associated_constituency(), item.is_appositive) for item in
                                       m.annotated_mentions]
 
         print("sentence pos w feats:", sentence_pos_with_features)
