@@ -24,6 +24,17 @@ class TestMentions(unittest.TestCase):
 
         print(test_obj)
 
+    def test_output_full(self):
+        test_obj = WholeXMLAnnotation("test_debate.xml",
+                                      "uk.org.publicwhip/debate/2020-06-15a.503.6",
+                                      "uk.org.publicwhip/debate/2020-06-15a.506.5",
+                                      "2021-12-01.p",
+                                      datetime.datetime(2021, 12, 1))
+
+        test_obj.set_references()
+        print("test obj")
+        print(test_obj)
+
 if __name__ == "__main__":
     unittest.main()
 
