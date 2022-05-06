@@ -65,11 +65,7 @@ class Mentions():
             separating_span = utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[target].start_char]
 
             if separating_span in {" ", ", "}:
-                print("found")
                 joins[i] = target
-            print("separating span", separating_span)
-
-        print("joins", joins)
 
         # now transform the joins dictionary into a dictionary containing the groupings of appositives
         new_mentions = []
@@ -87,7 +83,7 @@ class Mentions():
                 appos_chains[i].append(j)
                 already_added.add(j)
 
-        print("appos chains", appos_chains)
+        #print("appos chains", appos_chains)
 
         # now take the groupings of appositives and generate a new list of mentions
         new_start_end = {}
@@ -100,12 +96,12 @@ class Mentions():
                     new_start = (self.annotated_mentions[am_index].start_char, self.annotated_mentions[am_index].start_char_in_sentence, self.annotated_mentions[am_index].sentence_number)
                 if self.annotated_mentions[am_index].end_char > new_end[0]:
                     new_end = (self.annotated_mentions[am_index].end_char, self.annotated_mentions[am_index].end_char_in_sentence, self.annotated_mentions[am_index].sentence_number)
-            print("i:", i, "new start, end:", new_start, new_end)
+            #print("i:", i, "new start, end:", new_start, new_end)
             new_start_end[i] = (new_start, new_end)
 
-        print("new_start_end:", new_start_end)
+        #print("new_start_end:", new_start_end)
 
-        print(appos_chains)
+        #print("appos chains", appos_chains)
 
         # transformed version of self.annotated_mentions, where appositives are joined
         for key in appos_chains:
@@ -118,8 +114,8 @@ class Mentions():
                     most_precise = chain_item
                     most_precise_index = chain_item_index
 
-            print("most precise index:", most_precise_index)
-            print("most precise:", most_precise)
+            #print("most precise index:", most_precise_index)
+            #print("most precise:", most_precise)
 
             # now take the properties of the most precise mention in the apposition
             encompassing_mention = copy.deepcopy(most_precise)
@@ -132,8 +128,8 @@ class Mentions():
             encompassing_mention.end_char_in_sentence = new_start_end[key][1][1]
             encompassing_mention.sentence = new_start_end[key][0][2]
 
-            print("new set:", new_start_end[key][0][0])
-            print("new set:", new_start_end[key][1][0])
+            #print("new set:", new_start_end[key][0][0])
+            #print("new set:", new_start_end[key][1][0])
             encompassing_mention.appos_chain = []
 
             if len(appos_chains[key]) > 1:
@@ -263,7 +259,7 @@ class Mentions():
                         # filter out interrogative non-personal plural, feats does not contain info to discriminate this
                         if word.text.lower() in ["what"]:
                             continue
-                        print(word.text, word.parent.text, word.upos, word.feats)
+                        #print(word.text, word.parent.text, word.upos, word.feats)
 
                         if word.feats.find("Person=") != -1:
                             person = word.feats[word.feats.find("Person=")+len_of_person]
@@ -275,7 +271,7 @@ class Mentions():
 
                         gender=None
 
-                        print("word:", word.text, "gender:", word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4])
+                        #print("word:", word.text, "gender:", word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4])
 
                         if word.feats.find("Gender=") != -1:
                             if word.feats[word.feats.find("Gender=")+len_of_gender : word.feats.find("Gender=")+len_of_gender+4] == "Masc":
@@ -313,10 +309,10 @@ class Mentions():
         for item in self.annotated_mentions:
             if item.sentence_number > max_sentence:
                 max_sentence = item.sentence_number
-        print("max sentence: ", max_sentence)
+        #print("max sentence: ", max_sentence)
         # add 1 as if the maximum sentence has index 0, we need one sublist to hold its values
         sentence_groups = [[] for item in range(max_sentence+1)]
-        print("init sentence groups:", sentence_groups)
+        #print("init sentence groups:", sentence_groups)
         for i, item in enumerate(self.annotated_mentions):
             sentence_groups[item.sentence_number].append(i)
 
@@ -324,7 +320,7 @@ class Mentions():
         #    sentence_groups[key].sort(reverse=True)
         #    mentions_ordered.extend(sentence_groups[key])
 
-        print("mentions ordered:", mentions_ordered)
+        #print("mentions ordered:", mentions_ordered)
         return sentence_groups
 
 

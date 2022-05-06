@@ -75,16 +75,16 @@ class AnnotatedMention():
         # since python 3.7 dictionaries maintain insertion order
         utterers_keys = list(utterers.keys())
         utterance_position = utterers_keys.index(utterance_id)
-        print("utterance pos:", utterance_position)
+        #print("utterance pos:", utterance_position)
 
         # simply gets previous utterer
         # todo: improve this by using own attributes and matching against them
         utterer_to_check_index = utterance_position
         while True:
             utterer_to_check_index -= 1
-            print("utterer_to_check_index:", utterer_to_check_index)
+            #print("utterer_to_check_index:", utterer_to_check_index)
             if utterer_to_check_index < 0:
-                print("no entity found")
+                #print("no entity found")
                 self.entity = None
                 break
             self.entity = utterers[utterers_keys[utterer_to_check_index]]
@@ -123,7 +123,7 @@ class AnnotatedMention():
 
     # todo: could use own attributes e.g. gender
     def mention_attributes_match(self, candidate_antecedent, disallowed_roles=[]):
-        print("candidate antecedent:", candidate_antecedent)
+        #print("candidate antecedent:", candidate_antecedent)
         if candidate_antecedent.role not in disallowed_roles:
             return True
 
@@ -137,10 +137,10 @@ class AnnotatedMention():
         ordered_mentions = context["ordered_mentions"]
         utterance_id = context["utterance_id"]
 
-        print("annotated mentions", annotated_mentions)
-        print("mention index", mention_index)
-        print("ordered_mentions in annot", ordered_mentions)
-        print("for ", self)
+        #print("annotated mentions", annotated_mentions)
+        #print("mention index", mention_index)
+        #print("ordered_mentions in annot", ordered_mentions)
+        #print("for ", self)
 
         break_i = False
         # iterate over sentences in reverse

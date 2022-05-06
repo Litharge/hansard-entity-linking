@@ -97,12 +97,12 @@ class WholeXMLAnnotation():
         new_location = f"{model_location[:-2]}_{at_datetime.strftime('%Y_%m_%d')}.p"
         pickle.dump(model, open(new_location, "wb"))
 
-        for mp in model.mp_list:
-            print(mp)
-            print("is_secretary:", mp.is_secretary)
-            print("is_minister_of_state:", mp.is_minister_of_state)
-            print("is_shadow:", mp.is_shadow)
-            print("is_addressed", mp.is_addressed)
+        #for mp in model.mp_list:
+            #print(mp)
+            #print("is_secretary:", mp.is_secretary)
+            #print("is_minister_of_state:", mp.is_minister_of_state)
+            #print("is_shadow:", mp.is_shadow)
+            #print("is_addressed", mp.is_addressed)
 
         # todo: ultimately this should just return model, but need to refactor mention detection stuff first
         return model, new_location
@@ -128,8 +128,8 @@ class WholeXMLAnnotation():
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
 
         for utt_span, utterance_id, person_id in get_utterance_spans(xml_location, start, end):
-            print("utt_span", utt_span)
-            print("\n\nutterance id: ", utterance_id)
+            #print("utt_span", utt_span)
+            #print("\n\nutterance id: ", utterance_id)
             to_add = Mentions()
 
             utt_span = transform_hon(utt_span)
@@ -161,7 +161,7 @@ class WholeXMLAnnotation():
     # each value in the dict shall be a list like
     # a b c. d e f. g h. -> indexes of c b a f e d h g
     def order_mentions(self):
-        print("in order_mentions")
+        #print("in order_mentions")
         for key in self.utterance_mentions:
             self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
 
@@ -174,9 +174,9 @@ class WholeXMLAnnotation():
 
         self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
 
-        print("---")
+        #print("---")
         #print("utterance_mentions:", self.utterance_mentions['uk.org.publicwhip/debate/2020-06-15a.503.6'])
-        print("---")
+        #print("---")
         for key in self.utterance_mentions:
             self.utterance_mentions[key].join_appositives()
 
