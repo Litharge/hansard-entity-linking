@@ -8,4 +8,4 @@ from discourse_model.model_from_list import MPList
 test_date = "2021-12-01"
 save_csv(test_date, "./2021_12_01_list")
 
-to_save = MPList("./2021_12_01_list", "./", test_date, create_pickle=True)
+to_save = MPList("2021_12_01_list", "./", test_date, create_pickle=True)
