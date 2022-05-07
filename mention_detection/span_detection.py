@@ -84,7 +84,7 @@ def get_speaker_mentions(utt_span):
 
     found_spans = get_regex_span(hon_spans, utt_span)
 
-    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], gender=None, role="speaker_mention") for span
+    mentions = [AnnotatedMention(start_char=span[0], end_char=span[1], is_addressed=True, gender=None, role="speaker_mention") for span
                 in
                 found_spans]
 

@@ -10,7 +10,7 @@ from fuzzywuzzy import process, fuzz
 
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
-                                      end_char_in_sentence=None, person=None, gender=None, rank=None, is_shadow=None, role=None, entity=None):
+                                      end_char_in_sentence=None, person=None, gender=None, rank=None, is_shadow=None, is_addressed=None, role=None, entity=None):
         # syntactic info
         self.start_char = start_char
         self.end_char = end_char
@@ -35,6 +35,8 @@ class AnnotatedMention():
 
         self.is_shadow = is_shadow
 
+        self.is_addressed = is_addressed
+
         self.role = role
 
         self.entity = entity
@@ -57,7 +59,8 @@ class AnnotatedMention():
         pass
 
     def get_closest_match(self, search_term, to_search):
-        result = process.extract(search_term, to_search)
+        result = process.extract(search_term, to_search, scorer=fuzz.ratio)
+        print("result:", result)
         if result is not None:
             # return text only
             return result[0][0]
@@ -109,7 +112,19 @@ class AnnotatedMention():
 
 
     def speaker_mention(self, context):
-        pass
+        model = context["model"]
+        datetime_of_utterance = context["datetime_of_utterance"]
+
+        office_mp_dict = self.get_office_mp_dict_at_time(model, datetime_of_utterance,
+                                                         matching_attrib=["is_addressed"])
+
+        key = self.get_closest_match("Speaker", list(office_mp_dict.keys()))
+
+        self.entity = office_mp_dict[key]
+
+        print("office_mp_dict", office_mp_dict)
+        print("entity", self.entity)
+
     def exact_nominal_mention(self, context):
         pass
     def exact_office_mention(self, context):
@@ -120,14 +135,26 @@ class AnnotatedMention():
         datetime_of_utterance = context["datetime_of_utterance"]
 
         text = utt_span[self.start_char:self.end_char]
-        # remove the leading "the " and the trailing " secretary"
+        # remove the leading "the " and the trailing " secretary", otherwise the secretary component is prioritised
+        # with the default (best performing) scorer and does not produce useful results for short queries
         text_important_only = text[4:-10]
 
         office_mp_dict = self.get_office_mp_dict_at_time(model, datetime_of_utterance, matching_attrib=["is_secretary", "is_shadow"])
 
-        key = self.get_closest_match(text_important_only, list(office_mp_dict.keys()))
+        # remove leading "the Secretary of State for" as the query may match with characters in this part, favouring
+        # shorter office titles, e.g. "Home" -> "The Secretary of State for Wales" rather than
+        # "The Secretary of State for the Home Department", because there are a higher proportion of characters
+        useful_only = {}
+        for key in office_mp_dict:
+            if "The Secretary of State for " in key:
+                new_key = key.split("The Secretary of State for ")[1]
+                print("new key:", new_key)
+                useful_only[new_key] = office_mp_dict[key]
 
-        self.entity = office_mp_dict[key]
+
+        key = self.get_closest_match(text_important_only, list(useful_only.keys()))
+
+        self.entity = useful_only[key]
 
     def minister_class_mention(self, context):
         utterers = context["utterers"]
