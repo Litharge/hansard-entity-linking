@@ -8,3 +8,7 @@ discourse_model_data/
 __pycache__/
 #ignore test pickle in discourse_model testing
 test/discourse_model/test.p
+# ignore testing files created via script
+test/integration/test_scoring/annotated_data/to_compare/
+test/integration/test_scoring/system_data/system_output/
+test/integration/test_scoring/system_data/to_compare/
