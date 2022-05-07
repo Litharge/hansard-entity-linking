@@ -47,9 +47,8 @@ def get_human_readable(location, start, end):
         if ch.tag == "speech" and not ch.get("nospeaker") == "true":
             pid.mapping[len(selected_text)] = "utterer_" + ch.get("speakername")
             selected_text += ch.get("speakername") + "\n"
-
+            pid.mapping[len(selected_text)] = ch.get("id")
             for p in ch.getchildren():
-                pid.mapping[len(selected_text)] = p.get("pid")
                 selected_text += "".join(p.itertext()) + "\n"
 
             pid.mapping[len(selected_text)] = "separator"
