@@ -4,6 +4,10 @@
 #  for them to perform coref resolution
 # instances represent mentions in sentences
 # can take on additional data e.g. linking to a cluster
+
+from fuzzywuzzy import process, fuzz
+
+
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
                                       end_char_in_sentence=None, person=None, gender=None, rank=None, is_shadow=None, role=None, entity=None):
@@ -50,9 +54,60 @@ class AnnotatedMention():
         return assoc_constituency
 
     def member_for_mention(self, context):
-        print("in member_for_mention")
-    def irregular_office_mention(self, context):
         pass
+
+    def get_closest_match(self, search_term, to_search):
+        result = process.extract(search_term, to_search)
+        if result is not None:
+            # return text only
+            return result[0][0]
+        else:
+            return None
+
+    def get_office_mp_dict_at_time(self, model, datetime, matching_attrib=[]):
+        office_mp_dict = {}
+        for mp in model.mp_list:
+            for office in mp.past_offices:
+                if mp.past_offices[office][0] < datetime <= mp.past_offices[office][1]:
+                    outer_continue = False
+                    for attrib in matching_attrib:
+                        if getattr(self, attrib) != getattr(mp, attrib):
+                            outer_continue = True
+
+                    if outer_continue:
+                        continue
+
+                    office_mp_dict[office] = mp
+
+            for office in mp.current_offices:
+                if mp.current_offices[office] < datetime:
+                    outer_continue = False
+                    for attrib in matching_attrib:
+                        if getattr(self, attrib) != getattr(mp, attrib):
+                            outer_continue = True
+
+                    if outer_continue:
+                        continue
+
+                    office_mp_dict[office] = mp
+
+        return office_mp_dict
+
+    def irregular_office_mention(self, context):
+        model = context["model"]
+        utt_span = context["utterance_span"]
+        datetime_of_utterance = context["datetime_of_utterance"]
+
+        text = utt_span[self.start_char:self.end_char]
+
+        office_mp_dict = self.get_office_mp_dict_at_time(model, datetime_of_utterance)
+
+        key = self.get_closest_match(text, list(office_mp_dict.keys()))
+
+        self.entity = office_mp_dict[key]
+
+
+
     def speaker_mention(self, context):
         pass
     def exact_nominal_mention(self, context):
@@ -60,7 +115,20 @@ class AnnotatedMention():
     def exact_office_mention(self, context):
         pass
     def secretary_regular_mention(self, context):
-        pass
+        model = context["model"]
+        utt_span = context["utterance_span"]
+        datetime_of_utterance = context["datetime_of_utterance"]
+
+        text = utt_span[self.start_char:self.end_char]
+        # remove the leading "the " and the trailing " secretary"
+        text_important_only = text[4:-10]
+
+        office_mp_dict = self.get_office_mp_dict_at_time(model, datetime_of_utterance, matching_attrib=["is_secretary", "is_shadow"])
+
+        key = self.get_closest_match(text_important_only, list(office_mp_dict.keys()))
+
+        self.entity = office_mp_dict[key]
+
     def minister_class_mention(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]

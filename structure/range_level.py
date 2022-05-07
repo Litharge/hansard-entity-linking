@@ -146,13 +146,14 @@ class WholeXMLAnnotation():
                 # * which utterance the mention is in
                 # * the mentions within that utterance only
                 # * the index that this mention is within those utterances
-                mention.resolve(#utterance_span=self.utterance_mentions[utterance_key].utt_span,
+                mention.resolve(utterance_span=self.utterance_mentions[utterance_key].utt_span,
                                 utterers=self.utterers,
                                 utterance_id=utterance_key,
                                 annotated_mentions=self.utterance_mentions[utterance_key].annotated_mentions,
                                 mention_index=mention_index,
                                 ordered_mentions=self.ordered_mentions[utterance_key],
-                                model=self.augmented_model)
+                                model=self.augmented_model,
+                                datetime_of_utterance=self.datetime_of_utterance)
 
     # sets a dictionary of lists of indexes corresponding to items in self.annotated_mentions in each Mentions
     # each value in the dict shall be a list like
@@ -163,6 +164,8 @@ class WholeXMLAnnotation():
             self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
 
     def __init__(self, xml_location, start, end, model_location, datetime_of_utterance):
+        self.datetime_of_utterance = datetime_of_utterance
+
         self.utterance_mentions = None
 
         self.utterers = {}
