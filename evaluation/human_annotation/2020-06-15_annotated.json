@@ -1,0 +1,258 @@
+[
+  {
+    "text": "/data/upload/5/73e1155f-2020-06-15_to_annotate.txt",
+    "id": 15,
+    "label": [
+      {
+        "start": 27,
+        "end": 29,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 104,
+        "end": 105,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 112,
+        "end": 114,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 154,
+        "end": 155,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 112,
+        "end": 126,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 217,
+        "end": 220,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 424,
+        "end": 425,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 465,
+        "end": 479,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 487,
+        "end": 490,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 566,
+        "end": 568,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 915,
+        "end": 916,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 950,
+        "end": 965,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10295/lindsay_hoyle/chorley"
+        ]
+      },
+      {
+        "start": 1022,
+        "end": 1023,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 1216,
+        "end": 1218,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 1216,
+        "end": 1236,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 1244,
+        "end": 1246,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 1331,
+        "end": 1332,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 1348,
+        "end": 1350,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 1348,
+        "end": 1362,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 1364,
+        "end": 1367,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25891/felicity_buchan/kensington"
+        ]
+      },
+      {
+        "start": 1542,
+        "end": 1543,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 2351,
+        "end": 2363,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 2375,
+        "end": 2389,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25428/rishi_sunak/richmond_%28yorks%29"
+        ]
+      },
+      {
+        "start": 2404,
+        "end": 2407,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25428/rishi_sunak/richmond_%28yorks%29"
+        ]
+      },
+      {
+        "start": 2682,
+        "end": 2683,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 2770,
+        "end": 2784,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25428/rishi_sunak/richmond_%28yorks%29"
+        ]
+      },
+      {
+        "start": 2989,
+        "end": 3007,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10045/clive_betts/sheffield_south_east"
+        ]
+      },
+      {
+        "start": 3882,
+        "end": 3894,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 4043,
+        "end": 4044,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 4053,
+        "end": 4071,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25702/mike_amesbury/weaver_vale"
+        ]
+      },
+      {
+        "start": 4075,
+        "end": 4078,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25702/mike_amesbury/weaver_vale"
+        ]
+      },
+      {
+        "start": 4115,
+        "end": 4117,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25702/mike_amesbury/weaver_vale"
+        ]
+      },
+      {
+        "start": 4262,
+        "end": 4280,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25702/mike_amesbury/weaver_vale"
+        ]
+      },
+      {
+        "start": 4285,
+        "end": 4286,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24747/christopher_pincher/tamworth"
+        ]
+      },
+      {
+        "start": 4368,
+        "end": 4386,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25702/mike_amesbury/weaver_vale"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 19,
+    "created_at": "2022-05-07T20:34:03.330077Z",
+    "updated_at": "2022-05-07T20:34:03.330093Z",
+    "lead_time": 67.006
+  }
+]
