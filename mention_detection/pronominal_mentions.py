@@ -26,6 +26,10 @@ def get_pronominal_mentions(doc, sentence_starts):
                         continue
                     # print(word.text, word.parent.text, word.upos, word.feats)
 
+                    # filter out "that", which is not a personal pronoun, again feats does not contain this info
+                    if word.text.lower() in ["that"]:
+                        continue
+
                     if word.feats.find("Person=") != -1:
                         person = word.feats[word.feats.find("Person=") + len_of_person]
                         person = int(person)
