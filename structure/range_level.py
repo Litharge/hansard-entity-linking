@@ -25,8 +25,15 @@ def get_utterance_spans(location, start, end):
 
         utterance_text = ""
         if ch.tag == "speech" and not ch.get("nospeaker") == "true":
+            first_para = True
             for p in ch.getchildren():
+                if first_para:
+                    first_para = False
+                else:
+                    utterance_text += " "
                 utterance_text += "".join(p.itertext())
+
+            print("utterance text:", utterance_text)
 
             utterance_text = transform_hon(utterance_text)
 
