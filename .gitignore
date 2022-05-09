@@ -12,3 +12,6 @@ test/discourse_model/test.p
 test/integration/test_scoring/annotated_data/to_compare/
 test/integration/test_scoring/system_data/system_output/
 test/integration/test_scoring/system_data/to_compare/
+# various evaluation ignores for files created via scripts
+*_to_score.json
+evaluation/performance/
