@@ -58,7 +58,11 @@ class AnnotatedMention():
     def member_for_mention(self, context):
         pass
 
+
+    # return the string of the single closest match, using search_term on the list to_search
     def get_closest_match(self, search_term, to_search):
+        # fuzz.ratio is superior to fuzz.partial ratio, as otherwise the words common to the different offices
+        # dominate, rather than the words that discriminate them
         result = process.extract(search_term, to_search, scorer=fuzz.ratio)
         print("result:", result)
         if result is not None:
@@ -67,6 +71,10 @@ class AnnotatedMention():
         else:
             return None
 
+
+    # return a dictionary with items of the form office:mp, where the offices are held at the given datetime as
+    # described in the model. If matching_attrib contains strings, then the attributes of the mention and the
+    # mp in the model with those names must match
     def get_office_mp_dict_at_time(self, model, datetime, matching_attrib=[]):
         office_mp_dict = {}
         for mp in model.mp_list:
@@ -96,6 +104,7 @@ class AnnotatedMention():
 
         return office_mp_dict
 
+    # assign self.entity based on the context in the case of the mention being an irregular office e.g. "the Chancellor"
     def irregular_office_mention(self, context):
         model = context["model"]
         utt_span = context["utterance_span"]
@@ -109,8 +118,7 @@ class AnnotatedMention():
 
         self.entity = office_mp_dict[key]
 
-
-
+    # assign self.entity based on the context in the case of the mention being a speaker mention
     def speaker_mention(self, context):
         model = context["model"]
         datetime_of_utterance = context["datetime_of_utterance"]
@@ -125,10 +133,17 @@ class AnnotatedMention():
         print("office_mp_dict", office_mp_dict)
         print("entity", self.entity)
 
+    # this method could be written to match exact nominal mentions based on the context
     def exact_nominal_mention(self, context):
         pass
+
+    # self.entity was actually assigned in the mention detection stage in the case of exact office mentions, so this
+    # method can remain empty
     def exact_office_mention(self, context):
         pass
+
+    # assign self.entity based on the context in the case of the mention being a regular secretary mention e.g.
+    # "the Home Secretary", "the Foreign Secretary"
     def secretary_regular_mention(self, context):
         model = context["model"]
         utt_span = context["utterance_span"]
@@ -156,6 +171,8 @@ class AnnotatedMention():
 
         self.entity = useful_only[key]
 
+    # assign self.entity based on the context in the case of the mention being a minister class mention, e.g.
+    # "the Secretary of State", "the shadow Minister"
     def minister_class_mention(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
@@ -163,9 +180,12 @@ class AnnotatedMention():
 
         self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model, ["is_secretary", "is_minister_of_state", "is_shadow"])
 
-
+    # this method could be written to match deputy speaker mentions based on the context
     def deputy_speaker_mention(self, context):
         pass
+
+    # returns the last MP in utterers occuring before the utterance_id with the matching attribs_to_check, e.g.
+    # "is_secretary", based on the model
     def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, model, attribs_to_check=None):
         # since python 3.7 dictionaries maintain insertion order
         utterers_keys = list(utterers.keys())
@@ -198,7 +218,8 @@ class AnnotatedMention():
             if match_on_all_attribs:
                 break
 
-
+    # assign self.entity based on the context in the case of the mention being a minister class mention, e.g.
+    # "the Secretary of State", "the shadow Minister"
     def hon_mention(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
@@ -207,25 +228,27 @@ class AnnotatedMention():
         self.is_addressed = False
         self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model, attribs_to_check=["is_addressed"])
 
-    # first person pronouns
+    # assign self.entity based on the context in the case of the mention being a minister class mention
+    # simply assign the utterer to self.entity
     def pronominal_mention_1(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
         self.entity = utterers[utterance_id]
 
+    # this method could be written to match second person pronoun mentions e.g. "you", "your", based on the context
     def pronominal_mention_2(self, context):
         pass
 
-    # todo: could use own attributes e.g. gender
+    # return true if the mp's role is not in the disallowed class
+    # todo: rename to relate to role
     def mention_attributes_match(self, candidate_antecedent, disallowed_roles=[]):
-        #print("candidate antecedent:", candidate_antecedent)
         if candidate_antecedent.role not in disallowed_roles:
             return True
 
         return False
 
-
-    # resolve third person pronouns
+    # assign self.entity based on the context in the case of the mention being a third person singular pronoun e.g.
+    # "he", "his"
     def pronominal_mention_3(self, context):
         annotated_mentions = context["annotated_mentions"]
         mention_index = context["mention_index"]
@@ -250,7 +273,7 @@ class AnnotatedMention():
             if break_i:
                 break
 
-
+    # this method could be written to assign
     def pronominal_mention_other(self, context):
         pass
 
