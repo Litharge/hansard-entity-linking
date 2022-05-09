@@ -10,7 +10,7 @@ def get_regex_span(spans, utt_span):
     spans_found = []
 
     for span in spans:
-        for m in re.finditer(span, utt_span, re.IGNORECASE):
+        for m in re.finditer(re.escape(span), utt_span, re.IGNORECASE):
             spans_found.append(
                 (m.start(0),
                  m.start(0) + len(span))
