@@ -1,0 +1,160 @@
+[
+  {
+    "text": "/data/upload/11/154c6e26-2020-12-16_to_annotate.txt",
+    "id": 20,
+    "label": [
+      {
+        "start": 742,
+        "end": 755,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25433/rachael_maskell/york_central"
+        ]
+      },
+      {
+        "start": 781,
+        "end": 782,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 929,
+        "end": 932,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25433/rachael_maskell/york_central"
+        ]
+      },
+      {
+        "start": 987,
+        "end": 989,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1122,
+        "end": 1124,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1183,
+        "end": 1185,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1200,
+        "end": 1202,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1230,
+        "end": 1232,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1251,
+        "end": 1253,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1269,
+        "end": 1271,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 1518,
+        "end": 1520,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 1518,
+        "end": 1532,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1708,
+        "end": 1710,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1708,
+        "end": 1722,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 1795,
+        "end": 1796,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1971,
+        "end": 1974,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 2377,
+        "end": 2378,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 2249,
+        "end": 2251,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 2514,
+        "end": 2515,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25299/patrick_grady/glasgow_north"
+        ]
+      },
+      {
+        "start": 2640,
+        "end": 2652,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 2714,
+        "end": 2716,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25299/patrick_grady/glasgow_north"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 24,
+    "created_at": "2022-05-08T19:41:48.099022Z",
+    "updated_at": "2022-05-08T19:41:48.099044Z",
+    "lead_time": 114.197
+  }
+]

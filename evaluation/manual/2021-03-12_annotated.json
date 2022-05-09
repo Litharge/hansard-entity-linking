@@ -1,0 +1,286 @@
+[
+  {
+    "text": "/data/upload/12/7e3b79ff-2021-03-12_to_annotate.txt",
+    "id": 21,
+    "label": [
+      {
+        "start": 12,
+        "end": 13,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25687/alex_norris/nottingham_north"
+        ]
+      },
+      {
+        "start": 132,
+        "end": 133,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25687/alex_norris/nottingham_north"
+        ]
+      },
+      {
+        "start": 226,
+        "end": 227,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 241,
+        "end": 243,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 241,
+        "end": 294,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 324,
+        "end": 327,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 366,
+        "end": 367,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 424,
+        "end": 425,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 513,
+        "end": 516,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 845,
+        "end": 846,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 938,
+        "end": 939,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 1061,
+        "end": 1077,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25308/carolyn_harris/swansea_east"
+        ]
+      },
+      {
+        "start": 1101,
+        "end": 1117,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25393/judith_cummins/bradford_south"
+        ]
+      },
+      {
+        "start": 1185,
+        "end": 1186,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 1248,
+        "end": 1250,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 84,
+        "end": 127,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 1263,
+        "end": 1287,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 1545,
+        "end": 1547,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 1545,
+        "end": 1559,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 1641,
+        "end": 1642,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 1758,
+        "end": 1759,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10103/christopher_chope/christchurch"
+        ]
+      },
+      {
+        "start": 1860,
+        "end": 1861,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10103/christopher_chope/christchurch"
+        ]
+      },
+      {
+        "start": 1997,
+        "end": 1998,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2034,
+        "end": 2035,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2087,
+        "end": 2088,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2104,
+        "end": 2106,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2104,
+        "end": 2170,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25413/alberto_costa/south_leicestershire"
+        ]
+      },
+      {
+        "start": 2172,
+        "end": 2222,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25308/carolyn_harris/swansea_east"
+        ]
+      },
+      {
+        "start": 2246,
+        "end": 2262,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25393/judith_cummins/bradford_south"
+        ]
+      },
+      {
+        "start": 2307,
+        "end": 2317,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11003/kevan_jones/north_durham"
+        ]
+      },
+      {
+        "start": 2408,
+        "end": 2409,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2572,
+        "end": 2573,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2652,
+        "end": 2653,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2688,
+        "end": 2689,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 2747,
+        "end": 2748,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 2815,
+        "end": 2817,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 2815,
+        "end": 2868,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25851/laura_trott/sevenoaks"
+        ]
+      },
+      {
+        "start": 2932,
+        "end": 2933,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11397/nadine_dorries/mid_bedfordshire"
+        ]
+      },
+      {
+        "start": 2585,
+        "end": 2597,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25687/alex_norris/nottingham_north"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 26,
+    "created_at": "2022-05-08T20:18:05.604490Z",
+    "updated_at": "2022-05-08T20:18:07.564972Z",
+    "lead_time": 10352.814
+  }
+]

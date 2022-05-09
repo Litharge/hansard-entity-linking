@@ -1,0 +1,139 @@
+[
+  {
+    "text": "/data/upload/9/6f3b79b6-2016-05-12_to_annotate.txt",
+    "id": 18,
+    "label": [
+      {
+        "start": 541,
+        "end": 542,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25409/hannah_bardell/livingston"
+        ]
+      },
+      {
+        "start": 549,
+        "end": 561,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 582,
+        "end": 583,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25409/hannah_bardell/livingston"
+        ]
+      },
+      {
+        "start": 801,
+        "end": 804,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 1055,
+        "end": 1056,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 1240,
+        "end": 1241,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 1885,
+        "end": 1886,
+        "labels": [
+          "https://www.theyworkforyou.com/peer/10362/lord_lilley"
+        ]
+      },
+      {
+        "start": 1923,
+        "end": 1970,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25409/hannah_bardell/livingston"
+        ]
+      },
+      {
+        "start": 2267,
+        "end": 2268,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 2382,
+        "end": 2383,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 2745,
+        "end": 2746,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 2797,
+        "end": 2798,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 379,
+        "end": 381,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 844,
+        "end": 846,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25409/hannah_bardell/livingston"
+        ]
+      },
+      {
+        "start": 1412,
+        "end": 1414,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 1478,
+        "end": 1480,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 1699,
+        "end": 1701,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      },
+      {
+        "start": 2495,
+        "end": 2497,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24829/andrea_leadsom/south_northamptonshire"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 22,
+    "created_at": "2022-05-08T18:57:30.515460Z",
+    "updated_at": "2022-05-08T19:43:56.278726Z",
+    "lead_time": 8301.53
+  }
+]

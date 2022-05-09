@@ -1,0 +1,118 @@
+[
+  {
+    "text": "/data/upload/6/788fe9f9-2016-03-11_to_annotate.txt",
+    "id": 16,
+    "label": [
+      {
+        "start": 17,
+        "end": 18,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 72,
+        "end": 73,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 91,
+        "end": 92,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 36,
+        "end": 38,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 111,
+        "end": 161,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10147/jim_cunningham/coventry_south"
+        ]
+      },
+      {
+        "start": 36,
+        "end": 50,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11816/philip_davies/shipley"
+        ]
+      },
+      {
+        "start": 185,
+        "end": 203,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 712,
+        "end": 713,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 739,
+        "end": 741,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 739,
+        "end": 753,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24760/jeremy_lefroy/stafford"
+        ]
+      },
+      {
+        "start": 760,
+        "end": 761,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 780,
+        "end": 782,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      },
+      {
+        "start": 780,
+        "end": 833,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11816/philip_davies/shipley"
+        ]
+      },
+      {
+        "start": 1026,
+        "end": 1052,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10999/boris_johnson/uxbridge_and_south_ruislip"
+        ]
+      },
+      {
+        "start": 1458,
+        "end": 1460,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11661/philip_hollobone/kettering"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 20,
+    "created_at": "2022-05-08T17:59:29.024712Z",
+    "updated_at": "2022-05-08T17:59:29.024736Z",
+    "lead_time": 65.676
+  }
+]

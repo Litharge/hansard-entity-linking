@@ -1,0 +1,125 @@
+[
+  {
+    "text": "/data/upload/8/12d9d1b3-2016-05-10_to_annotate.txt",
+    "id": 17,
+    "label": [
+      {
+        "start": 245,
+        "end": 246,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 442,
+        "end": 443,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 688,
+        "end": 689,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 465,
+        "end": 478,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24852/valerie_vaz/walsall_south"
+        ]
+      },
+      {
+        "start": 1031,
+        "end": 1032,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 1163,
+        "end": 1220,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24852/valerie_vaz/walsall_south"
+        ]
+      },
+      {
+        "start": 1163,
+        "end": 1165,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10645/david_winnick/walsall_north"
+        ]
+      },
+      {
+        "start": 1414,
+        "end": 1415,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10645/david_winnick/walsall_north"
+        ]
+      },
+      {
+        "start": 1503,
+        "end": 1504,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 1510,
+        "end": 1528,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/10645/david_winnick/walsall_north"
+        ]
+      },
+      {
+        "start": 1663,
+        "end": 1664,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 1821,
+        "end": 1854,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24852/valerie_vaz/walsall_south"
+        ]
+      },
+      {
+        "start": 2706,
+        "end": 2707,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24852/valerie_vaz/walsall_south"
+        ]
+      },
+      {
+        "start": 2797,
+        "end": 2798,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24852/valerie_vaz/walsall_south"
+        ]
+      },
+      {
+        "start": 2971,
+        "end": 2972,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      },
+      {
+        "start": 1363,
+        "end": 1375,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/11633/david_gauke/south_west_hertfordshire"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 21,
+    "created_at": "2022-05-08T18:23:25.842356Z",
+    "updated_at": "2022-05-08T18:23:25.842378Z",
+    "lead_time": 823.752
+  }
+]

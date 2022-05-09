@@ -1,0 +1,104 @@
+[
+  {
+    "text": "/data/upload/17/83b842b1-2020-12-16_to_annotate.txt",
+    "id": 26,
+    "label": [
+      {
+        "start": 742,
+        "end": 755,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25433/rachael_maskell/york_central"
+        ]
+      },
+      {
+        "start": 781,
+        "end": 782,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 929,
+        "end": 932,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25433/rachael_maskell/york_central"
+        ]
+      },
+      {
+        "start": 1269,
+        "end": 1271,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 1518,
+        "end": 1520,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 1518,
+        "end": 1532,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1708,
+        "end": 1710,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1708,
+        "end": 1722,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 1787,
+        "end": 1793,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1795,
+        "end": 1796,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/24878/nigel_adams/selby_and_ainsty"
+        ]
+      },
+      {
+        "start": 1971,
+        "end": 1974,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25882/jo_gideon/stoke-on-trent_central"
+        ]
+      },
+      {
+        "start": 2514,
+        "end": 2515,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25299/patrick_grady/glasgow_north"
+        ]
+      },
+      {
+        "start": 2640,
+        "end": 2652,
+        "labels": [
+          "https://www.theyworkforyou.com/mp/25299/patrick_grady/glasgow_north"
+        ]
+      }
+    ],
+    "annotator": 1,
+    "annotation_id": 31,
+    "created_at": "2022-05-08T22:21:11.548890Z",
+    "updated_at": "2022-05-08T22:21:11.548917Z",
+    "lead_time": 135.613
+  }
+]
