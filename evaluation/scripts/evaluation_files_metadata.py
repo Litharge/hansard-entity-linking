@@ -167,3 +167,11 @@ model_locations = [
                    "../system/2020-12-14.p",
 
                    "../system/2020-12-14.p"]
+
+# system output info
+system_output_pickle_locations = [f"../system/{date.strftime('%Y-%m-%d')}_system_output.p" for date in dates]
+system_json_locations = [f"../system/{date.strftime('%Y-%m-%d')}_system_output.json" for date in dates]
+
+# list holding location of recall, precision, f1 scores
+system_entity_performance_locations = [f"../entity_performance/{date.strftime('%Y-%m-%d')}_system_entity_result.txt" for date in dates]
+manual_entity_performance_locations = [f"../entity_performance/{date.strftime('%Y-%m-%d')}_manual_entity_result.txt" for date in dates]

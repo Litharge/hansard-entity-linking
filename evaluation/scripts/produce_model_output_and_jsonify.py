@@ -19,10 +19,10 @@ for i in range(len(metadata.xml_locations)):
     print("test obj")
     print(test_obj)
 
-    pickle.dump(test_obj, open(f"../system/{metadata.dates[i].strftime('%Y-%m-%d')}_system_output.p", "wb"))
+    pickle.dump(test_obj, open(metadata.system_output_pickle_locations[i], "wb"))
 
 for i in range(len(metadata.xml_locations)):
-    test_system_output = pickle.load(open(f"../system/{metadata.dates[i].strftime('%Y-%m-%d')}_system_output.p", "rb"))
-    save_model_output_as_clusters(test_system_output, f"../system/{metadata.dates[i].strftime('%Y-%m-%d')}_system_output.json")
+    test_system_output = pickle.load(open(metadata.system_output_pickle_locations[i], "rb"))
+    save_model_output_as_clusters(test_system_output, metadata.system_json_locations[i])
 
 
