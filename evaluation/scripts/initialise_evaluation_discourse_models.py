@@ -10,10 +10,10 @@ import evaluation.scripts.evaluation_files_metadata as metadata
 
 # get discourse model for use in mock (debates2020-06-15a.xml)
 test_date = "2020-06-15"
-test_list_location = f"../system/{metadata.test_model_date}_list"
-save_csv(metadata.test_model_date, test_list_location)
+mock_list_location = f"../mock/{metadata.mock_model_date}_list"
+save_csv(metadata.mock_model_date, mock_list_location)
 
-to_save = MPList(test_list_location, "../system/", test_date, create_pickle=True)
+to_save = MPList(mock_list_location, "../mock/", test_date, create_pickle=True)
 
 # get discourse model for 1998 evaluation
 eval_2016_start_period_date = "2016-03-11"

@@ -1,7 +1,7 @@
 import datetime
 
 # model data
-test_model_date = "2020-06-15"
+mock_model_date = "2020-06-15"
 period_2016_model_date = "2016-03-11"
 period_2020_model_date = "2020-12-14"
 
@@ -52,7 +52,7 @@ end_values = [
               ]
 
 # shared gold and manual metadata
-mock_mapping_save_locations = ["../text_for_humans/2020-06-15_mapping.p"]
+mock_mapping_save_locations = ["../mock/2020-06-15_mapping.p"]
 mapping_save_locations = [
                               "../text_for_humans/2016-03-11_mapping.p",
 
@@ -67,7 +67,7 @@ mapping_save_locations = [
                           ]
 
 
-mock_to_annotate_save_locations = ["../text_for_humans/2020-06-15_to_annotate.txt"]
+mock_to_annotate_save_locations = ["../mock/2020-06-15_to_annotate.txt"]
 to_annotate_save_locations = [
                               "../text_for_humans/2016-03-11_to_annotate.txt",
 
@@ -122,6 +122,8 @@ manual_annotated_save_locations = [
 
                             "../manual/2021-03-12_annotated.json"
                             ]
+
+
 manual_to_score_save_locations = [
                             "../manual/2016-03-11_to_score.json",
 
@@ -135,8 +137,12 @@ manual_to_score_save_locations = [
                             "../manual/2021-03-12_to_score.json"
                            ]
 
+mock_annotated_save_locations = ["../mock/2020-06-15_annotated.json"]
+mock_to_score_save_locations = ["../mock/2020-06-15_to_score.json"]
+
 # system output only data
 # datetimes used to automatically name system output
+mock_dates = [datetime.datetime(2020, 6, 15)]
 dates = [
          datetime.datetime(2016, 3, 11),
 
@@ -149,6 +155,7 @@ dates = [
 
          datetime.datetime(2021, 3, 12)]
 # there are only 3 varieties of model, as these are expensive to create and applicable to any nearby debates
+mock_model_locations = ["../mock/2020-06-15.p"]
 model_locations = [
                    "../system/2016-03-11.p",
 
