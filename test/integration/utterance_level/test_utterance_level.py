@@ -2,6 +2,8 @@ import datetime
 import pickle
 
 from structure.utterance_level import Mentions
+# need transform hon as WholeXMLAnnotation uses this to process the utterance span
+from structure.range_level import transform_hon
 
 import unittest
 
@@ -11,15 +13,16 @@ import stanza
 class TestProduceMentions(unittest.TestCase):
     def test_sentences_are_correct(self):
         test_utterance = "I am sure that I've not seen it. Myself, I would prefer to hear it from a friend of mine. Come with me. You can go in, he is friendly."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model, datetime_of_utterance=dummy_datetime)
+        m.detect_mentions(nlp, model=model, datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
         print(m)
@@ -30,15 +33,16 @@ class TestProduceMentions(unittest.TestCase):
 
     def test_hon_sentences_are_correct(self):
         test_utterance = "My right hon  friend is waiting for you. The right hon  lady and the hon  gentleman are here."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -50,15 +54,16 @@ class TestProduceMentions(unittest.TestCase):
 
     def test_hon_genders_are_correct(self):
         test_utterance = "My right hon  friend is waiting for you. The right hon  lady and the hon  gentleman are here."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -72,15 +77,16 @@ class TestProduceMentions(unittest.TestCase):
     def test_correct_sentence_bounds(self):
         test_utterance = "The  hon Gentleman is at least partly correct. There will be additional costs to " \
                               "maintaining the Vanguard class through to 2028."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         self.assertEqual(m.sentence_bounds[0], (0, 46))
@@ -89,15 +95,16 @@ class TestProduceMentions(unittest.TestCase):
 
     def test_speaker_sentences_are_correct(self):
         test_utterance = "Mr Speaker, the hon  gentleman is correct. Excuse me, Madam Speaker."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -109,15 +116,16 @@ class TestProduceMentions(unittest.TestCase):
 
     def test_deputy_speaker_genders_are_correct(self):
         test_utterance = "Mr Deputy Speaker, the hon  gentleman is correct. Excuse me, Madam Deputy Speaker."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         print(test_utterance)
@@ -129,15 +137,16 @@ class TestProduceMentions(unittest.TestCase):
 
     def test_minister_class_sentences_are_correct(self):
         test_utterance = "The secretary of state, the shadow minister, the minister. The under-secretary, the shadow secretary of state."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         char_in_sentence_only = [(item.start_char_in_sentence, item.end_char_in_sentence) for item in m.annotated_mentions]
@@ -150,15 +159,16 @@ class TestProduceMentions(unittest.TestCase):
     # test whether multiple mention types can be detected correctly simultaneously
     def test_multiple(self):
         test_utterance = "I see my hon  friend the shadow Health Secretary agrees, he is right. The Parliamentary Under-Secretary of State for the Home Department. Mr Speaker and Madam Deputy Speaker, the member for Redditch. Diane Abbott. The Prime Minister."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         for item in m.annotated_mentions:
@@ -184,16 +194,17 @@ class TestProduceMentions(unittest.TestCase):
     def test_overlap_removal(self):
         # "The Shadow Home Secretary" will be detected both by the exact office match and by the regular secretary match
         test_utterance = "The Shadow Home Secretary. She"
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         # at this date Diane Abbott was shadow home secretary
         dummy_datetime = datetime.datetime(2018, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
 
         for item in m.annotated_mentions:
@@ -210,16 +221,17 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = "the Shadow Secretary, the hon  Member for Hackney North and Stoke Newington (Diane Abbott) " \
                          "is here. My hon  Friend the Member for Redditch (Rachel Maclean) is also here. I see my " \
                          "hon  friend the shadow Health Secretary agrees, he is right."
+        test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions()
+        m = Mentions(test_utterance)
 
         # at this date Diane Abbott was shadow home secretary
         dummy_datetime = datetime.datetime(2018, 1, 1)
         model_location = "verified_test_discourse_model.p"
         model = pickle.load(open(model_location, "rb"))
 
-        m.detect_mentions(nlp, test_utterance, model=model,
+        m.detect_mentions(nlp, model=model,
                           datetime_of_utterance=dummy_datetime)
         print("unsorted")
         for item in m.annotated_mentions:

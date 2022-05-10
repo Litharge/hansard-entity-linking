@@ -134,11 +134,11 @@ class WholeXMLAnnotation():
         for utt_span, utterance_id, person_id in get_utterance_spans(xml_location, start, end):
             #print("utt_span", utt_span)
             #print("\n\nutterance id: ", utterance_id)
-            to_add = Mentions()
+            to_add = Mentions(utt_span)
 
             utt_span = transform_hon(utt_span)
 
-            to_add.detect_mentions(nlp, utt_span, self.augmented_model, datetime_of_utterance=datetime_of_utterance)
+            to_add.detect_mentions(nlp, self.augmented_model, datetime_of_utterance=datetime_of_utterance)
 
             self.utterance_mentions[utterance_id] = to_add
 

@@ -31,8 +31,8 @@ from mention_detection.mention_type import is_more_precise
 # contains AnnotatedMention's
 # has an id associated
 class Mentions():
-    def __init__(self):
-        self.utt_span = None
+    def __init__(self, utt_span):
+        self.utt_span = utt_span
 
         self.annotated_mentions = []
 
@@ -49,7 +49,6 @@ class Mentions():
     # self.annotated mentions, add all original mentions to the new mention's appos list
     def join_appositives(self, utt_span=None):
         # todo: replace utt_span with self.utt_span
-        utt_span = self.utt_span
         # sort the AnnotatedMentions by start_char
         self.annotated_mentions.sort(key=lambda x: x.start_char)
         # sort the annotated mentions by start character
@@ -62,7 +61,7 @@ class Mentions():
             while target < len(self.annotated_mentions)-1 and self.annotated_mentions[target].start_char <= self.annotated_mentions[i].end_char:
                 target += 1
 
-            separating_span = utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[target].start_char]
+            separating_span = self.utt_span[self.annotated_mentions[i].end_char:self.annotated_mentions[target].start_char]
 
             if separating_span in {" ", ", "}:
                 joins[i] = target
@@ -147,10 +146,8 @@ class Mentions():
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
     # all relevant kinds to self.annotated_mentions
-    def detect_mentions(self, nlp, utt_span, model, datetime_of_utterance):
-        self.utt_span = utt_span
-
-        doc = nlp(utt_span)
+    def detect_mentions(self, nlp, model, datetime_of_utterance):
+        doc = nlp(self.utt_span)
 
         self.set_sentence_bounds(doc)
 
@@ -161,40 +158,40 @@ class Mentions():
         pronominal_mentions = get_pronominal_mentions(doc, sentence_starts)
         self.add_am_list(pronominal_mentions, sentence_starts)
 
-        hon_epicene_mentions = get_hon_epicene_mentions(utt_span, sentence_starts)
+        hon_epicene_mentions = get_hon_epicene_mentions(self.utt_span, sentence_starts)
         self.add_am_list(hon_epicene_mentions, sentence_starts)
 
-        hon_masculine_mentions = get_hon_masculine_mentions(utt_span, sentence_starts)
+        hon_masculine_mentions = get_hon_masculine_mentions(self.utt_span, sentence_starts)
         self.add_am_list(hon_masculine_mentions, sentence_starts)
 
-        hon_feminine_mentions = get_hon_feminine_mentions(utt_span, sentence_starts)
+        hon_feminine_mentions = get_hon_feminine_mentions(self.utt_span, sentence_starts)
         self.add_am_list(hon_feminine_mentions, sentence_starts)
 
-        speaker_mentions = get_speaker_mentions(utt_span)
+        speaker_mentions = get_speaker_mentions(self.utt_span)
         self.add_am_list(speaker_mentions, sentence_starts)
 
-        deputy_speaker_masculine_mentions = get_deputy_speaker_masculine_mentions(utt_span)
+        deputy_speaker_masculine_mentions = get_deputy_speaker_masculine_mentions(self.utt_span)
         self.add_am_list(deputy_speaker_masculine_mentions, sentence_starts)
 
-        deputy_speaker_feminine_ranges = get_deputy_speaker_feminine_mentions(utt_span)
+        deputy_speaker_feminine_ranges = get_deputy_speaker_feminine_mentions(self.utt_span)
         self.add_am_list(deputy_speaker_feminine_ranges, sentence_starts)
 
-        member_for_mentions = get_member_for_spans(model, utt_span)
+        member_for_mentions = get_member_for_spans(model, self.utt_span)
         self.add_am_list(member_for_mentions, sentence_starts)
 
-        exact_offices_mentions = get_exact_office_spans(model, utt_span, datetime_of_utterance)
+        exact_offices_mentions = get_exact_office_spans(model, self.utt_span, datetime_of_utterance)
         self.add_am_list(exact_offices_mentions, sentence_starts)
 
-        ministerial_class_mentions = get_ministerial_class_mentions(utt_span)
+        ministerial_class_mentions = get_ministerial_class_mentions(self.utt_span)
         self.add_am_list(ministerial_class_mentions, sentence_starts)
 
-        exact_nominal_mentions = get_exact_nominal_mentions(model, utt_span)
+        exact_nominal_mentions = get_exact_nominal_mentions(model, self.utt_span)
         self.add_am_list(exact_nominal_mentions, sentence_starts)
 
-        regular_secretary_mentions = get_regular_secretary_mentions(utt_span)
+        regular_secretary_mentions = get_regular_secretary_mentions(self.utt_span)
         self.add_am_list(regular_secretary_mentions, sentence_starts, allow_overlap=False)
 
-        irregular_office_mentions = get_irregular_office_mentions(utt_span)
+        irregular_office_mentions = get_irregular_office_mentions(self.utt_span)
         self.add_am_list(irregular_office_mentions, sentence_starts, allow_overlap=False)
 
 
