@@ -1,4 +1,7 @@
-# module to produce pronoun mentions
+# module containing Mentions, which represents an utterance, called Mentions as it contains the AnnotatedMention's
+# for the utterance
+# Mentions handles calling mention detection functions and determining sentence level information for the
+# AnnotatedMentions
 
 import bisect
 import pickle
@@ -28,8 +31,7 @@ from mention_detection.irregular_office_mention import get_irregular_office_ment
 from mention_detection.mention_type import is_more_precise
 
 
-# contains AnnotatedMention's
-# has an id associated
+# represents an utterance
 class Mentions():
     def __init__(self, utt_span):
         self.utt_span = utt_span
@@ -43,8 +45,6 @@ class Mentions():
 
         self.parent_range = None
 
-        # todo: this should be instance variable instead of arg
-
     # sort the annotated mentions by start character
     # go through each non-pronominal mention and look at the characters between it and the next non-overlapping mention
     # if the separating characters are of an allowed form, an item of form
@@ -53,6 +53,7 @@ class Mentions():
         joins = {}
         for i in range(len(self.annotated_mentions) - 1):
             target = i + 1
+
             # skip overlapping
             while target < len(self.annotated_mentions) - 1 and self.annotated_mentions[target].start_char <= \
                     self.annotated_mentions[i].end_char:
@@ -69,14 +70,18 @@ class Mentions():
     # transform the joins dictionary into a dictionary containing the groupings of appositives
     def get_appos_chains(self, joins):
         already_added = set()
+
         # dictionary of lists
         appos_chains = {}
         for i in range(len(self.annotated_mentions)):
             if i in already_added:
                 continue
+
             j = i
+
             already_added.add(j)
             appos_chains[i] = [i]
+
             while j in joins:
                 j = joins[j]
                 appos_chains[i].append(j)
@@ -84,7 +89,8 @@ class Mentions():
 
         return appos_chains
 
-    # take the groupings of appositives and generate a new list of mentions
+    # take the groupings of appositives and returns a new list of mentions, where appositive chains are a single
+    # mention each
     def get_new_list(self, appos_chains):
         new_start_end = {}
         for i in appos_chains:
@@ -106,12 +112,9 @@ class Mentions():
                     new_end = (
                     self.annotated_mentions[am_index].end_char, self.annotated_mentions[am_index].end_char_in_sentence,
                     self.annotated_mentions[am_index].sentence_number)
-            # print("i:", i, "new start, end:", new_start, new_end)
+
             new_start_end[i] = (new_start, new_end)
 
-        # print("new_start_end:", new_start_end)
-
-        # print("appos chains", appos_chains)
         return new_start_end
 
     # returns transformed version of self.annotated_mentions, where appositives are joined
@@ -128,22 +131,16 @@ class Mentions():
                     most_precise = chain_item
                     most_precise_index = chain_item_index
 
-            #print("most precise index:", most_precise_index)
-            #print("most precise:", most_precise)
-
             # now take the properties of the most precise mention in the apposition
             encompassing_mention = copy.deepcopy(most_precise)
 
             # but set the start and end characters to the start and end of the entire appositive
-            # todo: set start and end char in sent
             encompassing_mention.start_char = new_start_end[key][0][0]
             encompassing_mention.end_char = new_start_end[key][1][0]
             encompassing_mention.start_char_in_sentence = new_start_end[key][0][1]
             encompassing_mention.end_char_in_sentence = new_start_end[key][1][1]
             encompassing_mention.sentence = new_start_end[key][0][2]
 
-            #print("new set:", new_start_end[key][0][0])
-            #print("new set:", new_start_end[key][1][0])
             encompassing_mention.appos_chain = []
 
             if len(appos_chains[key]) > 1:
@@ -172,7 +169,8 @@ class Mentions():
 
 
     # method that for a given utterance span utt_span and its corresponding stanza Document doc, adds mentions of
-    # all relevant kinds to self.annotated_mentions
+    # all relevant kinds to self.annotated_mentions, model and datetime_of_utterance provide contextual information
+    # that greatly improves mention detection
     def detect_mentions(self, nlp, model, datetime_of_utterance):
         doc = nlp(self.utt_span)
 
@@ -215,12 +213,13 @@ class Mentions():
         exact_nominal_mentions = get_exact_nominal_mentions(model, self.utt_span)
         self.add_am_list(exact_nominal_mentions, sentence_starts)
 
+        # do not allow overlap for the following two detected mentions, as these may conflict with earlier, more precise
+        # mentions
         regular_secretary_mentions = get_regular_secretary_mentions(self.utt_span)
         self.add_am_list(regular_secretary_mentions, sentence_starts, allow_overlap=False)
 
         irregular_office_mentions = get_irregular_office_mentions(self.utt_span)
         self.add_am_list(irregular_office_mentions, sentence_starts, allow_overlap=False)
-
 
     # returns a tuple [start char index, end char index) for a sentence
     def set_sentence_bounds(self, doc):
@@ -249,8 +248,8 @@ class Mentions():
 
         return False
 
-    # todo this should only add irregular type and regular secretary type mentions if they do not overlap with existing mentions
-    #  do this with a parameter, as we want first person pronouns to allow overlap for example in "my hon. friend"
+    # adds items in mentions to self.annotated_mentions, also calling self.get_sentence_position to add sentence
+    # positional data. Items are only added if either allow_overlap is false or they are non-overlapping
     def add_am_list(self, mentions, sentence_starts, allow_overlap=True):
         for mention in mentions:
             if allow_overlap or not self.is_overlapping_with_existing(mention):
@@ -261,7 +260,9 @@ class Mentions():
 
 
 
-    # returns list of indexes
+    # returns list of indexes based on self.annotated_mentions, where the ordering is done right to left within
+    # sentence and left to right between sentences. Then when this list is iterated backwards in coreference resolution
+    # of third person pronouns, the list allows left to right within sentence and right to left between.
     # a b c. d e f. g h. -> indexes for: c b a f e d h g
     def order_mentions(self):
         mentions_ordered = []
@@ -270,21 +271,14 @@ class Mentions():
         for item in self.annotated_mentions:
             if item.sentence_number > max_sentence:
                 max_sentence = item.sentence_number
-        #print("max sentence: ", max_sentence)
+
         # add 1 as if the maximum sentence has index 0, we need one sublist to hold its values
         sentence_groups = [[] for item in range(max_sentence+1)]
-        #print("init sentence groups:", sentence_groups)
+
         for i, item in enumerate(self.annotated_mentions):
             sentence_groups[item.sentence_number].append(i)
 
-        #for key in sentence_groups:
-        #    sentence_groups[key].sort(reverse=True)
-        #    mentions_ordered.extend(sentence_groups[key])
-
-        #print("mentions ordered:", mentions_ordered)
         return sentence_groups
-
-
 
     def __repr__(self):
         repr_str = ""
