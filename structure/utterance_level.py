@@ -243,7 +243,8 @@ class Mentions():
 
     def is_overlapping_with_existing(self, to_check):
         for item in self.annotated_mentions:
-            if item.start_char <= to_check.start_char <= item.end_char or item.start_char <= to_check.end_char <= item.end_char:
+            if item.start_char <= to_check.start_char <= item.end_char \
+                    or item.start_char <= to_check.end_char <= item.end_char:
                 return True
 
         return False
@@ -253,9 +254,11 @@ class Mentions():
     def add_am_list(self, mentions, sentence_starts, allow_overlap=True):
         for mention in mentions:
             if allow_overlap or not self.is_overlapping_with_existing(mention):
-                mention.sentence_number, mention.start_char_in_sentence, mention.end_char_in_sentence = self.get_sentence_position(sentence_starts,
-                                                                                                           mention.start_char,
-                                                                                                           mention.end_char)
+                mention.sentence_number, \
+                mention.start_char_in_sentence, \
+                mention.end_char_in_sentence = self.get_sentence_position(sentence_starts,
+                                                                          mention.start_char,
+                                                                          mention.end_char)
                 self.annotated_mentions.append(mention)
 
 
@@ -285,7 +288,8 @@ class Mentions():
         repr_str += str(self.sentence_bounds) + "\n\n"
 
         for am in self.annotated_mentions:
-            repr_str += f"{am.start_char}, {am.end_char}, {am.sentence_number}, {am.start_char_in_sentence}, {am.end_char_in_sentence}, {am.gender}\n"
+            repr_str += f"{am.start_char}, {am.end_char}, {am.sentence_number}, {am.start_char_in_sentence}, " \
+                        f"{am.end_char_in_sentence}, {am.gender}\n"
 
         return repr_str
 
