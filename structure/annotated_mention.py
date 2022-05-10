@@ -258,7 +258,7 @@ class AnnotatedMention():
 
     # return true if the mp's role is not in the disallowed class
     # todo: rename to relate to role
-    def mention_attributes_match(self, candidate_antecedent, disallowed_roles=[]):
+    def mention_roles_match(self, candidate_antecedent, disallowed_roles=[]):
         if candidate_antecedent.role not in disallowed_roles:
             return True
 
@@ -276,7 +276,8 @@ class AnnotatedMention():
             # iterate mentions left to right as in Raghunathan et al. (2010)
             for j in range(len(ordered_mentions[i])):
                 # if the candidate antecedent matches then the entity can be set to match that of the antecedent and the loop can break
-                if self.mention_attributes_match(annotated_mentions[ordered_mentions[i][j]], disallowed_roles=["pronominal_mention"]):
+                if self.mention_roles_match(annotated_mentions[ordered_mentions[i][j]],
+                                            disallowed_roles=["pronominal_mention"]):
                     self.entity = annotated_mentions[ordered_mentions[i][j]].entity
                     break_i = True
                     break
