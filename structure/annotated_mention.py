@@ -257,7 +257,6 @@ class AnnotatedMention():
         pass
 
     # return true if the mp's role is not in the disallowed class
-    # todo: rename to relate to role
     def mention_roles_match(self, candidate_antecedent, disallowed_roles=[]):
         if candidate_antecedent.role not in disallowed_roles:
             return True
