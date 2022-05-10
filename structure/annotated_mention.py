@@ -7,7 +7,8 @@ from fuzzywuzzy import process, fuzz
 
 class AnnotatedMention():
     def __init__(self, start_char=None, end_char=None, sentence=None, start_char_in_sentence=None,
-                                      end_char_in_sentence=None, person=None, gender=None, rank=None, is_shadow=None, is_addressed=None, role=None, entity=None):
+                 end_char_in_sentence=None, person=None, gender=None, rank=None, is_shadow=None, is_addressed=None,
+                 role=None, entity=None):
         # syntactic info
         self.start_char = start_char
         self.end_char = end_char
@@ -45,7 +46,6 @@ class AnnotatedMention():
         self.appos_chain = []
         self.is_appositive = False
 
-
     def get_associated_constituency(self):
         if self.entity is not None:
             assoc_constituency = self.entity.constituency
@@ -56,7 +56,6 @@ class AnnotatedMention():
 
     def member_for_mention(self, context):
         pass
-
 
     # return the string of the single closest match, using search_term on the list to_search
     def get_closest_match(self, search_term, to_search):
@@ -69,7 +68,6 @@ class AnnotatedMention():
             return result[0][0]
         else:
             return None
-
 
     # return a dictionary with items of the form office:mp, where the offices are held at the given datetime as
     # described in the model. If matching_attrib contains strings, then the attributes of the mention and the
@@ -147,7 +145,6 @@ class AnnotatedMention():
 
         self.entity = office_mp_dict[key]
 
-
     # this method could be written to match exact nominal mentions based on the context
     def exact_nominal_mention(self, context):
         pass
@@ -169,7 +166,8 @@ class AnnotatedMention():
         # with the default (best performing) scorer and does not produce useful results for short queries
         text_important_only = text[4:-10]
 
-        office_mp_dict = self.get_office_mp_dict_at_time(model, datetime_of_utterance, matching_attrib=["is_secretary", "is_shadow"])
+        office_mp_dict = self.get_office_mp_dict_at_time(model, datetime_of_utterance,
+                                                         matching_attrib=["is_secretary", "is_shadow"])
 
         # remove leading "the Secretary of State for" as the query may match with characters in this part, favouring
         # shorter office titles, e.g. "Home" -> "The Secretary of State for Wales" rather than
@@ -181,7 +179,6 @@ class AnnotatedMention():
 
                 useful_only[new_key] = office_mp_dict[key]
 
-
         key = self.get_closest_match(text_important_only, list(useful_only.keys()))
 
         self.entity = useful_only[key]
@@ -192,7 +189,8 @@ class AnnotatedMention():
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
 
-        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, ["is_secretary", "is_minister_of_state", "is_shadow"])
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id,
+                                                               ["is_secretary", "is_minister_of_state", "is_shadow"])
 
     # this method could be written to match deputy speaker mentions based on the context
     def deputy_speaker_mention(self, context):
@@ -243,7 +241,8 @@ class AnnotatedMention():
 
         # this mention refers to someone other than the addressee
         self.is_addressed = False
-        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, attribs_to_check=["is_addressed"])
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id,
+                                                               attribs_to_check=["is_addressed"])
 
     # assign self.entity based on the context in the case of the mention being a minister class mention
     # simply assign the utterer to self.entity
@@ -274,7 +273,8 @@ class AnnotatedMention():
         for i in range(self.sentence_number, -1, -1):
             # iterate mentions left to right as in Raghunathan et al. (2010)
             for j in range(len(ordered_mentions[i])):
-                # if the candidate antecedent matches then the entity can be set to match that of the antecedent and the loop can break
+                # if the candidate antecedent matches then the entity can be set to match that of the antecedent and
+                # the loop can break
                 if self.mention_roles_match(annotated_mentions[ordered_mentions[i][j]],
                                             disallowed_roles=["pronominal_mention"]):
                     self.entity = annotated_mentions[ordered_mentions[i][j]].entity
@@ -294,7 +294,6 @@ class AnnotatedMention():
         except AttributeError as e:
             raise AttributeError("Role attribute as method name not found, check that the role is set correctly or"
                                  "that there is a method corresponding to the role")
-
 
     # assign an associated entity
     def resolve(self, **context):
