@@ -1,9 +1,6 @@
-# todo: place call to get_matching_antecedent() in here, this will be a function in a coreference subpackage that
-#  takes in params for what type of mention to look for then return the matching chain id
-#  MAYBE place AnnotatedMention in the coreference package, then Mentions is seen as detecting the mentions, ready
-#  for them to perform coref resolution
-# instances represent mentions in sentences
-# can take on additional data e.g. linking to a cluster
+# module containing AnnotateMention, which is a class describing a single mention
+# the class contains methods to perform entity linking and coreference resolution, given some provided contextual
+# data
 
 from fuzzywuzzy import process, fuzz
 
@@ -39,10 +36,12 @@ class AnnotatedMention():
 
         self.role = role
 
+        # semantic info
         self.entity = entity
 
         self.assoc_constituency = None
 
+        # coreference info
         self.appos_chain = []
         self.is_appositive = False
 
@@ -64,7 +63,7 @@ class AnnotatedMention():
         # fuzz.ratio is superior to fuzz.partial ratio, as otherwise the words common to the different offices
         # dominate, rather than the words that discriminate them
         result = process.extract(search_term, to_search, scorer=fuzz.ratio)
-        print("result:", result)
+
         if result is not None:
             # return text only
             return result[0][0]
@@ -77,12 +76,17 @@ class AnnotatedMention():
     # mp in the model with those names must match
     def get_office_mp_dict_at_time(self, model, datetime, matching_attrib=[]):
         office_mp_dict = {}
+
         for mp in model.mp_list:
+            # first add from the past offices, which requires checking both the start and end dates
             for office in mp.past_offices:
                 if mp.past_offices[office][0] < datetime <= mp.past_offices[office][1]:
                     outer_continue = False
+
                     for attrib in matching_attrib:
                         if getattr(self, attrib) != getattr(mp, attrib):
+                            # set outer_continue to continue the mp iteration loop and avoid adding the mp to the
+                            # dictionary if there is some attribute mismatch
                             outer_continue = True
 
                     if outer_continue:
@@ -90,11 +94,14 @@ class AnnotatedMention():
 
                     office_mp_dict[office] = mp
 
+            # now add from the current offices, which requires only checking the start date
             for office in mp.current_offices:
                 if mp.current_offices[office] < datetime:
                     outer_continue = False
                     for attrib in matching_attrib:
                         if getattr(self, attrib) != getattr(mp, attrib):
+                            # set outer_continue to continue the mp iteration loop and avoid adding the mp to the
+                            # dictionary if there is some attribute mismatch
                             outer_continue = True
 
                     if outer_continue:
@@ -130,8 +137,6 @@ class AnnotatedMention():
 
         self.entity = office_mp_dict[key]
 
-        print("office_mp_dict", office_mp_dict)
-        print("entity", self.entity)
 
     # this method could be written to match exact nominal mentions based on the context
     def exact_nominal_mention(self, context):
@@ -163,7 +168,7 @@ class AnnotatedMention():
         for key in office_mp_dict:
             if "The Secretary of State for " in key:
                 new_key = key.split("The Secretary of State for ")[1]
-                print("new key:", new_key)
+
                 useful_only[new_key] = office_mp_dict[key]
 
 
@@ -258,11 +263,6 @@ class AnnotatedMention():
         ordered_mentions = context["ordered_mentions"]
         utterance_id = context["utterance_id"]
 
-        #print("annotated mentions", annotated_mentions)
-        #print("mention index", mention_index)
-        #print("ordered_mentions in annot", ordered_mentions)
-        #print("for ", self)
-
         break_i = False
         # iterate over sentences in reverse
         for i in range(self.sentence_number, -1, -1):
@@ -289,8 +289,8 @@ class AnnotatedMention():
     # todo: replace **context with named args, pack it into a dict and pass this into method based on string,
     #   if some context is missing, put out a warning but continue with the rest of the resolution
     def resolve(self, **context):
-        #print("utterers, key", context["utterers"], context["utterance_id"], context["annotated_mentions"], context["mention_index"], context["ordered_mentions"])
-        # if the entity was already set due to 1 to 1 mapping, there is no work to be done
+        # if the entity was already set in the mention detection stage due to 1 to 1 mapping, there is no work to be
+        # done
         if self.entity is not None:
             return
 
