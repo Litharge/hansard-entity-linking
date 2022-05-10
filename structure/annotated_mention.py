@@ -184,32 +184,29 @@ class AnnotatedMention():
     def deputy_speaker_mention(self, context):
         pass
 
-    # returns the last MP in utterers occuring before the utterance_id with the matching attribs_to_check, e.g.
+    # returns the last MP in utterers occurring before the utterance_id with the matching attribs_to_check, e.g.
     # "is_secretary", based on the model
     def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, model, attribs_to_check=None):
         # since python 3.7 dictionaries maintain insertion order
         utterers_keys = list(utterers.keys())
         utterance_position = utterers_keys.index(utterance_id)
-        #print("utterance pos:", utterance_position)
 
-        # simply gets previous utterer
-        # todo: improve this by using own attributes and matching against them
         utterer_to_check_index = utterance_position
         while True:
             utterer_to_check_index -= 1
-            #print("utterer_to_check_index:", utterer_to_check_index)
+
+            # if the utterer index goes negative, then all utterers have been iterated through with no match being
+            # found, so leave self.entity as None
             if utterer_to_check_index < 0:
-                #print("no entity found")
                 self.entity = None
                 break
+
             self.entity = utterers[utterers_keys[utterer_to_check_index]]
 
             # if entity not in model, keep going
             if self.entity is None:
                 continue
-            # if entity is a match then stop decrementing index
-            #if self.entity.is_addressed == self.is_addressed:
-            #    break
+
             match_on_all_attribs = True
             for attrib in attribs_to_check:
                 try:
@@ -219,6 +216,8 @@ class AnnotatedMention():
                 except AttributeError as e:
                     raise AttributeError("Attribute name not found, check that the attribute name is one of those for "
                                          "an object attribute declared in the constructor")
+
+            # if entity is a match then break the loop, as the correct entity has been assigned to self.entity
             if match_on_all_attribs:
                 break
 
