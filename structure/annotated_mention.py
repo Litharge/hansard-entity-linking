@@ -178,7 +178,7 @@ class AnnotatedMention():
         utterance_id = context["utterance_id"]
         model = context["model"]
 
-        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model, ["is_secretary", "is_minister_of_state", "is_shadow"])
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, ["is_secretary", "is_minister_of_state", "is_shadow"])
 
     # this method could be written to match deputy speaker mentions based on the context
     def deputy_speaker_mention(self, context):
@@ -186,7 +186,7 @@ class AnnotatedMention():
 
     # returns the last MP in utterers occurring before the utterance_id with the matching attribs_to_check, e.g.
     # "is_secretary", based on the model
-    def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, model, attribs_to_check=None):
+    def find_nearest_previous_utterer_matching_attributes(self, utterers, utterance_id, attribs_to_check=None):
         # since python 3.7 dictionaries maintain insertion order
         utterers_keys = list(utterers.keys())
         utterance_position = utterers_keys.index(utterance_id)
@@ -229,7 +229,7 @@ class AnnotatedMention():
         model = context["model"]
         # this mention refers to someone other than the addressee
         self.is_addressed = False
-        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, model, attribs_to_check=["is_addressed"])
+        self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, attribs_to_check=["is_addressed"])
 
     # assign self.entity based on the context in the case of the mention being a minister class mention
     # simply assign the utterer to self.entity
