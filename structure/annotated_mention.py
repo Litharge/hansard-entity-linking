@@ -212,9 +212,13 @@ class AnnotatedMention():
             #    break
             match_on_all_attribs = True
             for attrib in attribs_to_check:
-                if getattr(self.entity, attrib) != getattr(self, attrib):
-                    match_on_all_attribs = False
-                    break
+                try:
+                    if getattr(self.entity, attrib) != getattr(self, attrib):
+                        match_on_all_attribs = False
+                        break
+                except AttributeError as e:
+                    raise AttributeError("Attribute name not found, check that the attribute name is one of those for "
+                                         "an object attribute declared in the constructor")
             if match_on_all_attribs:
                 break
 
