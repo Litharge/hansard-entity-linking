@@ -191,7 +191,6 @@ class AnnotatedMention():
     def minister_class_mention(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
-        model = context["model"]
 
         self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, ["is_secretary", "is_minister_of_state", "is_shadow"])
 
@@ -241,7 +240,7 @@ class AnnotatedMention():
     def hon_mention(self, context):
         utterers = context["utterers"]
         utterance_id = context["utterance_id"]
-        model = context["model"]
+
         # this mention refers to someone other than the addressee
         self.is_addressed = False
         self.find_nearest_previous_utterer_matching_attributes(utterers, utterance_id, attribs_to_check=["is_addressed"])
@@ -269,9 +268,7 @@ class AnnotatedMention():
     # "he", "his"
     def pronominal_mention_3(self, context):
         annotated_mentions = context["annotated_mentions"]
-        mention_index = context["mention_index"]
         ordered_mentions = context["ordered_mentions"]
-        utterance_id = context["utterance_id"]
 
         break_i = False
         # iterate over sentences in reverse
