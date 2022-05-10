@@ -84,10 +84,15 @@ class AnnotatedMention():
                     outer_continue = False
 
                     for attrib in matching_attrib:
-                        if getattr(self, attrib) != getattr(mp, attrib):
-                            # set outer_continue to continue the mp iteration loop and avoid adding the mp to the
-                            # dictionary if there is some attribute mismatch
-                            outer_continue = True
+                        try:
+                            if getattr(self, attrib) != getattr(mp, attrib):
+                                # set outer_continue to continue the mp iteration loop and avoid adding the mp to the
+                                # dictionary if there is some attribute mismatch
+                                outer_continue = True
+                        except AttributeError as e:
+                            raise AttributeError(
+                                "Attribute name not found, check that the attribute name is one of those for "
+                                "an object attribute declared in the constructor")
 
                     if outer_continue:
                         continue
@@ -99,10 +104,15 @@ class AnnotatedMention():
                 if mp.current_offices[office] < datetime:
                     outer_continue = False
                     for attrib in matching_attrib:
-                        if getattr(self, attrib) != getattr(mp, attrib):
-                            # set outer_continue to continue the mp iteration loop and avoid adding the mp to the
-                            # dictionary if there is some attribute mismatch
-                            outer_continue = True
+                        try:
+                            if getattr(self, attrib) != getattr(mp, attrib):
+                                # set outer_continue to continue the mp iteration loop and avoid adding the mp to the
+                                # dictionary if there is some attribute mismatch
+                                outer_continue = True
+                        except AttributeError as e:
+                            raise AttributeError(
+                                "Attribute name not found, check that the attribute name is one of those for "
+                                "an object attribute declared in the constructor")
 
                     if outer_continue:
                         continue
@@ -282,12 +292,14 @@ class AnnotatedMention():
 
     def pronominal_mention(self, context):
         # now call a specific method based on the person of the pronoun
-        getattr(self, f"{self.role}_{self.person}")(context)
+        try:
+            getattr(self, f"{self.role}_{self.person}")(context)
+        except AttributeError as e:
+            raise AttributeError("Role attribute as method name not found, check that the role is set correctly or"
+                                 "that there is a method corresponding to the role")
 
 
     # assign an associated entity
-    # todo: replace **context with named args, pack it into a dict and pass this into method based on string,
-    #   if some context is missing, put out a warning but continue with the rest of the resolution
     def resolve(self, **context):
         # if the entity was already set in the mention detection stage due to 1 to 1 mapping, there is no work to be
         # done
@@ -296,7 +308,13 @@ class AnnotatedMention():
 
         # call correct method based on role of mention
         # using getattr() is safer than using exec()
-        getattr(self, self.role)(context)
+        # the packed dictionary is passed in as the different possible methods need different items, the needed items
+        # are then retrieved from the dictionary in the relevant method
+        try:
+            getattr(self, self.role)(context)
+        except AttributeError as e:
+            raise AttributeError("Role attribute as method name not found, check that the role is set correctly or"
+                                 "that there is a method corresponding to the role")
 
     def __str__(self):
         return f"{self.start_char}, {self.end_char}\n" \
