@@ -10,9 +10,9 @@ def convert_model_output_to_clusters(system_output: WholeXMLAnnotation):
     #print(system_output)
     cluster_dict = {}
 
-    for utterance_id in system_output.utterance_mentions:
+    for utterance_id in system_output.utterances:
         #print(utterance_id)
-        for mention in system_output.utterance_mentions[utterance_id].annotated_mentions:
+        for mention in system_output.utterances[utterance_id].annotated_mentions:
             if mention.entity is not None:
                 #print(mention.entity.url)
                 #print(mention.start_char)

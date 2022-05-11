@@ -117,7 +117,7 @@ class WholeXMLAnnotation():
     def set_all_mentions(self, xml_location, start, end, model_location, datetime_of_utterance):
         self.augmented_model = self.set_MP_statuses_at_time(model_location, datetime_of_utterance)
 
-        self.utterance_mentions = {}
+        self.utterances = {}
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
 
@@ -126,23 +126,18 @@ class WholeXMLAnnotation():
 
             to_add.detect_mentions(nlp, self.augmented_model, datetime_of_utterance=datetime_of_utterance)
 
-            self.utterance_mentions[utterance_id] = to_add
+            self.utterances[utterance_id] = to_add
 
             self.utterers[utterance_id] = self.get_MP_from_person_id(person_id, self.augmented_model)
 
     def set_references(self):
-        for utterance_key in self.utterance_mentions:
-            for mention_index, mention in enumerate(self.utterance_mentions[utterance_key].annotated_mentions):
-                # pass contextual information to the mention so it can resolve itself
-                # the relevant information is:
-                # * who the utterers are
-                # * which utterance the mention is in
-                # * the mentions within that utterance only
-                # * the index that this mention is within those utterances
-                mention.resolve(utterance_span=self.utterance_mentions[utterance_key].utt_span,
+        for utterance_key in self.utterances:
+            for mention_index, mention in enumerate(self.utterances[utterance_key].annotated_mentions):
+                # pass contextual information to the AnnotatedMention, so it can resolve itself
+                mention.resolve(utterance_span=self.utterances[utterance_key].utt_span,
                                 utterers=self.utterers,
                                 utterance_id=utterance_key,
-                                annotated_mentions=self.utterance_mentions[utterance_key].annotated_mentions,
+                                annotated_mentions=self.utterances[utterance_key].annotated_mentions,
                                 mention_index=mention_index,
                                 ordered_mentions=self.ordered_mentions[utterance_key],
                                 model=self.augmented_model,
@@ -152,20 +147,20 @@ class WholeXMLAnnotation():
     # each value in the dict shall be a list like
     # a b c. d e f. g h. -> indexes of c b a f e d h g
     def order_mentions(self):
-        for key in self.utterance_mentions:
-            self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
+        for key in self.utterances:
+            self.ordered_mentions[key] = self.utterances[key].order_mentions()
 
     def __init__(self, xml_location, start, end, model_location, datetime_of_utterance):
         self.datetime_of_utterance = datetime_of_utterance
 
-        self.utterance_mentions = None
+        self.utterances = None
 
         self.utterers = {}
 
         self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
 
-        for key in self.utterance_mentions:
-            self.utterance_mentions[key].join_appositives()
+        for key in self.utterances:
+            self.utterances[key].join_appositives()
 
         self.ordered_mentions = {}
         self.order_mentions()
@@ -176,9 +171,9 @@ class WholeXMLAnnotation():
 
     def __str__(self):
         rep = ""
-        for key in self.utterance_mentions:
+        for key in self.utterances:
             rep += f"==={key}===\n{self.utterers[key]}\n"
-            for mention in self.utterance_mentions[key].annotated_mentions:
+            for mention in self.utterances[key].annotated_mentions:
                 rep += f"-\n{mention}\n-\n"
 
         return rep
