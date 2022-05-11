@@ -174,7 +174,7 @@ class TestProduceMentions(unittest.TestCase):
         for item in m.annotated_mentions:
             print(item)
 
-        sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence, item.person, item.gender, item.role, item.get_associated_constituency()) for item in m.annotated_mentions]
+        sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence, item.person, item.gender, item.role, item.get_associated_url()) for item in m.annotated_mentions]
 
         print(sentence_pos_with_features)
 
@@ -184,9 +184,9 @@ class TestProduceMentions(unittest.TestCase):
         self.assertTrue((0, 6, 20, None, 'epicene', 'hon_mention', None) in sentence_pos_with_features)
         self.assertTrue((2, 0, 10, None, None, 'speaker_mention', None) in sentence_pos_with_features)
         self.assertTrue((2, 15, 35, None, 'feminine', 'deputy_speaker_mention', None) in sentence_pos_with_features)
-        self.assertTrue((2, 37, 60, None, None, 'member_for_mention', 'Redditch') in sentence_pos_with_features)
+        self.assertTrue((2, 37, 60, None, None, 'member_for_mention', 'https://www.theyworkforyou.com/mp/25692/rachel_maclean/redditch') in sentence_pos_with_features)
         self.assertTrue((1, 0, 66, None, None, 'exact_office_mention', None) in sentence_pos_with_features)
-        self.assertTrue((3, 0, 12, None, None, 'exact_nominal_mention', 'Hackney North and Stoke Newington') in sentence_pos_with_features)
+        self.assertTrue((3, 0, 12, None, None, 'exact_nominal_mention', 'https://www.theyworkforyou.com/mp/10001/diane_abbott/hackney_north_and_stoke_newington') in sentence_pos_with_features)
         self.assertTrue((0, 21, 48, None, None, 'secretary_regular_mention', None) in sentence_pos_with_features)
         self.assertTrue((4, 0, 18, None, None, 'irregular_office_mention', None) in sentence_pos_with_features)
 
@@ -211,7 +211,7 @@ class TestProduceMentions(unittest.TestCase):
             print(item)
 
         sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence,
-                                       item.is_shadow, item.role, item.get_associated_constituency()) for item in
+                                       item.is_shadow, item.role, item.get_associated_url()) for item in
                                       m.annotated_mentions]
 
         print(sentence_pos_with_features)
@@ -244,14 +244,14 @@ class TestProduceMentions(unittest.TestCase):
             print(item)
 
         sentence_pos_with_features = [(item.sentence_number, item.start_char_in_sentence, item.end_char_in_sentence,
-                                       item.is_shadow, item.role, item.get_associated_constituency(), item.is_appositive) for item in
+                                       item.is_shadow, item.role, item.get_associated_url(), item.is_appositive) for item in
                                       m.annotated_mentions]
 
         print("sentence pos w feats:", sentence_pos_with_features)
 
-        self.assertTrue((0, 0, 90, None, 'member_for_mention', 'Hackney North and Stoke Newington', True) in sentence_pos_with_features)
+        self.assertTrue((0, 0, 90, None, 'member_for_mention', 'https://www.theyworkforyou.com/mp/10001/diane_abbott/hackney_north_and_stoke_newington', True) in sentence_pos_with_features)
         self.assertTrue((1, 0, 2, None, 'pronominal_mention', None, False) in sentence_pos_with_features)
-        self.assertTrue((1, 0, 55, None, 'member_for_mention', 'Redditch', True) in sentence_pos_with_features)
+        self.assertTrue((1, 0, 55, None, 'member_for_mention', 'https://www.theyworkforyou.com/mp/25692/rachel_maclean/redditch', True) in sentence_pos_with_features)
         self.assertTrue((2, 0, 1, None, 'pronominal_mention', None, False) in sentence_pos_with_features)
         self.assertTrue((2, 6, 8, None, 'pronominal_mention', None, False) in sentence_pos_with_features)
         self.assertTrue((2, 6, 48, True, 'secretary_regular_mention', None, True) in sentence_pos_with_features)

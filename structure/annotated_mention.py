@@ -46,13 +46,13 @@ class AnnotatedMention():
         self.appos_chain = []
         self.is_appositive = False
 
-    def get_associated_constituency(self):
+    def get_associated_url(self):
         if self.entity is not None:
-            assoc_constituency = self.entity.constituency
+            assoc_url = self.entity.url
         else:
-            assoc_constituency = None
+            assoc_url = None
 
-        return assoc_constituency
+        return assoc_url
 
     def member_for_mention(self, context):
         pass
@@ -318,4 +318,4 @@ class AnnotatedMention():
                f"{self.person}, {self.gender}\n" \
                f"{self.rank}, shadow? {self.is_shadow}\n" \
                f"{self.role}\n" \
-               f"constituency of associated MP: {self.get_associated_constituency()}"
+               f"url of associated MP: {self.get_associated_url()}"
