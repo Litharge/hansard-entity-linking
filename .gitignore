@@ -17,3 +17,4 @@ test/integration/test_scoring/system_data/to_compare/
 evaluation/performance/
 evaluation/mock/out.txt
 evaluation/entity_performance/
+evaluation/system
