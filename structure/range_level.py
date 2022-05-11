@@ -10,10 +10,12 @@ def transform_hon(to_transform):
     return to_transform.replace(" hon. ", " hon  ")
 
 
-# class whose instance represents a whole xml document, containing a Utterance for each utterance
+# class whose instance represents a whole xml document, containing an Utterance for each utterance
 # class will iterate over each Utterance, calling its detect mentions method
 # then it will iterate over each of the AnnotatedMentions in its list of Utterance, calling on the AnnotatedMention its resolution method
 class WholeXMLAnnotation():
+    # iterate over an XML document stored in file specified by location, yielding an utterance span, from start to end
+    # utterance id
     def get_utterance_spans(self, location, start, end):
         tree = etree.parse(location)
 
@@ -49,6 +51,7 @@ class WholeXMLAnnotation():
             if ch.get("id") == end:
                 break
 
+    # return True if any of the offices in offices_to_check are secretaries of state
     def check_if_any_are_secretary(self, offices_to_check):
         for office in offices_to_check:
             if "Secretary of State" in office and not any(
@@ -57,6 +60,7 @@ class WholeXMLAnnotation():
 
         return False
 
+    # return True if any of the offices in offices_to_check are ministers of the crown
     def check_if_any_are_minister_of_the_crown(self, offices_to_check):
         for office in offices_to_check:
             if office[0:7] != "Member," and "PPS" not in office and "Secretary of State" not in office and ("minister" in office or "Minister" in office):
@@ -64,6 +68,7 @@ class WholeXMLAnnotation():
 
         return False
 
+    # return True if any of the offices in offices_to_check are shadow offices
     def check_if_shadow(self, offices_to_check):
         for office in offices_to_check:
             if "shadow" in office or "Shadow" in office:
@@ -101,7 +106,7 @@ class WholeXMLAnnotation():
 
         return model
 
-    # looks in the model for a matching mp based on their id
+    # returns the MP from the model matching the passed id
     def get_MP_from_person_id(self, id, model):
         id_number = id.split("/")[-1]
         for mp in model.mp_list:
@@ -130,6 +135,9 @@ class WholeXMLAnnotation():
 
             self.utterers[utterance_id] = self.get_MP_from_person_id(person_id, self.augmented_model)
 
+    # iterate over the items in self.utterances, then iterate over each of the items in the annotated_mentions of
+    # these, calling the resolve() method of the AnnotatedMention and passing in contextual information to allow it
+    # to perform entity linkin on itself
     def set_references(self):
         for utterance_key in self.utterances:
             for mention_index, mention in enumerate(self.utterances[utterance_key].annotated_mentions):
@@ -164,10 +172,6 @@ class WholeXMLAnnotation():
 
         self.ordered_mentions = {}
         self.order_mentions()
-
-
-
-
 
     def __str__(self):
         rep = ""
