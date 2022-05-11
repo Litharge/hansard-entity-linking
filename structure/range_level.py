@@ -14,6 +14,30 @@ def transform_hon(to_transform):
 # class will iterate over each Utterance, calling its detect mentions method
 # then it will iterate over each of the AnnotatedMentions in its list of Utterance, calling on the AnnotatedMention its resolution method
 class WholeXMLAnnotation():
+    def __init__(self, xml_location, start, end, model_location, datetime_of_utterance):
+        self.datetime_of_utterance = datetime_of_utterance
+
+        self.utterances = None
+
+        self.utterers = {}
+
+        self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
+
+        for key in self.utterances:
+            self.utterances[key].join_appositives()
+
+        self.ordered_mentions = {}
+        self.order_mentions()
+
+    def __str__(self):
+        rep = ""
+        for key in self.utterances:
+            rep += f"==={key}===\n{self.utterers[key]}\n"
+            for mention in self.utterances[key].annotated_mentions:
+                rep += f"-\n{mention}\n-\n"
+
+        return rep
+
     # iterate over an XML document stored in file specified by location, yielding an utterance span, from start to end
     # utterance id
     def get_utterance_spans(self, location, start, end):
@@ -158,26 +182,4 @@ class WholeXMLAnnotation():
         for key in self.utterances:
             self.ordered_mentions[key] = self.utterances[key].order_mentions()
 
-    def __init__(self, xml_location, start, end, model_location, datetime_of_utterance):
-        self.datetime_of_utterance = datetime_of_utterance
 
-        self.utterances = None
-
-        self.utterers = {}
-
-        self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
-
-        for key in self.utterances:
-            self.utterances[key].join_appositives()
-
-        self.ordered_mentions = {}
-        self.order_mentions()
-
-    def __str__(self):
-        rep = ""
-        for key in self.utterances:
-            rep += f"==={key}===\n{self.utterers[key]}\n"
-            for mention in self.utterances[key].annotated_mentions:
-                rep += f"-\n{mention}\n-\n"
-
-        return rep
