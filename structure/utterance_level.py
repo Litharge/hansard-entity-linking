@@ -1,6 +1,6 @@
-# module containing Mentions, which represents an utterance, called Mentions as it contains the AnnotatedMention's
+# module containing Utterance, which represents an utterance, called Utterance as it contains the AnnotatedMention's
 # for the utterance
-# Mentions handles calling mention detection functions and determining sentence level information for the
+# Utterance handles calling mention detection functions and determining sentence level information for the
 # AnnotatedMentions
 
 import bisect
@@ -32,7 +32,7 @@ from mention_detection.mention_type import is_more_precise
 
 
 # represents an utterance
-class Mentions():
+class Utterance():
     def __init__(self, utt_span):
         self.utt_span = utt_span
 

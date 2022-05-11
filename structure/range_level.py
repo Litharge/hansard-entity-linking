@@ -4,7 +4,7 @@ from lxml import etree
 
 import stanza
 
-from structure.utterance_level import Mentions
+from structure.utterance_level import Utterance
 
 def transform_hon(to_transform):
     return to_transform.replace(" hon. ", " hon  ")
@@ -47,9 +47,9 @@ def get_utterance_spans(location, start, end):
             break
 
 
-# class whose instance represents a whole xml document, containing a Mentions for each utterance
-# class will iterate over each Mentions, calling its detect mentions method
-# then it will iterate over each of the AnnotatedMentions in its list of Mentions, calling on the AnnotatedMention its resolution method
+# class whose instance represents a whole xml document, containing a Utterance for each utterance
+# class will iterate over each Utterance, calling its detect mentions method
+# then it will iterate over each of the AnnotatedMentions in its list of Utterance, calling on the AnnotatedMention its resolution method
 class WholeXMLAnnotation():
     def check_if_any_are_secretary(self, offices_to_check):
         for office in offices_to_check:
@@ -134,7 +134,7 @@ class WholeXMLAnnotation():
         for utt_span, utterance_id, person_id in get_utterance_spans(xml_location, start, end):
             #print("utt_span", utt_span)
             #print("\n\nutterance id: ", utterance_id)
-            to_add = Mentions(utt_span)
+            to_add = Utterance(utt_span)
 
             utt_span = transform_hon(utt_span)
 
@@ -162,7 +162,7 @@ class WholeXMLAnnotation():
                                 model=self.augmented_model,
                                 datetime_of_utterance=self.datetime_of_utterance)
 
-    # sets a dictionary of lists of indexes corresponding to items in self.annotated_mentions in each Mentions
+    # sets a dictionary of lists of indexes corresponding to items in self.annotated_mentions in each Utterance
     # each value in the dict shall be a list like
     # a b c. d e f. g h. -> indexes of c b a f e d h g
     def order_mentions(self):

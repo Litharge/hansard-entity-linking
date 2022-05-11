@@ -1,7 +1,7 @@
 import datetime
 import pickle
 
-from structure.utterance_level import Mentions
+from structure.utterance_level import Utterance
 # need transform hon as WholeXMLAnnotation uses this to process the utterance span
 from structure.range_level import transform_hon
 
@@ -16,7 +16,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -36,7 +36,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -57,7 +57,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -80,7 +80,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -98,7 +98,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -119,7 +119,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -140,7 +140,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -162,7 +162,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         dummy_datetime = datetime.datetime(2020, 1, 1)
         model_location = "verified_test_discourse_model.p"
@@ -197,7 +197,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         # at this date Diane Abbott was shadow home secretary
         dummy_datetime = datetime.datetime(2018, 1, 1)
@@ -224,7 +224,7 @@ class TestProduceMentions(unittest.TestCase):
         test_utterance = transform_hon(test_utterance)
 
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
-        m = Mentions(test_utterance)
+        m = Utterance(test_utterance)
 
         # at this date Diane Abbott was shadow home secretary
         dummy_datetime = datetime.datetime(2018, 1, 1)
