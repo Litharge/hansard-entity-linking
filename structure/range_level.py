@@ -38,8 +38,6 @@ class WholeXMLAnnotation():
                         utterance_text += " "
                     utterance_text += "".join(p.itertext())
 
-                print("utterance text:", utterance_text)
-
                 utterance_text = transform_hon(utterance_text)
 
                 if ch.get("person_id") is not None:
@@ -101,14 +99,6 @@ class WholeXMLAnnotation():
             model.mp_list[i].is_shadow = self.check_if_shadow(offices_to_check)
             model.mp_list[i].is_addressed = self.check_if_addressed(offices_to_check)
 
-        #for mp in model.mp_list:
-            #print(mp)
-            #print("is_secretary:", mp.is_secretary)
-            #print("is_minister_of_state:", mp.is_minister_of_state)
-            #print("is_shadow:", mp.is_shadow)
-            #print("is_addressed", mp.is_addressed)
-
-        # todo: ultimately this should just return model, but need to refactor mention detection stuff first
         return model
 
     # looks in the model for a matching mp based on their id
@@ -132,11 +122,7 @@ class WholeXMLAnnotation():
         nlp = stanza.Pipeline(lang='en', processors='tokenize,pos')
 
         for utt_span, utterance_id, person_id in self.get_utterance_spans(xml_location, start, end):
-            #print("utt_span", utt_span)
-            #print("\n\nutterance id: ", utterance_id)
             to_add = Utterance(utt_span)
-
-            utt_span = transform_hon(utt_span)
 
             to_add.detect_mentions(nlp, self.augmented_model, datetime_of_utterance=datetime_of_utterance)
 
@@ -166,7 +152,6 @@ class WholeXMLAnnotation():
     # each value in the dict shall be a list like
     # a b c. d e f. g h. -> indexes of c b a f e d h g
     def order_mentions(self):
-        #print("in order_mentions")
         for key in self.utterance_mentions:
             self.ordered_mentions[key] = self.utterance_mentions[key].order_mentions()
 
@@ -179,9 +164,6 @@ class WholeXMLAnnotation():
 
         self.set_all_mentions(xml_location, start, end, model_location, datetime_of_utterance)
 
-        #print("---")
-        #print("utterance_mentions:", self.utterance_mentions['uk.org.publicwhip/debate/2020-06-15a.503.6'])
-        #print("---")
         for key in self.utterance_mentions:
             self.utterance_mentions[key].join_appositives()
 
